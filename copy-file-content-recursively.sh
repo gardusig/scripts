@@ -1,27 +1,34 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Check for required folder path
 if [ -z "$1" ]; then
-  echo "Usage: $0 <folder-path>"
+  echo "Usage: $0 <folder-path> [optional-output-file]"
   exit 1
 fi
 
 FOLDER="$1"
-OUTPUT=""
+OUTFILE="${2:-$(mktemp)}"
 
-# Use find to iterate recursively over regular files
-while IFS= read -r -d '' FILE; do
-  if [ -f "$FILE" ]; then
-    EXT="${FILE##*.}"
-    BASENAME=$(basename "$FILE")
-    CONTENT=$(<"$FILE")
+# Add header to output file
+echo "# 📦 File dump from: ${PWD}" >"$OUTFILE"
+echo "" >>"$OUTFILE"
 
-    OUTPUT+="\n${FILE}:\n"
-    OUTPUT+="\`\`\`${EXT}\n${CONTENT}\n\`\`\`\n\n"
-  fi
-done < <(find "$FOLDER" -type f -print0)
+# Collect files, excluding unwanted paths
+find "$FOLDER" \
+  -type f \
+  ! -path "*/node_modules/*" \
+  ! -path "*/build/*" \
+  ! -path "*/dist/*" \
+  ! -path "*/.git/*" \
+  ! -name "package-lock.json" \
+  ! -name "yarn.lock" \
+  -print0 | while IFS= read -r -d '' FILE; do
+  echo -e "\n${FILE}:\n\`\`\`\n$(cat "$FILE")\n\`\`\`\n" >>"$OUTFILE"
+  echo "📄 Processed: $FILE"
+done
 
 # Copy to clipboard
-echo -e "$OUTPUT" | pbcopy
+cat "$OUTFILE" | pbcopy
 
-echo "✅ Copied contents of all files in '$FOLDER' to clipboard as formatted code blocks."
+echo -e "\n✅ All contents copied to clipboard"
+echo "📝 Output also saved at: $OUTFILE"
