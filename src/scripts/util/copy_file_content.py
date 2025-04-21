@@ -34,8 +34,7 @@ def copy_file_contents_recursively(path: str, ignore_patterns=DEFAULT_IGNORES) -
                 print(f"📄 Reading: {current_path}")
                 with open(current_path, "r", encoding="utf-8") as f:
                     content = f.read().strip()
-                rel_path = os.path.relpath(current_path, start=path)
-                output.append(f"{rel_path}:\n\n```\n{content}\n```")
+                output.append(f"{current_path}:\n\n```\n{content}\n```")
             except Exception as e:
                 output.append(f"{current_path} (Error reading file: {e})")
         elif os.path.isdir(current_path):
