@@ -15,7 +15,7 @@ python3 -m pip install virtualenv
 ```bash
 python3 -m venv venv
 source venv/bin/activate
-python3 -m pip install .
+pip install .
 ```
 
 ## 🔐 Environment Variables
@@ -34,14 +34,6 @@ export OPENAI_API_KEY=sk-...
 
 ## 🧪 Usage
 
-### Dump a folder as Markdown (prints to stdout):
-
-```bash
-python src/main.py ./your-folder
 ```
-
-## 📋 Clipboard Copy
-
-```bash
-python src/main.py ./your-folder --copy
+python -m scripts.util
 ```
