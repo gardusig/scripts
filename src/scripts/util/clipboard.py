@@ -6,7 +6,13 @@ HISTORY_FILE = Path.home() / ".clipboard_history.json"
 
 
 def get_preview(text: str) -> str:
-    return text if len(text) <= 40 else f"{text[:20]}...{text[-20:]}"
+    if len(text) <= 100:
+        return text
+    return (
+        f"{text[:50]}\n\n"
+        f"[...]\n\n"
+        f"{text[-50:]}"
+    )
 
 
 def load_history() -> list[str]:

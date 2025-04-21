@@ -42,4 +42,5 @@ python -m scripts.clipboard summary
 python -m scripts.clipboard append --from clipboard
 python -m scripts.clipboard append --from message --message "message content..."
 python -m scripts.clipboard append --from filepath --path path/to/file
+python -m scripts.clipboard analyze --instructions "Summarize this"
 ```

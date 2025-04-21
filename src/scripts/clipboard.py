@@ -1,5 +1,7 @@
 import typer
 from scripts.util.cli_util import Source, resolve_text
+from scripts.service.ai_interface import AIClient
+from scripts.service.openai import OpenAIClient
 
 from scripts.util.clipboard import (
     clear_clipboard,
@@ -10,6 +12,8 @@ from scripts.util.clipboard import (
 )
 
 app = typer.Typer(help="🧠 Clipboard utilities")
+
+ai_client: AIClient = OpenAIClient()
 
 
 @app.command()
@@ -50,6 +54,27 @@ def undo():
 def summary():
     """Show clipboard preview and history depth"""
     clipboard_summary()
+
+
+@app.command()
+def analyze(
+    instructions: str = typer.Option(
+        ..., help="Instructions for the AI model (e.g. 'Summarize this')"),
+    input_from: Source = typer.Option(
+        Source.clipboard, "--input-from", help="Source of input content"),
+    message: str = typer.Option(
+        None, help="Input message if source is 'message'"),
+    path: str = typer.Option(
+        None, help="Input file path if source is 'filepath'"),
+):
+    """
+    Analyze text using AI (e.g. summarize, transform, critique).
+    Instructions must be passed as a direct string.
+    Input can come from clipboard, a message, or a file.
+    """
+    input_text = resolve_text(input_from, message, path)
+    result = ai_client.get_response(instructions, input_text)
+    print(result)
 
 
 if __name__ == "__main__":
