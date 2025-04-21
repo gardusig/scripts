@@ -1,73 +1,26 @@
 import typer
-from scripts.util.cli_util import Source, resolve_text
+from scripts.cli.file_cli import file_app
+from scripts.util.file_util import stringify_file_contents
+from scripts.cli.instruction_cli import instruction_app
 from scripts.service.ai_interface import AIClient
 from scripts.service.openai import OpenAIClient
+from scripts.db.instruction_db import get_latest_instruction
+from scripts.db.file_db import get_latest_files
 
-from scripts.util.clipboard import (
-    clear_clipboard,
-    append_to_clipboard,
-    override_clipboard,
-    undo_clipboard,
-    clipboard_summary,
-    get_latest_clipboard,
-)
-
-app = typer.Typer(help="🐽 Kirby utilities")
+app = typer.Typer(help="Main application with subcommands.")
+app.add_typer(file_app, name="file",
+              help="Manage resources (clipboard).")
+app.add_typer(instruction_app, name="instruction",
+              help="AI Instruction Analysis.")
 
 ai_client: AIClient = OpenAIClient()
 
 
 @app.command()
-def clear():
-    """Clear the clipboard and history"""
-    clear_clipboard()
-
-
-@app.command()
-def append(
-    from_: Source = typer.Option(..., "--from", help="Source of input"),
-    message: str = typer.Option(None, help="Message to append"),
-    path: str = typer.Option(None, help="Filepath to append content from"),
-):
-    """Append to clipboard from clipboard, message, or filepath"""
-    text = resolve_text(from_, message, path)
-    append_to_clipboard(text)
-
-
-@app.command()
-def override(
-    from_: Source = typer.Option(..., "--from", help="Source of input"),
-    message: str = typer.Option(None, help="Message to override with"),
-    path: str = typer.Option(None, help="Filepath to override content from"),
-):
-    """Override clipboard from clipboard, message, or filepath"""
-    text = resolve_text(from_, message, path)
-    override_clipboard(text)
-
-
-@app.command()
-def undo():
-    """Undo last clipboard change"""
-    undo_clipboard()
-
-
-@app.command()
-def summary():
-    """Show clipboard preview and history depth"""
-    clipboard_summary()
-
-
-@app.command()
-def analyze(
-    instructions: str = typer.Option(
-        ..., help="Instructions for the AI model (e.g. 'Summarize this')"),
-):
-    """
-    Analyze text using AI (e.g. summarize, transform, critique).
-    Instructions must be passed as a direct string.
-    Input can come from clipboard, a message, or a file.
-    """
-    input_text = get_latest_clipboard()
+def analyze():
+    instructions = get_latest_instruction()
+    files = get_latest_files()
+    input_text = stringify_file_contents(files)
     result = ai_client.get_response(instructions, input_text)
     print(result)
 
