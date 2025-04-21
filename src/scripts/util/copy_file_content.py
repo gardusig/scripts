@@ -1,12 +1,37 @@
 import os
+import fnmatch
 
 
-def copy_file_contents_recursively(path: str) -> str:
+DEFAULT_IGNORES = [
+    "__pycache__",
+    "*.pyc",
+    "*.pyo",
+    "*.egg-info",
+    ".DS_Store",
+    ".git",
+    ".venv",
+    "venv",
+    "build",
+    "dist",
+    ".copyignore"
+]
+
+
+def should_ignore(name, ignore_patterns):
+    return any(fnmatch.fnmatch(name, pattern) for pattern in ignore_patterns)
+
+
+def copy_file_contents_recursively(path: str, ignore_patterns=DEFAULT_IGNORES) -> str:
     output = []
 
     def traverse(current_path):
+        name = os.path.basename(current_path)
+        if should_ignore(name, ignore_patterns):
+            print(f"⏭️ Skipping ignored: {current_path}")
+            return
         if os.path.isfile(current_path):
             try:
+                print(f"📄 Reading: {current_path}")
                 with open(current_path, "r", encoding="utf-8") as f:
                     content = f.read().strip()
                 rel_path = os.path.relpath(current_path, start=path)

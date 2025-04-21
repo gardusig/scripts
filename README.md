@@ -35,5 +35,5 @@ export OPENAI_API_KEY=sk-...
 ## 🧪 Usage
 
 ```
-python -m scripts.util
+python -m scripts.copy_to_clipboard
 ```
