@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "scripts"
+version = "0.1.0"
+description = "A Python toolkit"
+authors = [{ name = "Gustavo Gardusi", email = "gustavo.gardusi@gmail.com" }]
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.8"
+dependencies = ["openai", "python-dotenv", "pyperclip", "rich", "typer[all]"]
+
+[project.urls]
+Homepage = "https://github.com/gardusig/scripts"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.scripts]
+scripts = "util.cli:app"
