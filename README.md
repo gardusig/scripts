@@ -32,9 +32,9 @@ Alternatively, you can export the key directly in your shell session:
 export OPENAI_API_KEY=sk-...
 ```
 
-## Using the Scripts 🧪
+## Kirby
 
-### AI Analysis with Kirby
+### AI Analysis
 
 Execute an analysis by combining files and instructions through AI:
 
@@ -42,7 +42,7 @@ Execute an analysis by combining files and instructions through AI:
 python -m scripts.kirby analyze
 ```
 
-### File Management with Kirby
+### File Management
 
 Manage file paths seamlessly with the following commands:
 
@@ -73,7 +73,7 @@ Manage file paths seamlessly with the following commands:
   python -m scripts.kirby file clear
   ```
 
-### Instruction Management with Kirby
+### Instruction Management
 
 Organize AI instructions effectively using these commands:
 
