@@ -34,13 +34,13 @@ export OPENAI_API_KEY=sk-...
 
 ## 🧪 Usage
 
-### Clipboard
+### Kirby
 
 ```
-python -m scripts.clipboard clear
-python -m scripts.clipboard summary
-python -m scripts.clipboard append --from clipboard
-python -m scripts.clipboard append --from message --message "message content..."
-python -m scripts.clipboard append --from filepath --path path/to/file
-python -m scripts.clipboard analyze --instructions "Summarize this"
+python -m scripts.kirby clear
+python -m scripts.kirby summary
+python -m scripts.kirby append --from clipboard
+python -m scripts.kirby append --from message --message "message content..."
+python -m scripts.kirby append --from filepath --path path/to/file
+python -m scripts.kirby analyze --instructions "Summarize this"
 ```

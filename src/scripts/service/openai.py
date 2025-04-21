@@ -12,8 +12,7 @@ class OpenAIClient(AIClient):
         api_key = os.getenv("OPENAI_API_KEY")
         if not api_key:
             raise RuntimeError("❌ OPENAI_API_KEY is not set.")
-        self.client = OpenAI(
-            api_key=api_key, organization='org-JK0b0W0uy8LeYa5v3R5A3A3r')
+        self.client = OpenAI(api_key=api_key)
 
     def get_response(self, instructions: str, input: str) -> str:
         print("📨 Sending request to OpenAI...\n")

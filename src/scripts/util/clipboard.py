@@ -74,3 +74,8 @@ def clipboard_summary():
     print(f"Undo steps available: {len(history) - 1}")
     print(f"Current content preview:\n{get_preview(current)}")
     pyperclip.copy(current)
+
+
+def get_latest_clipboard() -> str:
+    history = load_history()
+    return history[-1]
