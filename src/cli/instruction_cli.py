@@ -1,8 +1,7 @@
 import typer
-from scripts.db.instruction_db import (
+from db.instruction_db import (
     clear_instructions,
     append_instruction,
-    override_instruction,
     undo_instruction,
     summary_instruction,
 )
@@ -18,11 +17,6 @@ def clear():
 @instruction_app.command()
 def add(string: str = typer.Argument(..., help="File path to append")):
     append_instruction(string)
-
-
-@instruction_app.command()
-def override(string: str = typer.Argument(..., help="File path to append")):
-    override_instruction(string)
 
 
 @instruction_app.command()

@@ -1,6 +1,5 @@
 import json
 from pathlib import Path
-from scripts.util.cli_util import get_preview
 
 FILE_SET_HISTORY = Path.home() / ".file_set_history.json"
 
@@ -43,12 +42,7 @@ def append_file(path: str):
     history = load_file_history()
     history.append(sorted(current))
     save_file_history(history)
-    print(f"➕ File path added: {get_preview(path)}")
-
-
-def override_files(path: str):
-    clear_files()
-    append_file(path)
+    print(f"➕ File path added: {path}")
 
 
 def undo_files():
@@ -66,4 +60,4 @@ def summary_files():
     print(f"📁 File set size: {len(latest)}")
     print("Current file set preview:")
     for p in sorted(latest):
-        print(f" - {get_preview(p)}")
+        print(f" - {p}")

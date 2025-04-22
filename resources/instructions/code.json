@@ -1,0 +1,6 @@
+[
+    "Send the entire response in JSON format, like a dict including only code snippets. example: {\"path/to/file\": \"from ... import ...\"}.",
+    "Don't add new code comments.",
+    "Preserve same code style and make adjustments when necessary, like to fix bugs.",
+    "Focus only on what is necessary, return only code with changes on your response."
+]

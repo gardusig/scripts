@@ -1,6 +1,5 @@
 import json
 from pathlib import Path
-from scripts.util.cli_util import get_preview
 
 INSTRUCTION_HISTORY_FILE = Path.home() / ".instruction_history.json"
 
@@ -37,17 +36,12 @@ def append_instruction(text: str):
     current = f'{previous}\n{text}' if previous != '' else text
     history.append(current)
     save_instruction_history(history)
-    print(f"➕ Text appended to instructions:\n{get_preview(text)}")
+    print(f"➕ Text appended to instructions:\n{text}")
 
 
 def get_latest_instruction() -> str:
     history = load_instruction_history()
     return history[-1] if history else ""
-
-
-def override_instruction(text: str):
-    clear_instructions()
-    append_instruction(text)
 
 
 def undo_instruction():
@@ -57,11 +51,11 @@ def undo_instruction():
         return
     last = history.pop()
     save_instruction_history(history)
-    print(f"↩️ Removed from instructions:\n{get_preview(last)}")
+    print(f"↩️ Removed from instructions:\n{last}")
 
 
 def summary_instruction():
     history = load_instruction_history()
     current = history[-1]
     print(f"Undo steps available: {len(history) - 1}")
-    print(f"Current content preview:\n{get_preview(current)}")
+    print(f"Current content preview:\n{current}")

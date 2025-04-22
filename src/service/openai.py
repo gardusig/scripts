@@ -1,10 +1,7 @@
 import os
 from openai import OpenAI
-from dotenv import load_dotenv
-from scripts.service.ai_interface import AIClient
+from service.ai_interface import AIClient
 from rich import print
-
-load_dotenv()
 
 
 class OpenAIClient(AIClient):
@@ -14,11 +11,11 @@ class OpenAIClient(AIClient):
             raise RuntimeError("❌ OPENAI_API_KEY is not set.")
         self.client = OpenAI(api_key=api_key)
 
-    def get_response(self, instructions: str, input: str) -> str:
+    def get_response(self, instructions: str, input: str, model: str = "gpt-4o") -> str:
         print("📨 Sending request to OpenAI...\n")
         try:
             response = self.client.chat.completions.create(
-                model="gpt-4o",
+                model=model,
                 messages=[
                     {"role": "system", "content": instructions},
                     {"role": "user", "content": input},

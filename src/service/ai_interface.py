@@ -3,5 +3,5 @@ from abc import ABC, abstractmethod
 
 class AIClient(ABC):
     @abstractmethod
-    def get_response(self, instructions: str, input: str) -> str:
+    def get_response(self, instructions: str, input: str, model: str) -> str:
         pass
