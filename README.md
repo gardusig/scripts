@@ -1,4 +1,4 @@
-# Kirby CLI README 🚀
+# Kirby CLI
 
 Welcome to the Kirby CLI! This snazzy tool is here to enhance your workflow with a sprinkle of command-line magic. Manage your file paths, harness the power of AI, and analyze instructions with flair and efficiency! Let's dive in and have some fun! 😎
 
@@ -94,7 +94,7 @@ python3 -m pip install --upgrade pip
 python3 -m pip install virtualenv
 ```
 
-### Creating Your Magical Development Environment
+### Creating Your Development Environment
 
 Embark on your dev adventure with these simple steps:
 
@@ -104,7 +104,7 @@ source venv/bin/activate
 pip install -e .
 ```
 
-## Environment Configuration 🔐
+### Environment Configuration 🔐
 
 Unlock the full flavor of AI by setting your secret API key in a `.env` file at the root of the project:
 
