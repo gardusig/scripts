@@ -1,72 +1,72 @@
 # Kirby CLI
 
-Welcome to the Kirby CLI! This snazzy tool is here to enhance your workflow with a sprinkle of command-line magic. Manage your file paths, harness the power of AI, and analyze instructions with flair and efficiency! Let's dive in and have some fun! 😎
+Welcome to the Kirby CLI! Forget about hunting through endless file explorers or struggling to keep track of those pesky AI instructions—our tool is designed to streamline your workflow and boost your productivity with some real-world functionality. Manage files and instructions efficiently like a pro! Let's get started.
 
 ## Commands Overview 📜
 
 ### Main Application
 
-At the heart of our magical CLI journey is the central application, guiding you through a maze of commands and features.
+The Kirby CLI is your reliable companion for navigating the world of file management and AI instruction processing with ease and precision.
 
 ## Usage 🛠️
 
-Think of Kirby CLI as a master chef, helping you collect all the ingredients (files and instructions) to cook up a delicious AI recipe. Once you've gathered your magical ingredients, fuse them for an LLM to savor.
+Imagine Kirby CLI as your diligent sous-chef, sorting and organizing all your files and instructions so you can focus on creating the perfect AI-assisted project. Once everything is in order, pass it on to your language model for an efficient, focused analysis.
 
 ![kirby](./resources/media/kirby.webp)
 
-### Kirby Wizardry at Your Fingertips
+### Efficient File Management at Your Fingertips
 
 #### File Management 📁
 
-Manage your files like a maestro with these harmonious commands:
+Effortlessly manage your files with these commands:
 
-- **Add a file or folder to your list of magical paths:**
+- **Add a file or folder to your designated paths:**
   ```bash
-  python -m kirby file add "path/to/your/ingredient"
+  python -m kirby file add "path/to/your/file"
   ```
 
-- **Summon a summary of your current file paths:**
+- **View your current list of file paths:**
   ```bash
   python -m kirby file list
   ```
 
-- **Reverse the last file-related enchantment:**
+- **Undo the last modification to your file list:**
   ```bash
   python -m kirby file undo
   ```
 
-- **Wipe the slate clean of all file paths:**
+- **Clear out all file paths to start fresh:**
   ```bash
   python -m kirby file clear
   ```
 
 #### Instruction Management 💡
 
-Cast spells on your AI instructions with these intuitive commands:
+Manage your AI instructions with clarity using these commands:
 
-- **Inscribe a message into your scroll of instructions:**
+- **Add a new instruction to your list:**
   ```bash
-  python -m kirby instruction add "Write captivating storylines"
+  python -m kirby instruction add "Write clear documentation"
   ```
 
-- **Reveal the secrets of your current instructions:**
+- **List all current instructions:**
   ```bash
   python -m kirby instruction list
   ```
 
-- **Undo the last tweak to your instructions:**
+- **Undo the last change to your instructions:**
   ```bash
   python -m kirby instruction undo
   ```
 
-- **Vanish all instructions into thin air:**
+- **Clear all instructions:**
   ```bash
   python -m kirby instruction clear
   ```
 
 #### Recipe Creation with LLM 🍲
 
-Once you've collected your ingredients and instructions, cook up your recipe with:
+Once you've organized your files and instructions, get a focused response with:
 
 ```bash
 python -m kirby evaluate
@@ -74,19 +74,21 @@ python -m kirby evaluate
 
 ## Example Flow 🔄
 
-Let's put it all together with a simple example flow. Imagine you want to add a recipe and get the magic response from AI:
+Here's a step-by-step example: say you want to understand a recipe and get a solid response from AI:
 
 ```bash
-python -m kirby file add "recipes/special_dish.txt"
-python -m kirby instruction add "Explain the cooking process clearly."
+python -m kirby file add "recipes/delicious_dish.txt"
+python -m kirby instruction add "Describe the main steps clearly."
 python -m kirby evaluate
 ```
 
 ## Dev Setup Instructions ⚙️
 
-Ready to join the Kirby development brigade? Here's your quick start guide:
+Ready to start developing with Kirby? Here's your setup guide:
 
-### Essential Ingredients: Python Installation 🐍
+### Python Setup 🐍
+
+First, ensure Python is installed:
 
 ```bash
 brew install python
@@ -96,7 +98,7 @@ python3 -m pip install virtualenv
 
 ### Creating Your Development Environment
 
-Embark on your dev adventure with these simple steps:
+Set up your development environment efficiently with:
 
 ```bash
 python3 -m venv venv
@@ -106,13 +108,13 @@ pip install -e .
 
 ### Environment Configuration 🔐
 
-Unlock the full flavor of AI by setting your secret API key in a `.env` file at the root of the project:
+To access AI features, set your API key in a `.env` file at the project's root:
 
 ```env
 OPENAI_API_KEY=sk-...
 ```
 
-Or enjoy the thrill of a direct key export before each session:
+Alternatively, export the key directly for each session:
 
 ```bash
 export OPENAI_API_KEY=sk-...
