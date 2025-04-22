@@ -12,7 +12,7 @@ The Kirby CLI is your reliable companion for navigating the world of file manage
 
 Imagine Kirby CLI as your diligent sous-chef, sorting and organizing all your files and instructions so you can focus on creating the perfect AI-assisted project. Once everything is in order, pass it on to your language model for an efficient, focused analysis.
 
-![kirby](./resources/media/kirby.webp)
+![kirby](./media/kirby.webp)
 
 ### Efficient File Management at Your Fingertips
 

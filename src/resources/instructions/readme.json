@@ -1,0 +1,7 @@
+[
+    "Given this codebase, how would you build an up to date README?",
+    "Keep README professional and somewhat funny, document mostly about exposed APIs or CLI.",
+    "Output should contain a header with each section, matching emojis for each section title and whenever applicable on text.",
+    "It should contain an usage example section with code blocks showing commands and expected output examples.",
+    "It should contain environment development instructions with simple to use code snippets for macos with brew."
+]

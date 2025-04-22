@@ -1,12 +1,8 @@
+from db.instruction_db import append_instruction, clear_instructions, summary_instruction, undo_instruction
 import typer
-from db.instruction_db import (
-    clear_instructions,
-    append_instruction,
-    undo_instruction,
-    summary_instruction,
-)
 
-instruction_app = typer.Typer(help="AI instruction processing")
+
+instruction_app = typer.Typer(help="instruction processing")
 
 
 @instruction_app.command()
@@ -15,7 +11,7 @@ def clear():
 
 
 @instruction_app.command()
-def add(string: str = typer.Argument(..., help="File path to append")):
+def add(string: str = typer.Argument(..., help="instruction to append")):
     append_instruction(string)
 
 

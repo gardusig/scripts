@@ -1,14 +1,14 @@
 import typer
+from util.ai_util import get_ai_client, send_message
+
 from util.instruction_util import load_instructions
-from util.ai_util import send_message
-from util.cli_util import get_ai_client
 
 code_app = typer.Typer(help="📁 Code management CLI")
 
 
 @code_app.command()
 def evaluate():
-    instructions = load_instructions("./resources/instructions/code.json")
+    instructions = load_instructions("instructions/code.json")
     if not instructions:
         print("⚠️ No instructions were loaded.")
         return

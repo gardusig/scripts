@@ -14,7 +14,10 @@ DEFAULT_IGNORES = [
     "dist",
     ".copyignore",
     ".env",
-    "LICENSE"
+    "LICENSE",
+    "*.webp",
+    "*.jpg",
+    "*.jpeg",
 ]
 
 
@@ -40,7 +43,9 @@ def get_all_files(path: str, ignore_patterns=DEFAULT_IGNORES) -> list[str]:
     return files
 
 
-def stringify_file_contents(file_paths: list[str]) -> str:
+def stringify_file_contents(file_paths: set[str]) -> str:
+    if len(file_paths) == 0:
+        return ""
     output = []
     for path in file_paths:
         try:

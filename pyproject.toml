@@ -10,7 +10,7 @@ authors = [{ name = "Gustavo Gardusi", email = "gustavo.gardusi@gmail.com" }]
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.8"
-dependencies = ["openai", "python-dotenv", "rich", "typer[all]", "mypy", "boto3"]
+dependencies = ["openai", "python-dotenv", "rich", "typer[all]", "mypy", "boto3", "pyperclip"]
 
 [project.urls]
 Homepage = "https://github.com/gardusig/scripts"

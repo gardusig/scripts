@@ -4,5 +4,6 @@
       "statusBar.noFolderBackground": "#ff00ee",
       "statusBar.debuggingBackground": "#ff00ee",
       "activityBar.background": "#ff00ee",
-    }
+    },
+    "python.analysis.typeCheckingMode": "standard"
   }
