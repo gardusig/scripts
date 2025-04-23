@@ -2,7 +2,6 @@
     "Perform a thorough code review to identify bugs, inefficiencies, or non-idiomatic patterns.",
     "Ensure that all referenced APIs are implemented and correctly named; add new APIs if needed to match usage.",
     "Validate that the code is well-structured, clean, and consistent with the existing style.",
-    "Add unit tests for all public functions and classes, focusing on realistic and meaningful test cases.",
     "Review and improve error handling, including edge case management and meaningful fallback behavior.",
     "Refactor duplicated logic into reusable functions where applicable.",
     "Verify that all data models, schemas, or DTOs are correctly typed and used consistently.",
@@ -10,8 +9,5 @@
     "Insert logging using `print()` from `rich` in key locations to trace program execution and aid in debugging.",
     "Ensure that documentation and function docstrings are present, concise, and accurately reflect purpose.",
     "Remove dead code, commented-out blocks, unused imports, and unnecessary variables.",
-    "Ensure consistency between frontend and backend API usage, adding missing endpoints if the frontend expects them.",
-    "Apply safe performance optimizations without altering expected behavior.",
-    "Restructure or reorganize files or folders if it improves modularity or separation of concerns.",
-    "Only output updated files as a JSON object using the format: { 'relative/path/to/file.py': 'entire file content' }."
+    "Apply safe performance optimizations without altering expected behavior."
 ]

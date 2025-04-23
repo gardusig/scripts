@@ -28,7 +28,6 @@ def send_message(
 ) -> str:
     instructions = build_instructions(instructions)
     context = build_context(files)
-    print(f'instructions: {instructions}')
     response = ai_client.get_response(instructions, context)
     return response
 

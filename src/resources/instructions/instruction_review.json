@@ -1,15 +1,6 @@
 [
-    "Perform a thorough review of this instruction to determine whether it is clear, useful, and specific.",
-    "Evaluate if the instruction is actionable and can lead to a meaningful code transformation.",
-    "Check whether the instruction is relevant to typical codebases or if it's too narrow or redundant.",
-    "Suggest improvements to the instruction’s wording for clarity and precision if needed.",
-    "Ensure the instruction encourages safe and minimal changes unless explicitly stated otherwise.",
-    "Identify whether the instruction overlaps with another common directive (e.g., code cleanup, test generation).",
-    "Determine if the instruction should be broken into smaller, more focused steps.",
-    "You can add new files to your response in case you think it's relevant.",
-    "Make sure the instruction aligns with best practices for prompting AI in code automation contexts.",
-    "Flag instructions that are vague, overly broad, or contain ambiguous terms.",
-    "Recommend adding examples or output format expectations if the instruction lacks structure.",
-    "Provide feedback on the potential impact of implementing the instruction in a real-world scenario.",
-    "Consider the potential challenges or limitations in executing the instruction as written."
+    "Answer by updating each file so that the response contains well-defined instructions for prompting an LLM. Ensure the instructions are clear, specific, and actionable.",
+    "Include all problem requirements to meet expectations, detailing steps and criteria needed to complete the task successfully.",
+    "Conduct a thorough review to ensure content is clear, useful, and specific for prompting an AI, focusing on task relevance and clarity.",
+    "Assess if the instruction is actionable and can lead to a meaningful transformation. Confirm that the instruction is easily implementable and understandable."
 ]
