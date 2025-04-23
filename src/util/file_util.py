@@ -69,17 +69,12 @@ def load_instructions(instruction_paths: list[str]) -> Optional[str]:
         instruction = load_instruction(instruction_path)
         if instruction:
             instructions += instruction
-    return instructions
+    return instructions if instructions else None
 
 
 def load_instruction(instruction_path: str) -> Optional[str]:
     try:
-        current_dir = Path(__file__).resolve().parent
-        while current_dir != current_dir.root:
-            if (current_dir / ".git").exists():
-                break
-            current_dir = current_dir.parent
-        path = current_dir / "src" / instruction_path
+        path = Path(__file__) / "../resources/instructions/" / instruction_path
         if not path.exists():
             print(f"⚠️ Instruction file '{instruction_path}' not found.")
             return None
@@ -98,8 +93,8 @@ def rewrite_files(content_dict: dict[str, str]):
 
 def rewrite_file(file_path: str, content: str):
     try:
-        file_path = Path(file_path)
-        file_path.parent.mkdir(parents=True, exist_ok=True)
+        path = Path(file_path)
+        path.parent.mkdir(parents=True, exist_ok=True)
         with open(file_path, "w", encoding="utf-8") as file:
             file.write(content)
         print(f"✅ File rewritten: {file_path}")

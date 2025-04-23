@@ -35,8 +35,8 @@ def guidance():
 def code():
     instructions = load_instructions(
         [
-            "resources/instructions/code/code_standards.json",
-            "resources/instructions/response/response_json_format.json",
+            "code/code_standards.json",
+            "response/response_json_format.json",
         ]
     )
     ai_client = get_ai_client()

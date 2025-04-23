@@ -28,6 +28,8 @@ def send_message(
 ):
     instructions = build_instructions(instructions)
     context = build_context(files)
+    print(instructions)
+    print(context)
     return ai_client.get_response(instructions, context)
 
 
