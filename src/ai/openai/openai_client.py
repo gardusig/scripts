@@ -1,9 +1,8 @@
 import os
 from typing import Optional
-from openai import OpenAI
 from ai.ai_client_interface import AIClient
-from rich import print
 from ai.openai.openai_config import OpenAIConfig
+from openai import OpenAI
 
 
 class OpenAIClient(AIClient):
@@ -18,12 +17,16 @@ class OpenAIClient(AIClient):
     ) -> dict:
         if not config:
             config = OpenAIConfig()
+
+        messages = []
+        if instructions.strip():
+            messages.append({"role": "system", "content": instructions.strip()})
+        if input.strip():
+            messages.append({"role": "user", "content": input.strip()})
+
         return {
             "model": config.model,
-            "messages": [
-                {"role": "system", "content": instructions},
-                {"role": "user", "content": input},
-            ],
+            "messages": messages,
             "temperature": config.temperature,
             "max_tokens": config.max_tokens,
             "top_p": config.top_p,

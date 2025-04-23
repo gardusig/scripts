@@ -34,7 +34,7 @@ def preview():
     summary_files()
 
 
-@instruction_app.command()
+@app.command()
 def eat(string: str = typer.Argument(..., help="instruction to append")):
     if not string.strip():
         print("⚠️ Empty instruction provided.")
@@ -42,7 +42,7 @@ def eat(string: str = typer.Argument(..., help="instruction to append")):
     append_instruction(string)
 
 
-@instruction_app.command()
+@app.command()
 def eat_clipboard():
     string = pyperclip.paste()
     if not string.strip():

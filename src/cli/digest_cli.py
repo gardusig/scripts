@@ -42,3 +42,17 @@ def code():
     ai_client = get_ai_client()
     response = send_message(ai_client, instructions)
     handle_code_change_response(response)
+
+
+@digest_app.command()
+def code_cli():
+    instructions = load_instructions(
+        [
+            "code/code_standards.json",
+            "code/code_python_cli.json",
+            "response/response_json_format.json",
+        ]
+    )
+    ai_client = get_ai_client()
+    response = send_message(ai_client, instructions)
+    handle_code_change_response(response)

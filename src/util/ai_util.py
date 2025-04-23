@@ -28,9 +28,9 @@ def send_message(
 ):
     instructions = build_instructions(instructions)
     context = build_context(files)
-    print(instructions)
-    print(context)
-    return ai_client.get_response(instructions, context)
+    print(f'instructions: {instructions}')
+    response = ai_client.get_response(instructions, context)
+    print(f'response: {response}')
 
 
 def build_instructions(instructions: Optional[str] = None) -> str:

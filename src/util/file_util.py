@@ -74,13 +74,14 @@ def load_instructions(instruction_paths: list[str]) -> Optional[str]:
 
 def load_instruction(instruction_path: str) -> Optional[str]:
     try:
-        path = Path(__file__) / "../resources/instructions/" / instruction_path
+        path = Path(__file__).parent.parent / \
+            "resources/instructions/" / instruction_path
         if not path.exists():
             print(f"⚠️ Instruction file '{instruction_path}' not found.")
             return None
         with open(path, "r", encoding="utf-8") as f:
             instructions: list[str] = json.load(f)
-            return "\n".join(instructions)
+            return "".join(instructions)
     except Exception as e:
         print(f"❌ Failed to load instructions from '{instruction_path}': {e}")
         return None
