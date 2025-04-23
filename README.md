@@ -2,11 +2,20 @@
 
 Welcome to the Kirby CLI! Designed to streamline your workflow and boost your productivity with some real-world AI functionality. Manage files and instructions efficiently like a pro! Let's get started.
 
-<div align="center">
-  <img src="./media/kirby-eat.webp" alt="kirby-eat" height="175" />
-  <img src="./media/kirby-cook.gif" alt="kirby-cook" height="175" />
-  <img src="./media/kirby-work.gif" alt="kirby-work" height="175" />
-</div>
+<table width="100%">
+  <tr>
+    <td align="left">
+      <img src="./media/kirby-eat.webp" alt="kirby-eat" height="175" />
+    </td>
+    <td align="center">
+      <img src="./media/kirby-cook.gif" alt="kirby-cook" height="175" />
+    </td>
+    <td align="right">
+      <img src="./media/kirby-work.gif" alt="kirby-work" height="175" />
+    </td>
+  </tr>
+</table>
+
 
 ## Usage 🛠️
 
