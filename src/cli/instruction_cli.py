@@ -40,7 +40,7 @@ def undo():
 
 @instruction_app.command(help="List all instructions")
 def list():
-    summary_instruction()
+    print(summary_instruction())
 
 
 @instruction_app.command(help="Usage for each resource")

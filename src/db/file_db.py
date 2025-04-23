@@ -55,8 +55,9 @@ def undo_files():
     print("↩️ Reverted last added file.")
 
 
-def summary_files():
+def summary_files() -> str:
     latest = get_latest_files()
-    print(f"📁 File set size: {len(latest)}")
+    strings = [f"📁 File set size: {len(latest)}"]
     for p in sorted(latest):
-        print(f" - {p}")
+        strings.append(f"- {p}")
+    return '\n'.join(strings)

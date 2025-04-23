@@ -1,9 +1,17 @@
 [
-    "MANDATORY: wrap exactly one JSON object on your response as ```json  {...}  ```  and never emit anything before or after the fences.",
-    "Encapsulate the entire response in a single triple-backtick JSON code block.",
-    "Return a JSON object where each key is the file path and each value is the Base64-encoded contents of that file.",
-    "Do not include any explanation or commentary—only the JSON mapping.",
-    "Ensure the JSON is valid and properly escaped.",
-    "Do not include data URIs or MIME types—just raw Base64 strings.",
-    "Keep the JSON concise and focused on the changed files only."
+    "✅ MANDATORY: Respond with a single fenced code block using the format ```base64json ... ``` — and nothing else.",
+    "🔹 The contents must be a valid JSON object where:",
+    "- Keys are file paths (e.g., 'main.py')",
+    "- Values are Base64-encoded UTF-8 strings of each file's content",
+    "🧼 DO NOT encode the entire JSON — only encode the file content values.",
+    "🛑 DO NOT include comments, explanations, or anything outside the code block.",
+    "📄 Example:",
+    "```base64json",
+    "{",
+    "  \"main.py\": \"cHJpbnQoJ2hlbGxvIHdvcmxkJykK\",",
+    "  \"utils/helper.py\": \"ZGVmIGFkZChhLCBiKTogcmV0dXJuIGEgKyBi\"",
+    "}",
+    "```",
+    "💡 Base64 values must be inline, without line breaks or extra formatting.",
+    "🚫 Avoid using non-UTF-8 characters, escaped triple quotes, or fancy quotes in strings."
 ]

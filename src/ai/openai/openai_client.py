@@ -50,11 +50,9 @@ class OpenAIClient(AIClient):
         **kwargs
     ) -> str:
         config = OpenAIConfig(**kwargs)
-        print(f"📨 Sending request to {config.model}...")
 
         messages = self.build_messages(instructions, context, last_messages)
-        print(messages)
-
+        print(f"📨 Sending request to {config.model}...")
         response = self.client.chat.completions.create(
             model=config.model,
             messages=messages,
@@ -62,7 +60,6 @@ class OpenAIClient(AIClient):
             max_tokens=config.max_tokens,
             top_p=config.top_p,
         )
-
         result = response.choices[0].message.content or ""
         print(f"✅ Response received from {config.model}")
         return result.strip()

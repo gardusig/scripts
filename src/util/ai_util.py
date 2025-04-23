@@ -1,7 +1,6 @@
 import os
-import re
-import json
 import base64
+import json
 import logging
 from typing import Optional, Dict, Set
 
@@ -10,19 +9,27 @@ from ai.aws.anthropic.claude_35_client import Claude3SonnetClient
 from ai.openai.openai_client import OpenAIClient
 from db.instruction_db import get_latest_instruction
 from db.file_db import get_latest_files
-import util.file_util as file_util
 from util.file_util import stringify_file_contents
+from util.string_util import extract_base64json_block
 
 logger = logging.getLogger(__name__)
 
+AI_CLIENTS = {
+    "openai": OpenAIClient,
+    "claude_3_sonnet": Claude3SonnetClient,
+}
+
 
 def get_ai_client() -> AIClient:
-    client = os.getenv("AI_CLIENT")
-    if client == "openai":
-        return OpenAIClient()
-    if client == "claude_3_sonnet":
-        return Claude3SonnetClient()
-    raise RuntimeError("❌ AI_CLIENT not set or unsupported")
+    client_name = os.getenv("AI_CLIENT")
+    if not client_name:
+        raise RuntimeError("⛔️ No client name provided")
+    client_class = AI_CLIENTS.get(client_name.strip())
+    if client_class:
+        return client_class()
+    raise ValueError(
+        f"❌ AI_CLIENT '{client_name}' not set or unsupported. Supported: {list(AI_CLIENTS.keys())}"
+    )
 
 
 def send_message(
@@ -34,7 +41,6 @@ def send_message(
     Merges your stored instruction with any ad-hoc text, gathers file contents,
     and calls get_response with 'final_prompt' set to that merged text.
     """
-
     final_prompt = get_latest_instruction().strip()
 
     file_set = set(files or ())
@@ -44,7 +50,7 @@ def send_message(
     return ai_client.get_response(
         instructions=instructions,
         context=context_map,
-        last_messages=final_prompt
+        last_messages=final_prompt,
     )
 
 
@@ -57,65 +63,31 @@ def build_context(files: Optional[Set[str]] = None) -> Dict[str, str]:
     return stringify_file_contents(file_set)
 
 
-def extract_json_blob(response: str) -> str:
+def parse_code_response(response: str) -> dict[str, str]:
     """
-    Extracts and returns just the `{...}` payload from the first ```json ... ``` block.
-    Raises if no such block is found.
+    Extracts and decodes a base64-encoded JSON object from a `base64json` fenced block.
+    Each value is expected to be base64-encoded UTF-8 text.
     """
-    pattern = re.compile(
-        r"```json\s*"             # opening fence
-        r"(?P<blob>\{[\s\S]*?\})"  # capture the JSON object
-        r"\s*```",                # closing fence
-        re.DOTALL
-    )
-    m = pattern.search(response)
-    if not m:
-        raise RuntimeError("⛔️ No ```json … ``` block found in assistant response")
-    return m.group("blob")
-
-
-def handle_code_change_response(response: str):
-    """
-    1) Extracts the JSON blob
-    2) Parses it as { path: base64_string }
-    3) Cleans & Base64-decodes each string
-    4) UTF-8 decodes with replacement on errors
-    5) Calls rewrite_files on the result map
-    """
-    json_blob = extract_json_blob(response)
-
     try:
-        files_b64: Dict[str, str] = json.loads(json_blob)
-    except json.JSONDecodeError as e:
-        raise RuntimeError(f"Invalid JSON from model: {e}")
+        json_str = extract_base64json_block(response)
+        filemap_b64: dict[str, str] = json.loads(json_str)
+    except Exception as e:
+        raise RuntimeError(f"❌ Failed to parse base64json block: {e}")
 
-    decoded_files: Dict[str, str] = {}
-    for path, b64_content in files_b64.items():
-        # skip invalid types
-        if not isinstance(path, str) or not isinstance(b64_content, str):
-            logger.warning("Skipping invalid entry: %r → %r", path, b64_content)
-            continue
-
-        # skip entries without a file extension
-        if "." not in path:
-            continue
-
-        # Remove any stray whitespace/newlines
-        clean_b64 = "".join(b64_content.split())
-
-        # Decode Base64
+    decoded_files: dict[str, str] = {}
+    for path, b64_content in filemap_b64.items():
         try:
-            raw = base64.b64decode(clean_b64)
-        except Exception as err:
-            raise RuntimeError(f"Failed to Base64-decode `{path}`: {err}")
+            # Clean and decode base64 string
+            raw_bytes = base64.b64decode(b64_content.encode("utf-8"), validate=True)
+            if b"\x00" in raw_bytes:
+                print(f"⚠️ Warning: {path} might be a binary file.")
+            decoded = raw_bytes.decode("utf-8", errors="replace")
+            decoded_files[path] = decoded
+        except Exception as e:
+            raise ValueError(f"❌ Failed to decode file `{path}`: {e}")
 
-        # Decode to UTF-8, replacing invalid bytes
-        text = raw.decode("utf-8", errors="replace")
-        decoded_files[path] = text
+    print("✅ Decoded response:")
+    for file, content in decoded_files.items():
+        print(f"📄 {file} (len={len(content)}) preview: {repr(content[:80])}...")
 
-    if not decoded_files:
-        raise RuntimeError(
-            "No valid base64-encoded file entries found in model response")
-
-    # Write the files out
-    file_util.rewrite_files(decoded_files)
+    return decoded_files

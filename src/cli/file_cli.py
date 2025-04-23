@@ -34,7 +34,7 @@ def undo():
 
 @file_app.command(help="List all files")
 def list():
-    summary_files()
+    print(summary_files())
 
 
 @file_app.command(help="Usage for file operations")

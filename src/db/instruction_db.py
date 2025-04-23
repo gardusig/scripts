@@ -54,7 +54,7 @@ def undo_instruction():
     print("↩️ Removed last added instruction")
 
 
-def summary_instruction():
+def summary_instruction() -> str:
     history = load_instruction_history()
     current = history[-1]
-    print(current)
+    return current
