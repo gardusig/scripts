@@ -1,0 +1,5 @@
+[
+    "Don't put your answer within code blocks like '```'.",
+    "Send the entire response in JSON format.",
+    "Like a dict including only code snippets. example: {\"path/to/file\": \"from ... import ...\"}."
+]

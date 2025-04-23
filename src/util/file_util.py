@@ -1,5 +1,8 @@
+import json
 import os
 import fnmatch
+from pathlib import Path
+from typing import Optional
 
 DEFAULT_IGNORES = [
     "__pycache__",
@@ -56,3 +59,46 @@ def stringify_file_contents(file_paths: set[str]) -> str:
             output.append(f"{path} (Error reading file: {e})")
     print(f"📄 Read {len(file_paths)} file(s)")
     return "\n\n".join(output)
+
+
+def load_instructions(instruction_paths: list[str]) -> Optional[str]:
+    instructions = ''
+    for instruction_path in instruction_paths:
+        instruction = load_instruction(instruction_path)
+        if instruction:
+            instructions += instruction
+    return instructions
+
+
+def load_instruction(instruction_path: str) -> Optional[str]:
+    try:
+        current_dir = Path(__file__).resolve().parent
+        while current_dir != current_dir.root:
+            if (current_dir / '.git').exists():
+                break
+            current_dir = current_dir.parent
+        path = current_dir / 'src' / instruction_path
+        if not path.exists():
+            print(f"⚠️ Instruction file '{instruction_path}' not found.")
+            return None
+        with open(path, "r", encoding="utf-8") as f:
+            instructions: list[str] = json.load(f)
+            print(f"Loaded instructions from: {path}")
+            return '\n'.join(instructions)
+    except Exception as e:
+        print(f"❌ Failed to load instructions from '{instruction_path}': {e}")
+        return None
+
+
+def rewrite_files(content_dict: dict[str, str]):
+    for file_path, content in content_dict.items():
+        rewrite_file(file_path, content)
+
+
+def rewrite_file(file_path: str, content: str):
+    try:
+        with open(file_path, 'w', encoding='utf-8') as file:
+            file.write(content)
+        print(f'✅ File rewritten: {file_path}')
+    except Exception as e:
+        print(f"❌ Error writing to {file_path}: {e}")

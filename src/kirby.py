@@ -1,10 +1,10 @@
-from db.file_db import clear_files
-from db.instruction_db import clear_instructions
+from db.file_db import clear_files, summary_files
+from db.instruction_db import clear_instructions, summary_instruction
 import typer
 from cli.file_cli import file_app
 from util.ai_util import build_message, get_ai_client, send_message
 from cli.instruction_cli import instruction_app
-from cli.code_cli import code_app
+from cli.digest_cli import digest_app
 from dotenv import load_dotenv
 import pyperclip
 
@@ -13,8 +13,7 @@ app.add_typer(file_app, name="file",
               help="Manage resources (clipboard).")
 app.add_typer(instruction_app, name="instruction",
               help="AI Instruction Analysis.")
-app.add_typer(code_app, name="?",
-              help="?")
+app.add_typer(digest_app, name="digest", help="?")
 
 load_dotenv()
 
@@ -36,6 +35,12 @@ def clear():
 def clipboard():
     message = build_message()
     pyperclip.copy(message)
+
+
+@app.command()
+def preview():
+    summary_instruction()
+    summary_files()
 
 
 if __name__ == "__main__":

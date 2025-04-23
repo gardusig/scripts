@@ -38,7 +38,6 @@ class OpenAIClient(AIClient):
                 instructions, input, config)
             response = self.client.chat.completions.create(**request_body)
             result = self.parse_response(response)
-            print("✅ Response received:\n")
             print(f"✅ Response received from {config.model}\n")
             return result
         except Exception as e:

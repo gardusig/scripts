@@ -36,7 +36,7 @@ def append_instruction(text: str):
     current = f'{previous}\n{text}' if previous != '' else text
     history.append(current)
     save_instruction_history(history)
-    print(f"➕ Text appended to instructions:\n{text}")
+    print(f"➕ Text appended to instructions.")
 
 
 def get_latest_instruction() -> str:
@@ -49,13 +49,12 @@ def undo_instruction():
     if not history or history[-1] == '':
         print("⚠️ No instructions history to undo.")
         return
-    last = history.pop()
+    history.pop()
     save_instruction_history(history)
-    print(f"↩️ Removed from instructions:\n{last}")
+    print(f"↩️ Removed last added instruction")
 
 
 def summary_instruction():
     history = load_instruction_history()
     current = history[-1]
-    print(f"Undo steps available: {len(history) - 1}")
-    print(f"Current content preview:\n{current}")
+    print(f"Instructions:\n{current}")

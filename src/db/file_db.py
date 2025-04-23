@@ -50,14 +50,13 @@ def undo_files():
     if len(history) <= 1:
         print("⚠️ No file history to undo.")
         return
-    removed = history.pop()
+    history.pop()
     save_file_history(history)
-    print(f"↩️ Reverted last change ({len(removed)} paths removed).")
+    print(f"↩️ Reverted last added file.")
 
 
 def summary_files():
     latest = get_latest_files()
     print(f"📁 File set size: {len(latest)}")
-    print("Current file set preview:")
     for p in sorted(latest):
         print(f" - {p}")

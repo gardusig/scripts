@@ -1,0 +1,5 @@
+[
+    "Don't add new code comments.",
+    "Preserve same code style and make adjustments when necessary, like to fix bugs.",
+    "Focus only on what is necessary, return entire code files with changes on your response within code blocks with '```'."
+]
