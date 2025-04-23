@@ -1,8 +1,10 @@
+
 import json
 import os
 import fnmatch
 from pathlib import Path
 from typing import Optional
+from rich import print
 
 DEFAULT_IGNORES = [
     "__pycache__",
@@ -62,7 +64,7 @@ def stringify_file_contents(file_paths: set[str]) -> str:
 
 
 def load_instructions(instruction_paths: list[str]) -> Optional[str]:
-    instructions = ''
+    instructions = ""
     for instruction_path in instruction_paths:
         instruction = load_instruction(instruction_path)
         if instruction:
@@ -74,17 +76,16 @@ def load_instruction(instruction_path: str) -> Optional[str]:
     try:
         current_dir = Path(__file__).resolve().parent
         while current_dir != current_dir.root:
-            if (current_dir / '.git').exists():
+            if (current_dir / ".git").exists():
                 break
             current_dir = current_dir.parent
-        path = current_dir / 'src' / instruction_path
+        path = current_dir / "src" / instruction_path
         if not path.exists():
             print(f"⚠️ Instruction file '{instruction_path}' not found.")
             return None
         with open(path, "r", encoding="utf-8") as f:
             instructions: list[str] = json.load(f)
-            print(f"Loaded instructions from: {path}")
-            return '\n'.join(instructions)
+            return "\n".join(instructions)
     except Exception as e:
         print(f"❌ Failed to load instructions from '{instruction_path}': {e}")
         return None
@@ -97,8 +98,10 @@ def rewrite_files(content_dict: dict[str, str]):
 
 def rewrite_file(file_path: str, content: str):
     try:
-        with open(file_path, 'w', encoding='utf-8') as file:
+        file_path = Path(file_path)
+        file_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(file_path, "w", encoding="utf-8") as file:
             file.write(content)
-        print(f'✅ File rewritten: {file_path}')
+        print(f"✅ File rewritten: {file_path}")
     except Exception as e:
         print(f"❌ Error writing to {file_path}: {e}")

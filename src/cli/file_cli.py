@@ -5,9 +5,7 @@ from db.file_db import (
     undo_files,
     summary_files,
 )
-from util.file_util import (
-    get_all_files
-)
+from util.file_util import get_all_files
 
 file_app = typer.Typer(help="📁 File path management CLI")
 

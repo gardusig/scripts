@@ -1,6 +1,11 @@
-from db.instruction_db import append_instruction, clear_instructions, summary_instruction, undo_instruction
+from db.instruction_db import (
+    append_instruction,
+    clear_instructions,
+    summary_instruction,
+    undo_instruction,
+)
+import pyperclip
 import typer
-
 
 instruction_app = typer.Typer(help="instruction processing")
 
@@ -12,6 +17,18 @@ def clear():
 
 @instruction_app.command()
 def add(string: str = typer.Argument(..., help="instruction to append")):
+    if not string.strip():
+        print("⚠️ Empty instruction provided.")
+        raise typer.Exit(code=1)
+    append_instruction(string)
+
+
+@instruction_app.command()
+def add_clipboard():
+    string = pyperclip.paste()
+    if not string.strip():
+        print("⚠️ Empty instruction provided.")
+        raise typer.Exit(code=1)
     append_instruction(string)
 
 

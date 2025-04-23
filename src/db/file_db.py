@@ -52,7 +52,7 @@ def undo_files():
         return
     history.pop()
     save_file_history(history)
-    print(f"↩️ Reverted last added file.")
+    print("↩️ Reverted last added file.")
 
 
 def summary_files():

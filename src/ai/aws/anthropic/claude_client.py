@@ -8,7 +8,9 @@ class ClaudeClient(AbstractAWSBedrockClient, ABC):
     def get_model_id(self) -> str:
         pass
 
-    def format_request_body(self, instructions: str, input: str, config: Optional[BedrockConfig] = None) -> dict:
+    def format_request_body(
+        self, instructions: str, input: str, config: Optional[BedrockConfig] = None
+    ) -> dict:
         if not config:
             config = BedrockConfig()
         return {
@@ -20,9 +22,9 @@ class ClaudeClient(AbstractAWSBedrockClient, ABC):
                     "content": [
                         {
                             "type": "text",
-                            "text": f"Instructions: {instructions}\n\nContext: {input}"
+                            "text": f"Instructions: {instructions}\n\nContext: {input}",
                         }
-                    ]
+                    ],
                 }
             ],
             "temperature": config.temperature,
@@ -30,4 +32,4 @@ class ClaudeClient(AbstractAWSBedrockClient, ABC):
         }
 
     def parse_response(self, response_body: dict) -> str:
-        return response_body.get('content', [{}])[0].get('text', '')
+        return response_body.get("content", [{}])[0].get("text", "")

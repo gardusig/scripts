@@ -13,7 +13,9 @@ class OpenAIClient(AIClient):
             raise RuntimeError("❌ OPENAI_API_KEY is not set.")
         self.client = OpenAI(api_key=api_key)
 
-    def format_request_body(self, instructions: str, input: str, config: Optional[OpenAIConfig] = None) -> dict:
+    def format_request_body(
+        self, instructions: str, input: str, config: Optional[OpenAIConfig] = None
+    ) -> dict:
         if not config:
             config = OpenAIConfig()
         return {
@@ -31,14 +33,13 @@ class OpenAIClient(AIClient):
         return response.choices[0].message.content.strip()
 
     def get_response(self, instructions: str, input: str, **kwargs) -> str:
-        print("📨 Sending request to OpenAI...\n")
         try:
             config = OpenAIConfig(**kwargs) if kwargs else OpenAIConfig()
-            request_body = self.format_request_body(
-                instructions, input, config)
+            request_body = self.format_request_body(instructions, input, config)
+            print(f"📨 Sending request to {config.model}...")
             response = self.client.chat.completions.create(**request_body)
             result = self.parse_response(response)
-            print(f"✅ Response received from {config.model}\n")
+            print(f"✅ Response received from {config.model}")
             return result
         except Exception as e:
             raise RuntimeError(f"❌ Failed to get response: {e}")

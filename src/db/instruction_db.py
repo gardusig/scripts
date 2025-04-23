@@ -28,15 +28,15 @@ def clear_instructions():
 
 
 def append_instruction(text: str):
-    if text == '':
+    if text == "":
         print("⚠️ No text to append.")
         return
     history = load_instruction_history()
     previous = history[-1]
-    current = f'{previous}\n{text}' if previous != '' else text
+    current = f"{previous}\n{text}" if previous != "" else text
     history.append(current)
     save_instruction_history(history)
-    print(f"➕ Text appended to instructions.")
+    print("➕ Text appended to instructions.")
 
 
 def get_latest_instruction() -> str:
@@ -46,12 +46,12 @@ def get_latest_instruction() -> str:
 
 def undo_instruction():
     history = load_instruction_history()
-    if not history or history[-1] == '':
+    if not history or history[-1] == "":
         print("⚠️ No instructions history to undo.")
         return
     history.pop()
     save_instruction_history(history)
-    print(f"↩️ Removed last added instruction")
+    print("↩️ Removed last added instruction")
 
 
 def summary_instruction():

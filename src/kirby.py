@@ -9,10 +9,8 @@ from dotenv import load_dotenv
 import pyperclip
 
 app = typer.Typer(help="Main application with subcommands.")
-app.add_typer(file_app, name="file",
-              help="Manage resources (clipboard).")
-app.add_typer(instruction_app, name="instruction",
-              help="AI Instruction Analysis.")
+app.add_typer(file_app, name="file", help="Manage resources (clipboard).")
+app.add_typer(instruction_app, name="instruction", help="AI Instruction Analysis.")
 app.add_typer(digest_app, name="digest", help="?")
 
 load_dotenv()

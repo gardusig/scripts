@@ -19,7 +19,7 @@ def repository_review():
 
 
 @digest_app.command()
-def code():
+def guidance():
     instructions = load_instructions(
         [
             "resources/instructions/code/code_standards.json",
@@ -32,11 +32,10 @@ def code():
 
 
 @digest_app.command()
-def code_review():
+def code():
     instructions = load_instructions(
         [
             "resources/instructions/code/code_standards.json",
-            "resources/instructions/code/code_review.json",
             "resources/instructions/response/response_json_format.json",
         ]
     )
