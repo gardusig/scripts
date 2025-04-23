@@ -2,6 +2,7 @@ import typer
 from util.ai_util import get_ai_client, handle_code_change_response, send_message
 from util.file_util import load_instructions
 
+
 digest_app = typer.Typer(help="📁 Code management CLI")
 
 
@@ -14,27 +15,6 @@ def repository_review():
     ai_client = get_ai_client()
     response = send_message(ai_client, instructions)
     print(response)
-
-
-@digest_app.command(help="Provide coding guidance")
-def guidance():
-    instructions = load_instructions([
-        "code/code_standards.json",
-        "code/code_review.json",
-    ])
-    ai_client = get_ai_client()
-    response = send_message(ai_client, instructions)
-    print(response)
-
-
-@digest_app.command(help="Response JSON format analysis")
-def response_analysis():
-    instructions = load_instructions([
-        "response/response_json_format.json",
-    ])
-    ai_client = get_ai_client()
-    response = send_message(ai_client, instructions)
-    handle_code_change_response(response)
 
 
 @digest_app.command(help="Comprehensive code review")

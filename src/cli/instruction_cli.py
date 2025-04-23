@@ -7,11 +7,14 @@ from db.instruction_db import (
 import pyperclip
 import typer
 
+
 instruction_app = typer.Typer(help="Instruction processing CLI")
+
 
 @instruction_app.command(help="Clear all instructions")
 def clear():
     clear_instructions()
+
 
 @instruction_app.command(help="Add a new instruction")
 def add(string: str = typer.Argument(..., help="Instruction to append")):
@@ -19,6 +22,7 @@ def add(string: str = typer.Argument(..., help="Instruction to append")):
         print("⚠️ Empty instruction provided.")
         raise typer.Exit(code=1)
     append_instruction(string)
+
 
 @instruction_app.command(help="Add instruction from clipboard")
 def add_clipboard():
@@ -28,13 +32,16 @@ def add_clipboard():
         raise typer.Exit(code=1)
     append_instruction(string)
 
+
 @instruction_app.command(help="Undo last instruction operation")
 def undo():
     undo_instruction()
 
+
 @instruction_app.command(help="List all instructions")
 def list():
     summary_instruction()
+
 
 @instruction_app.command(help="Usage for each resource")
 def usage():

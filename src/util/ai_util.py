@@ -1,3 +1,4 @@
+import base64
 import json
 import re
 from typing import Optional
@@ -26,31 +27,18 @@ def send_message(
     instructions: Optional[str] = None,
     files: Optional[set[str]] = None,
 ) -> str:
-    instructions = build_instructions(instructions)
     context = build_context(files)
-    response = ai_client.get_response(instructions, context)
+    last_messages = get_latest_instruction()
+    response = ai_client.get_response(instructions, context, last_messages)
     return response
 
 
-def build_instructions(instructions: Optional[str] = None) -> str:
-    latest_instruction = get_latest_instruction()
-    if instructions:
-        return latest_instruction + '.' + instructions
-    return latest_instruction
-
-
-def build_context(files: Optional[set[str]] = None) -> str:
+def build_context(files: Optional[set[str]] = None) -> dict[str, str]:
     if not files:
         files = set()
     for file in get_latest_files():
         files.add(file)
     return stringify_file_contents(files)
-
-
-def build_message() -> str:
-    instructions = build_instructions()
-    context = build_context()
-    return f"instructions:\n{instructions}\n\ncontext:\n{context}"
 
 
 def extract_first_code_block(response: str) -> str:
@@ -62,5 +50,15 @@ def extract_first_code_block(response: str) -> str:
 
 def handle_code_change_response(response: str):
     code_block = extract_first_code_block(response)
-    files: dict[str, str] = json.loads(code_block)
-    rewrite_files(files)
+    try:
+        files_b64: dict[str, str] = json.loads(code_block)
+    except json.JSONDecodeError as e:
+        raise RuntimeError(f"Invalid JSON from model: {e}")
+    decoded_files: dict[str, str] = {}
+    for path, b64_content in files_b64.items():
+        try:
+            raw_bytes = base64.b64decode(b64_content)
+            decoded_files[path] = raw_bytes.decode("utf-8")
+        except Exception as err:
+            raise RuntimeError(f"Failed to decode `{path}`: {err}")
+    rewrite_files(decoded_files)

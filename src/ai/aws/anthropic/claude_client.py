@@ -3,6 +3,12 @@ from typing import Optional
 from ai.aws.bedrock_client import AbstractAWSBedrockClient, BedrockConfig
 
 
+def build_prompt(instructions: str, input: str) -> str:
+    instructions = instructions.strip()
+    input = input.strip()
+    return f"Instructions: {instructions}\n\nContext through files: {input}"
+
+
 class ClaudeClient(AbstractAWSBedrockClient, ABC):
     @abstractmethod
     def get_model_id(self) -> str:
@@ -22,7 +28,7 @@ class ClaudeClient(AbstractAWSBedrockClient, ABC):
                     "content": [
                         {
                             "type": "text",
-                            "text": f"Instructions: {instructions}\n\nContext: {input}",
+                            "text": build_prompt(instructions, input),
                         }
                     ],
                 }

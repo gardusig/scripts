@@ -1,1 +1,8 @@
-["Encapsulate the entire response within a single code block for clarity.", "Submit the complete response in a valid JSON format.", "Structure it as a dictionary containing only code snippets, e.g., {\"path/to/file\": \"from ... import ...\"}.", "Provide each updated file's content as a single string for its respective path, even if it's a JSON file.", "Ensure the JSON structure is valid and properly escaped to avoid errors.", "Keep the JSON response concise and focused on the request provided.", "Include clear error messages to handle invalid JSON structures effectively.", "Use consistent indentation throughout for improved readability and maintenance.", "Test JSON responses for compliance with API specifications.", "Provide examples of valid and invalid JSON responses for clarity."]
+[
+    "Encapsulate the entire response in a single triple-backtick JSON code block.",
+    "Return a JSON object where each key is the file path and each value is the Base64-encoded contents of that file.",
+    "Do not include any explanation or commentary—only the JSON mapping.",
+    "Ensure the JSON is valid and properly escaped.",
+    "Do not include data URIs or MIME types—just raw Base64 strings.",
+    "Keep the JSON concise and focused on the changed files only."
+]

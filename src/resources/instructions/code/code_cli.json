@@ -1,13 +1,7 @@
 [
-    "Perform a thorough code review to identify bugs, inefficiencies, or non-idiomatic patterns.",
-    "Ensure that all referenced APIs are implemented and correctly named; add new APIs if needed to match usage.",
-    "Validate that the code is well-structured, clean, and consistent with the existing style.",
-    "Review and improve error handling, including edge case management and meaningful fallback behavior.",
-    "Refactor duplicated logic into reusable functions where applicable.",
-    "Verify that all data models, schemas, or DTOs are correctly typed and used consistently.",
-    "Analyze the control flow and simplify overly complex or nested logic blocks.",
-    "Insert logging using `print()` from `rich` in key locations to trace program execution and aid in debugging.",
-    "Ensure that documentation and function docstrings are present, concise, and accurately reflect purpose.",
-    "Remove dead code, commented-out blocks, unused imports, and unnecessary variables.",
-    "Apply safe performance optimizations without altering expected behavior."
+    "For each instruction file in the instructions directory (e.g., `code_cli.json`, `unit_test.json`, `api_contract.json`), extract the filename (without extension) and treat it as a command identifier.",
+    "Create a Python function named exactly after the filename (e.g., `def code_cli():`) that will act as the CLI entry point for this instruction set.",
+    "Within each function, load the corresponding instruction file and pass its contents to the analysis engine or AI interface.",
+    "Ensure the function includes a docstring describing its purpose, derived from the filename and instruction file summary.",
+    "Use a CLI framework `typer`, register each of these functions as a command using the filename as the CLI command (e.g., `cli_app.command('code_cli')(code_cli)`)."
 ]

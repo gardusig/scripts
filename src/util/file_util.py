@@ -48,19 +48,16 @@ def get_all_files(path: str, ignore_patterns=DEFAULT_IGNORES) -> list[str]:
     return files
 
 
-def stringify_file_contents(file_paths: set[str]) -> str:
-    if len(file_paths) == 0:
-        return ""
-    output = []
+def stringify_file_contents(file_paths: set[str]) -> dict[str, str]:
+    output = {}
     for path in file_paths:
         try:
             with open(path, "r", encoding="utf-8") as f:
-                content = f.read().strip()
-            output.append(f"{path}:\n\n```\n{content}\n```")
+                output[path] = f.read().strip()
         except Exception as e:
-            output.append(f"{path} (Error reading file: {e})")
+            print(f"Error reading file: {path}, reason: {e})")
     print(f"📄 Read {len(file_paths)} file(s)")
-    return "\n\n".join(output)
+    return output
 
 
 def load_instructions(instruction_paths: list[str]) -> Optional[str]:

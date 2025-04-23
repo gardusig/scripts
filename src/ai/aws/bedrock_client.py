@@ -33,42 +33,42 @@ class AbstractAWSBedrockClient(AIClient, ABC):
     def parse_response(self, response_body: dict) -> str:
         pass
 
-    def get_response(self, instructions: str, input: str, **kwargs) -> str:
+    def get_response(self, instructions: str, context: dict[str, str], last_messages: str, **kwargs) -> str:
         print(f"📨 Sending request to {self.get_model_id()}...\n")
 
-        try:
-            config = BedrockConfig(**kwargs) if kwargs else BedrockConfig()
+        # try:
+        #     config = BedrockConfig(**kwargs) if kwargs else BedrockConfig()
 
-            request_body = self.format_request_body(
-                instructions=instructions, input=input, config=config
-            )
+        #     request_body = self.format_request_body(
+        #         instructions=instructions, input=input, config=config
+        #     )
 
-            response = self.client.invoke_model(
-                modelId=self.get_model_id(),
-                body=json.dumps(request_body),
-                contentType="application/json",
-                accept="application/json",
-            )
+        #     response = self.client.invoke_model(
+        #         modelId=self.get_model_id(),
+        #         body=json.dumps(request_body),
+        #         contentType="application/json",
+        #         accept="application/json",
+        #     )
 
-            response_body = json.loads(response.get("body").read())
-            result = self.parse_response(response_body)
+        #     response_body = json.loads(response.get("body").read())
+        #     result = self.parse_response(response_body)
 
-            print(f"✅ Response received from {self.get_model_id()}\n")
-            return result.strip()
+        #     print(f"✅ Response received from {self.get_model_id()}\n")
+        #     return result.strip()
 
-        except (BotoCoreError, ClientError) as e:
-            error_message = str(e)
-            if "ThrottlingException" in error_message:
-                raise RuntimeError(
-                    "❌ Rate limit exceeded. Please wait before trying again."
-                )
-            elif "ValidationException" in error_message:
-                raise RuntimeError("❌ Invalid request format or parameters.")
-            elif "AccessDeniedException" in error_message:
-                raise RuntimeError(
-                    "❌ Authentication failed. Please check your AWS credentials."
-                )
-            else:
-                raise RuntimeError(
-                    f"❌ Failed to get response from {self.get_model_id()}: {e}"
-                )
+        # except (BotoCoreError, ClientError) as e:
+        #     error_message = str(e)
+        #     if "ThrottlingException" in error_message:
+        #         raise RuntimeError(
+        #             "❌ Rate limit exceeded. Please wait before trying again."
+        #         )
+        #     elif "ValidationException" in error_message:
+        #         raise RuntimeError("❌ Invalid request format or parameters.")
+        #     elif "AccessDeniedException" in error_message:
+        #         raise RuntimeError(
+        #             "❌ Authentication failed. Please check your AWS credentials."
+        #         )
+        #     else:
+        #         raise RuntimeError(
+        #             f"❌ Failed to get response from {self.get_model_id()}: {e}"
+        #         )
