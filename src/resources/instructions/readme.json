@@ -1,10 +1,10 @@
 [
-    "Given this codebase, how would you build an up to date README?",
-    "Keep README professional and somewhat funny, document mostly about exposed APIs or CLI.",
-    "Output should contain a header with each section, matching emojis for each section title and whenever applicable on text.",
-    "It should contain a usage example section with code blocks showing commands and expected output examples.",
-    "It should contain environment development instructions with simple to use code snippets for macos with brew.",
-    "Include a section on project setup and installation steps.",
-    "Add a section for troubleshooting common issues.",
-    "Provide a list of contributors and how others can contribute."
+    "How would you construct an up-to-date README for this codebase?",
+    "Keep the README professional yet slightly humorous, focusing mainly on exposed APIs or CLI.",
+    "Include a header for each section, accompanied by matching emojis where applicable.",
+    "Provide a usage example section with code blocks demonstrating commands and expected outputs.",
+    "Include environment development instructions with straightforward code snippets, particularly for macOS using Homebrew.",
+    "Add a section detailing project setup and installation steps.",
+    "Include a section for troubleshooting common issues.",
+    "List contributors and provide instructions on how others can contribute."
 ]

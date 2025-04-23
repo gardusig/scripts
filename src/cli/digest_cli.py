@@ -32,6 +32,18 @@ def guidance():
 
 
 @digest_app.command()
+def code_kappa():
+    instructions = load_instructions(
+        [
+            "response/response_json_format.json",
+        ]
+    )
+    ai_client = get_ai_client()
+    response = send_message(ai_client, instructions)
+    handle_code_change_response(response)
+
+
+@digest_app.command()
 def code_review():
     instructions = load_instructions(
         [

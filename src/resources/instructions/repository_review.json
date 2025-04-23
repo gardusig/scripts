@@ -1,10 +1,10 @@
 [
-    "Review this codebase and look forward to finding potential bugs and errors.",
-    "Focus only on already existing things, disregard new features or tools.",
-    "Assess code organization and structure for maintainability.",
+    "Examine the codebase to identify potential bugs and errors.",
+    "Focus solely on existing features; disregard new features or tools.",
+    "Evaluate the organization and structure of the code for maintainability.",
     "Check for adherence to coding standards and best practices.",
-    "Evaluate the repository for redundancy and code duplication.",
-    "Ensure that documentation is clear and provides necessary insights into the codebase.",
-    "Verify that the repository includes a license file.",
-    "Check for a clear versioning strategy and changelog."
+    "Assess the repository for redundancy and code duplication.",
+    "Ensure documentation is clear and provides necessary insights into the codebase.",
+    "Verify that the repository includes a proper license file.",
+    "Check for a clear versioning strategy and maintain a changelog."
 ]

@@ -1,10 +1,10 @@
 [
-    "Put your entire answer within a single code block.",
-    "Send the entire response in JSON format.",
-    "Like a dict including only code snippets. example: {\"path/to/file\": \"from ... import ...\"}.",
-    "Every file content must be provided as a single string for that path. Even for these shitty json",
-    "Ensure JSON structure is valid and properly escaped.",
-    "Keep the JSON response concise and relevant to the request.",
-    "Include meaningful error messages when the JSON structure is invalid.",
-    "Use consistent indentation for readability."
+    "Encapsulate your entire response within a single code block.",
+    "Submit the entire response in a valid JSON format.",
+    "Structure it like a dictionary containing only code, entire code. For example: {\"path/to/file\": \"from ... import ...\"}.",
+    "Provide each file's content as a single string for its path, even if it's a JSON file.",
+    "Ensure the JSON structure is valid and properly escaped.",
+    "Keep the JSON response concise and focused on the request.",
+    "Include clear error messages for invalid JSON structures.",
+    "Use consistent indentation for enhanced readability."
 ]
