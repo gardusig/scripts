@@ -1,3 +1,5 @@
+import json
+import re
 from typing import Optional
 from ai.ai_client_interface import AIClient
 
@@ -7,7 +9,7 @@ from ai.openai.openai_client import OpenAIClient
 import os
 
 from db.file_db import get_latest_files
-from util.file_util import stringify_file_contents
+from util.file_util import rewrite_files, stringify_file_contents
 from db.instruction_db import get_latest_instruction
 
 
@@ -47,3 +49,17 @@ def build_message() -> str:
     instructions = build_instructions()
     context = build_context()
     return f'instructions:\n{instructions}\n\ncontext:\n{context}'
+
+
+def extract_first_code_block(response: str) -> str:
+    match = re.search(r'```(.*?)```', response, re.DOTALL)
+    if match:
+        return match.group(1).strip()
+    return response.strip()
+
+
+def handle_code_change_response(response: str):
+    code_block = extract_first_code_block(response)
+    print(f'code_block: {code_block}')
+    files: dict[str, str] = json.loads(response)
+    rewrite_files(files)

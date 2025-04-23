@@ -1,7 +1,6 @@
-import json
 import typer
-from util.ai_util import get_ai_client, send_message
-from util.file_util import load_instructions, rewrite_files
+from util.ai_util import get_ai_client, handle_code_change_response, send_message
+from util.file_util import load_instructions
 
 digest_app = typer.Typer(help="📁 Code management CLI")
 
@@ -43,5 +42,4 @@ def code_review():
     )
     ai_client = get_ai_client()
     response = send_message(ai_client, instructions)
-    files: dict[str, str] = json.loads(response)
-    rewrite_files(files)
+    handle_code_change_response(response)
