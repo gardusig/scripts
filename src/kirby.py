@@ -66,7 +66,7 @@ def unit_test():
     ai_client = get_ai_client()
     response = send_message(ai_client, instructions)
     file_map = parse_code_response(response)
-    rewrite_files(file_map)
+    rewrite_files(file_map, ['tests'])
 
 
 if __name__ == "__main__":

@@ -60,19 +60,20 @@ def stringify_file_contents(file_paths: set[str]) -> dict[str, str]:
     return output
 
 
-def load_instructions(instruction_paths: list[str]) -> Optional[str]:
-    instructions = ""
-    for instruction_path in instruction_paths:
-        instruction = load_instruction(instruction_path)
-        if instruction:
-            instructions += instruction
-    return instructions if instructions else None
+def load_instructions(instruction_paths: list[str], base_dir: Optional[Path] = None) -> Optional[str]:
+    result = ""
+    for path in instruction_paths:
+        text = load_instruction(path, base_dir)
+        if text:
+            result += text
+    return result if result else None
 
 
-def load_instruction(instruction_path: str) -> Optional[str]:
+def load_instruction(instruction_path: str, base_dir: Optional[Path] = None) -> Optional[str]:
     try:
-        path = Path(__file__).parent.parent / \
-            "resources/instructions/" / instruction_path
+        if base_dir is None:
+            base_dir = Path(__file__).parent.parent / "resources/instructions"
+        path = base_dir / instruction_path
         if not path.exists():
             print(f"⚠️ Instruction file '{instruction_path}' not found.")
             return None
@@ -84,9 +85,10 @@ def load_instruction(instruction_path: str) -> Optional[str]:
         return None
 
 
-def rewrite_files(content_dict: dict[str, str]):
+def rewrite_files(content_dict: dict[str, str], allowed_file_prefixes: list[str] = []):
     for file_path, content in content_dict.items():
-        rewrite_file(file_path, content)
+        if any(file_path.startswith(prefix) for prefix in allowed_file_prefixes):
+            rewrite_file(file_path, content)
 
 
 def rewrite_file(file_path: str, content: str):

@@ -1,6 +1,5 @@
 import json
 import base64
-from typing import Any
 import pytest
 
 from util.ai_util import (
