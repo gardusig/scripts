@@ -20,6 +20,7 @@ dependencies = [
   "pyperclip",
   "black",
   "flake8",
+  "pytest",
 ]
 
 [project.urls]

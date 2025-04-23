@@ -2,7 +2,7 @@ from db.file_db import clear_files, summary_files
 from db.instruction_db import append_instruction, clear_instructions, summary_instruction
 import typer
 from cli.file_cli import file_app
-from util.ai_util import build_message, get_ai_client, handle_code_change_response, send_message
+from util.ai_util import get_ai_client, handle_code_change_response, send_message
 from cli.instruction_cli import instruction_app
 from cli.digest_cli import digest_app
 from dotenv import load_dotenv
@@ -21,12 +21,6 @@ load_dotenv()
 def clean():
     clear_instructions()
     clear_files()
-
-
-@app.command(help="Copy built message to clipboard")
-def clipboard():
-    message = build_message()
-    pyperclip.copy(message)
 
 
 @app.command(help="Preview instructions and files")

@@ -1,4 +1,5 @@
 import os
+from typing import Optional
 from ai.ai_client_interface import AIClient
 from ai.openai.openai_config import OpenAIConfig
 from openai import OpenAI
@@ -14,16 +15,17 @@ class OpenAIClient(AIClient):
 
     def build_messages(
         self,
-        instructions: str,
+        instructions: Optional[str],
         files: dict[str, str],
         last_messages: str,
     ) -> list[ChatCompletionMessageParam]:
         msgs: list[ChatCompletionMessageParam] = []
 
-        msgs.append({
-            "role": "system",
-            "content": instructions.strip()
-        })
+        if instructions:
+            msgs.append({
+                "role": "system",
+                "content": instructions.strip()
+            })
 
         for fname, content in files.items():
             msgs.append({
@@ -42,7 +44,7 @@ class OpenAIClient(AIClient):
 
     def get_response(
         self,
-        instructions: str,
+        instructions: Optional[str],
         context: dict[str, str],
         last_messages: str,
         **kwargs

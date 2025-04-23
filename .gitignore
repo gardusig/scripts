@@ -37,3 +37,5 @@ coverage.xml
 
 # Test results
 junit.xml
+
+.pytest_cache
