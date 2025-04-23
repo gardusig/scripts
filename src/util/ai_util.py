@@ -25,12 +25,13 @@ def send_message(
     ai_client: AIClient,
     instructions: Optional[str] = None,
     files: Optional[set[str]] = None,
-):
+) -> str:
     instructions = build_instructions(instructions)
     context = build_context(files)
     print(f'instructions: {instructions}')
     response = ai_client.get_response(instructions, context)
     print(f'response: {response}')
+    return response
 
 
 def build_instructions(instructions: Optional[str] = None) -> str:

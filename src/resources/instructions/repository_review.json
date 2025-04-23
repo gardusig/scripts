@@ -1,4 +1,6 @@
 [
     "Review this codebase and look forward to finding potential bugs and errors.",
-    "Focus only on already existing things, disregard new features or tools."
+    "Focus only on already existing things, disregard new features or tools.",
+    "Assess code organization and structure for maintainability.",
+    "Check for adherence to coding standards and best practices."
 ]

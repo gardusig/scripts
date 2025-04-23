@@ -1,4 +1,6 @@
 [
     "Review this code and look forward to finding potential bugs and errors.",
-    "Focus only on already existing things, disregard new features or tools."
+    "Focus only on already existing things, disregard new features or tools.",
+    "Ensure code logic is clear and efficient.",
+    "Check for proper error handling and edge case coverage."
 ]

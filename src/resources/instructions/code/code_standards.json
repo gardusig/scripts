@@ -2,5 +2,7 @@
     "Don't add new code comments.",
     "Preserve same code style and make adjustments when necessary, like to fix bugs.",
     "Focus only on what is necessary.",
-    "Put entire file code when adding a code block."
+    "Put entire file code when adding a code block.",
+    "Ensure code adheres to PEP 8 standards for Python.",
+    "Maintain consistent naming conventions and formatting."
 ]

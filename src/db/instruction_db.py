@@ -57,4 +57,4 @@ def undo_instruction():
 def summary_instruction():
     history = load_instruction_history()
     current = history[-1]
-    print(f"Instructions:\n{current}")
+    print(current)
