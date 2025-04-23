@@ -9,8 +9,8 @@ digest_app = typer.Typer(help="📁 Code management CLI")
 def repository_review():
     instructions = load_instructions(
         [
-            "resources/instructions/code/code_standards.json",
-            "resources/instructions/repository_review.json",
+            "code/code_standards.json",
+            "repository_review.json",
         ]
     )
     ai_client = get_ai_client()
@@ -22,13 +22,27 @@ def repository_review():
 def guidance():
     instructions = load_instructions(
         [
-            "resources/instructions/code/code_standards.json",
-            "resources/instructions/code/code_review.json",
+            "code/code_standards.json",
+            "code/code_review.json",
         ]
     )
     ai_client = get_ai_client()
     response = send_message(ai_client, instructions)
     print(response)
+
+
+@digest_app.command()
+def code_review():
+    instructions = load_instructions(
+        [
+            "code/code_standards.json",
+            "code/code_review.json",
+            "response/response_json_format.json",
+        ]
+    )
+    ai_client = get_ai_client()
+    response = send_message(ai_client, instructions)
+    handle_code_change_response(response)
 
 
 @digest_app.command()
