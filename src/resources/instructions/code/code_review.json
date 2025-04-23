@@ -1,10 +1,1 @@
-[
-    "Examine the code to uncover potential bugs and errors.",
-    "Focus on existing features; disregard new features or tools.",
-    "Ensure code logic is clear, efficient, and easy to follow.",
-    "Check for comprehensive error handling and edge case coverage.",
-    "Validate the correctness and efficiency of algorithms and data structures used.",
-    "Identify opportunities for performance improvements where applicable.",
-    "Ensure the code is free from security vulnerabilities.",
-    "Verify that documentation is provided where necessary and is clear."
-]
+["Perform a meticulous examination of the code to uncover potential bugs and vulnerabilities.", "Concentrate on reviewing current features, excluding the consideration of new features or tools.", "Ensure that the code logic is transparent, efficient, and easy to comprehend.", "Check for robust error handling and coverage of edge cases.", "Validate the correctness and efficiency of algorithms and data structures utilized.", "Identify and propose performance enhancements where applicable.", "Ensure that the code is secure and devoid of vulnerabilities.", "Verify that all necessary documentation is clear and beneficial.", "Review test coverage and suggest additional tests where necessary.", "Provide constructive feedback and actionable suggestions for improvement."]

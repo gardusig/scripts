@@ -1,10 +1,1 @@
-[
-    "Examine the codebase to identify potential bugs and errors.",
-    "Focus solely on existing features; disregard new features or tools.",
-    "Evaluate the organization and structure of the code for maintainability.",
-    "Check for adherence to coding standards and best practices.",
-    "Assess the repository for redundancy and code duplication.",
-    "Ensure documentation is clear and provides necessary insights into the codebase.",
-    "Verify that the repository includes a proper license file.",
-    "Check for a clear versioning strategy and maintain a changelog."
-]
+["Conduct a comprehensive review of the codebase to pinpoint potential bugs and vulnerabilities.", "Focus solely on existing features without considering new additions or tools.", "Assess the code's architecture for maintainability and scalability.", "Verify compliance with established coding standards and best practices.", "Identify and eliminate code redundancy and duplication where feasible.", "Ensure documentation is thorough, offering necessary insights into the codebase.", "Confirm the presence of a proper license file to ensure legal compliance.", "Check for a clear versioning strategy and an up-to-date changelog.", "Evaluate the effectiveness of the current testing strategy.", "Propose improvements for better code organization and structure.", "Usage: Utilize for repository reviews focusing on existing features and compliance."]

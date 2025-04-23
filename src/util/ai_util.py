@@ -30,14 +30,13 @@ def send_message(
     context = build_context(files)
     print(f'instructions: {instructions}')
     response = ai_client.get_response(instructions, context)
-    print(f'response: {response}')
     return response
 
 
 def build_instructions(instructions: Optional[str] = None) -> str:
     latest_instruction = get_latest_instruction()
     if instructions:
-        return latest_instruction + instructions
+        return latest_instruction + '.' + instructions
     return latest_instruction
 
 

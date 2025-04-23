@@ -1,11 +1,1 @@
-[
-    "Avoid adding new code comments unless necessary.",
-    "Preserve the existing code style, making adjustments only to fix bugs.",
-    "Concentrate on essential changes only.",
-    "Include the entire file content when adding a code block.",
-    "Ensure the code adheres to PEP 8 standards for Python.",
-    "Maintain consistent naming conventions and formatting.",
-    "Ensure variable names are meaningful and descriptive.",
-    "Use descriptive commit messages for any changes made.",
-    "Ensure functions have a single responsibility and are not overly complex."
-]
+["Emphasize clear and understandable code, restricting comments to essential clarifications.", "Adhere to the current code style, modifying only when necessary for bug resolution.", "Focus on changes that improve functionality or address specific issues.", "Include complete file content when introducing or altering code blocks.", "Follow PEP 8 standards for Python to maintain consistency across the codebase.", "Ensure uniform naming conventions and consistent formatting throughout the code.", "Select descriptive and meaningful names for variables and functions.", "Compose informative commit messages that clearly articulate the changes made.", "Design functions with a single responsibility, avoiding unnecessary complexity.", "Encourage peer reviews to uphold coding standards.", "Integrate unit testing with code standards to ensure robust testing and code quality."]
