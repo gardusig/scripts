@@ -4,5 +4,7 @@
     "Ensure code logic is clear and efficient.",
     "Check for proper error handling and edge case coverage.",
     "Validate the correctness of algorithms and data structures used.",
-    "Assess the code for performance improvements where applicable."
+    "Assess the code for performance improvements where applicable.",
+    "Verify that the code is free of security vulnerabilities.",
+    "Ensure that the code is well-documented where necessary."
 ]

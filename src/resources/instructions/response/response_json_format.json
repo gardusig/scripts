@@ -4,5 +4,7 @@
     "Like a dict including only code snippets. example: {\"path/to/file\": \"from ... import ...\"}.",
     "Every file content must be provided as a single string for that path. Even for these shitty json",
     "Ensure JSON structure is valid and properly escaped.",
-    "Keep the JSON response concise and relevant to the request."
+    "Keep the JSON response concise and relevant to the request.",
+    "Include meaningful error messages when the JSON structure is invalid.",
+    "Use consistent indentation for readability."
 ]

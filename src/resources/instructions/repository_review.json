@@ -4,5 +4,7 @@
     "Assess code organization and structure for maintainability.",
     "Check for adherence to coding standards and best practices.",
     "Evaluate the repository for redundancy and code duplication.",
-    "Ensure that documentation is clear and provides necessary insights into the codebase."
+    "Ensure that documentation is clear and provides necessary insights into the codebase.",
+    "Verify that the repository includes a license file.",
+    "Check for a clear versioning strategy and changelog."
 ]
