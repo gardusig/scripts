@@ -4,6 +4,5 @@
     "Output should contain a header with each section, matching emojis for each section title and whenever applicable on text.",
     "It should contain an usage example section with code blocks showing commands and expected output examples.",
     "It should contain environment development instructions with simple to use code snippets for macos with brew.",
-    "Include a section on project setup and installation steps.",
-    "Add a section for contributing guidelines and code of conduct."
+    "Include a section on project setup and installation steps."
 ]

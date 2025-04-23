@@ -2,5 +2,7 @@
     "Review this codebase and look forward to finding potential bugs and errors.",
     "Focus only on already existing things, disregard new features or tools.",
     "Assess code organization and structure for maintainability.",
-    "Check for adherence to coding standards and best practices."
+    "Check for adherence to coding standards and best practices.",
+    "Evaluate the repository for redundancy and code duplication.",
+    "Ensure that documentation is clear and provides necessary insights into the codebase."
 ]

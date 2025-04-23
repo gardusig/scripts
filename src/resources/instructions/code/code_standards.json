@@ -4,5 +4,6 @@
     "Focus only on what is necessary.",
     "Put entire file code when adding a code block.",
     "Ensure code adheres to PEP 8 standards for Python.",
-    "Maintain consistent naming conventions and formatting."
+    "Maintain consistent naming conventions and formatting.",
+    "Verify that variable names are meaningful and descriptive."
 ]
