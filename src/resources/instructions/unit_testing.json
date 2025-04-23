@@ -1,1 +1,13 @@
-["Develop comprehensive unit tests for each function and class, focusing on edge cases and expected behavior.", "Utilize a testing framework like pytest or unittest to organize and run tests efficiently.", "Ensure tests are isolated, avoiding dependencies on external systems or data sources.", "Mock external services and components to simulate different scenarios and outcomes.", "Achieve a high level of code coverage, aiming for at least 80% or higher.", "Document each test case clearly, explaining the purpose and expected results.", "Regularly review and update tests to align with code changes and new features.", "Implement continuous integration to automatically run tests on code changes.", "Encourage test-driven development practices.", "Incorporate performance testing for critical functions.", "Prioritize writing tests for areas with high user impact or complex logic.", "Use parameterized tests to cover multiple scenarios with minimal code duplication.", "Integrate code coverage tools to identify untested parts of the code base.", "Automate regression testing to catch unintended changes in behavior.", "Review and refactor test code for readability and maintainability.", "Usage: Apply for creating and maintaining comprehensive unit tests."]
+[
+    "Write Unit tests for all the provided files. Pick each function and organize a way to test it.",
+    "Review the function signature, input parameters, and return type to understand its intended behavior.",
+    "Identify all normal cases, boundary conditions, and error scenarios the function should handle.",
+    "Propose a comprehensive list of test cases that cover valid inputs, invalid inputs, edge cases, and exceptions.",
+    "For each test case, suggest clear and descriptive test names that reflect the scenario and expected outcome.",
+    "Use the Arrange-Act-Assert (AAA) pattern in each unit test for clarity and consistency.",
+    "Include setup and teardown logic if any shared fixtures or resources are required.",
+    "Mock or stub external dependencies to isolate the function under test and avoid side effects.",
+    "Use parameterized tests or data-driven testing where appropriate to group similar test scenarios.",
+    "Ensure tests are independent and can run in any order without affecting each other.",
+    "Provide brief comments or docstrings for each test to explain its purpose."
+]

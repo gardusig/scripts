@@ -1,18 +1,17 @@
 # Kirby CLI
 
-Welcome to the Kirby CLI! Forget about hunting through endless file explorers or struggling to keep track of those pesky AI instructions—our tool is designed to streamline your workflow and boost your productivity with some real-world functionality. Manage files and instructions efficiently like a pro! Let's get started.
+Welcome to the Kirby CLI! Designed to streamline your workflow and boost your productivity with some real-world AI functionality. Manage files and instructions efficiently like a pro! Let's get started.
 
-## Commands Overview 📜
-
-### Main Application
-
-The Kirby CLI is your reliable companion for navigating the world of file management and AI instruction processing with ease and precision.
+<div align="center">
+  <img src="./media/kirby-eat.webp" alt="kirby-eat" height="150" />
+  <img src="./media/kirby-cook.gif" alt="kirby-cook" height="150" />
+  <img src="./media/kirby-work.gif" alt="kirby-work" height="150" />
+</div>
 
 ## Usage 🛠️
 
 Imagine Kirby CLI as your diligent sous-chef, sorting and organizing all your files and instructions so you can focus on creating the perfect AI-assisted project. Once everything is in order, pass it on to your language model for an efficient, focused analysis.
 
-![kirby](./media/kirby.webp)
 
 ### Efficient File Management at Your Fingertips
 

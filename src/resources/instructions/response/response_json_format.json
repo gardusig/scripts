@@ -1,4 +1,5 @@
 [
+    "MANDATORY: wrap exactly one JSON object on your response as ```json  {...}  ```  and never emit anything before or after the fences.",
     "Encapsulate the entire response in a single triple-backtick JSON code block.",
     "Return a JSON object where each key is the file path and each value is the Base64-encoded contents of that file.",
     "Do not include any explanation or commentary—only the JSON mapping.",

@@ -62,6 +62,18 @@ def code_cli():
     handle_code_change_response(response)
 
 
+@digest_app.command(help="?")
+def unit_test():
+    instructions = load_instructions([
+        "unit_testing.json",
+        "code/code_standards.json",
+        "response/response_json_format.json",
+    ])
+    ai_client = get_ai_client()
+    response = send_message(ai_client, instructions)
+    handle_code_change_response(response)
+
+
 @digest_app.command(help="CLI code analysis")
 def instruction():
     instructions = load_instructions([
