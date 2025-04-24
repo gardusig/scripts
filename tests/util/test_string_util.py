@@ -1,42 +1,83 @@
-import base64
 import pytest
-from util.string_util import decode_b64, extract_base64json_block
+from util.string_util import DEFAULT_FENCE, parse_code_response
 
 
-def test_extract_base64json_block_simple():
-    b64 = base64.b64encode(b"print('hello')").decode()
-    resp = f"```base64json\n{b64}\n```"
-    assert extract_base64json_block(resp) == b64
+def block(path: str, body: str = "") -> str:
+    quoted = f'"{path}"' if path[0] not in "\"'`" else path
+    return (
+        "!@# random_text !@#"
+        f"{DEFAULT_FENCE}"
+        f"{quoted}{body}"
+        f"{DEFAULT_FENCE} "
+        "!@# random_text !@#"
+    )
 
 
-def test_extract_base64json_block_with_whitespace():
-    b64 = base64.b64encode(b"print('x')").decode()
-    messy = f"```base64json \n   {b64.strip()} \n```"
-    assert extract_base64json_block(messy) == b64.strip()
+# ────────────────────────── happy-path table ────────────────────
+GOOD = [
+    (
+        block("src/app.py", "kappa('hi')\n"),
+        {"src/app.py": "kappa('hi')\n"},
+    ),
+    (
+        "\n".join(
+            [
+                block("a.py", "\nA\n"),
+                block("b.txt", "\nB\n"),
+                block("c.js", "\nC\n"),
+            ]
+        ),
+        {"a.py": "\nA\n", "b.txt": "\nB\n", "c.js": "\nC\n"},
+    ),
+    (
+        block("notes.md", "\n# Title ```python\nimport ...```"),
+        {"notes.md": "\n# Title ```python\nimport ...```"},
+    ),
+    (
+        block("dir with space/data.txt", "\nX\n"),
+        {"dir with space/data.txt": "\nX\n"},
+    ),
+    (
+        block("empty.py", ""),
+        {"empty.py": ""},
+    ),
+]
 
 
-def test_extract_base64json_block_missing():
-    with pytest.raises(RuntimeError, match="No ```base64json``` fenced block"):
-        extract_base64json_block("no base64json block here")
+@pytest.mark.parametrize("source, expected", GOOD, ids=[c[0] for c in GOOD])
+def test_parse_code_response_good(source, expected):
+    result = parse_code_response(source)
+    assert result == expected
+    assert list(result) == list(expected)
 
 
-def test_decode_b64_valid():
-    s = "hello"
-    b64 = base64.b64encode(s.encode()).decode()
-    assert decode_b64("f.py", b64) == s
+def test_duplicate_paths_last_one_wins():
+    src = "\n".join(
+        [
+            block("dup.py", "\nONE\n"),
+            block("dup.py", "\nTWO\n"),
+        ]
+    )
+    res = parse_code_response(src)
+    assert res == {"dup.py": "\nTWO\n"}
+    assert next(iter(res)) == "dup.py"
 
 
-def test_decode_b64_with_linebreaks():
-    val = "hello\nworld\n"
-    b64 = base64.b64encode(val.encode()).decode()
-    b64_messy = f"\n{b64[:4]} \n{b64[4:]}\n"
-    assert decode_b64("x", b64_messy) == val
+@pytest.mark.parametrize("quote", ["'", "`"])
+def test_different_quote_styles(quote):
+    src = block(f'{quote}quoted.txt{quote}', "\nX\n")
+    res = parse_code_response(src)
+    assert res == {"quoted.txt": "\nX\n"}
 
 
-def test_decode_b64_empty_string():
-    assert decode_b64("f", "") == ""
+def test_reject_path_outside_root(tmp_path):
+    root = tmp_path / "sandbox"
+    root.mkdir()
+    src = block("../escape.txt", "\nZ\n")
+    res = parse_code_response(src, root=root)
+    assert res == {}
 
 
-def test_decode_b64_invalid_format():
-    with pytest.raises(ValueError, match="Failed to Base64-decode `bad.txt`"):
-        decode_b64("bad.txt", "not_base64!!")
+def test_carriage_return_line_endings():
+    src = "~~~\"foo.txt\"\r\nFOO\r\n~~~\r\n"
+    assert parse_code_response(src) == {"foo.txt": "\r\nFOO\r\n"}

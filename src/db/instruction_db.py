@@ -1,60 +1,85 @@
-import json
-from pathlib import Path
+# db/instruction_db.py
+from __future__ import annotations
 
-INSTRUCTION_HISTORY_FILE = Path.home() / ".instruction_history.json"
+import logging
+from typing import List, Set
+
+from db.history_db import HistoryDB
+from logging_setup import get_log_file_handler
+from util.file_util import create_session_file
+
+log = logging.getLogger(__name__)
+log.addHandler(get_log_file_handler(__name__))
+
+# ───── underlying generic store ─────────────────────────────────────
+_instruction_db: HistoryDB[List[str]] = HistoryDB(
+    create_session_file("instruction_history"),
+    empty=[],
+    # strip trailing whitespace, drop blank lines – duplicates allowed
+    normalise=lambda lines: [ln.strip() for ln in lines if ln.strip()],
+    pretty=lambda lines: (
+        "\n".join(["📜 instructions:"] + [f"- {ln}" for ln in lines])
+        if lines
+        else "(none)"
+    ),
+)
+
+# ---------- internal helper ----------------------------------------
 
 
-def load_instruction_history() -> list[str]:
-    if INSTRUCTION_HISTORY_FILE.exists():
-        try:
-            with open(INSTRUCTION_HISTORY_FILE, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except Exception as e:
-            print(f"⚠️ Failed to load instruction history: {e}")
-    return [""]
+def _snap() -> List[str]:
+    """Return a *copy* of the current snapshot so we can mutate safely."""
+    return list(_instruction_db.latest())
 
 
-def save_instruction_history(history: list[str]):
+# ───── public helpers consumed by your CLI ──────────────────────────
+
+
+def clear_instructions() -> None:
+    _instruction_db.clear()
+    log.info("🧹 Instruction list cleared.")
+
+
+def append_instruction(line: str) -> None:
+    text = line.strip()
+    if not text:
+        log.warning("⚠️  Empty instruction — nothing added.")
+        return
+    instructions = _snap()
+    if text in instructions:
+        log.warning(f"⚠️  Instruction already present: {text}")
+        return
+    instructions.append(text)
+    _instruction_db.push(instructions)
+    log.info(f"➕ Added instruction: {text}")
+
+
+def remove_instruction(line: str) -> None:
+    text = line.strip()
+    if not text:
+        log.warning("⚠️  Empty instruction — nothing removed.")
+        return
+    instructions = _snap()
     try:
-        with open(INSTRUCTION_HISTORY_FILE, "w", encoding="utf-8") as f:
-            json.dump(history, f, indent=2)
-    except Exception as e:
-        print(f"❌ Failed to save instruction history: {e}")
-
-
-def clear_instructions():
-    save_instruction_history([""])
-    print("🧹 Instructions cleared.")
-
-
-def append_instruction(text: str):
-    if text == "":
-        print("⚠️ No text to append.")
+        instructions.remove(text)
+    except ValueError:
+        log.warning(f"⚠️  Instruction not tracked: {text}")
         return
-    history = load_instruction_history()
-    previous = history[-1]
-    current = f"{previous}\n{text}" if previous != "" else text
-    history.append(current)
-    save_instruction_history(history)
-    print("➕ Text appended to instructions.")
+    _instruction_db.push(instructions)
+    log.info(f"➖ Removed instruction: {text}")
 
 
-def get_latest_instruction() -> str:
-    history = load_instruction_history()
-    return history[-1] if history else ""
-
-
-def undo_instruction():
-    history = load_instruction_history()
-    if not history or history[-1] == "":
-        print("⚠️ No instructions history to undo.")
-        return
-    history.pop()
-    save_instruction_history(history)
-    print("↩️ Removed last added instruction")
+def undo_instructions() -> None:
+    if _instruction_db.undo():
+        log.info("↩️ Reverted last change.")
+    else:
+        log.warning("⚠️  Nothing to undo.")
 
 
 def summary_instruction() -> str:
-    history = load_instruction_history()
-    current = history[-1]
-    return current
+    return _instruction_db.summary()
+
+
+def get_latest_instructions() -> List[str]:
+    """Convenience for other modules that need the current set."""
+    return list(_instruction_db.latest())

@@ -32,7 +32,7 @@ class AbstractAWSBedrockClient(AIClient, ABC):
     def parse_response(self, response_body: dict) -> str:
         pass
 
-    def get_response(self, instructions: Optional[str], context: dict[str, str], last_messages: str, **kwargs) -> str:
+    def get_response(self, instructions: Optional[list[str]], context: dict[str, str], final_prompt: str, **kwargs) -> str:
         # print(f"Sending request to {self.get_model_id}()}...\n\n")
         return ''
 
@@ -56,19 +56,5 @@ class AbstractAWSBedrockClient(AIClient, ABC):
         #     print(f"✔ Response received from {self.get_model_id()}\n\n")
         #     return result.strip()
 
-        # except (BotoCoreError, ClientError) as e:
+        # except Exception as e:
         #     error_message = str(e)
-        #     if "ThrottlingException" in error_message:
-        #         raise RuntimeError(
-        #             "😼 Rate limit exceeded. Please wait before trying again."
-        #         )
-        #     elif "ValidationException" in error_message:
-        #         raise RuntimeError("😼 Invalid request format or parameters.")
-        #     elif "AccessDeniedException" in error_message:
-        #         raise RuntimeError(
-        #             "b Authentication failed. Please check your AWS credentials."
-        #         )
-        #     else:
-        #         raise RuntimeError(
-        #             "b Failed to get response from {self.get_model_id()}: {e}"
-        #         )

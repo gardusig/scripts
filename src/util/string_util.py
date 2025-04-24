@@ -1,39 +1,62 @@
-import base64
-import re
-from typing import Optional
+from __future__ import annotations
 
-pattern = re.compile(
-    r"""
-    (?P<fence>`{3,})        # capture opening fence of 3+ backticks
-    (?P<inner>[\s\S]*?)     # lazily grab everything inside the fence
-    (?P=fence)              # closing fence (must match opener)
+import logging
+import re
+from collections import OrderedDict
+from pathlib import Path
+from typing import OrderedDict as OD
+
+logger = logging.getLogger(__name__)
+
+# ─────────────────────────── regex ──────────────────────────────
+DEFAULT_FENCE = "~~~"
+_FENCE_RE = re.escape(DEFAULT_FENCE)
+QUOTES = '\"\'`'
+
+
+CODE_BLOCK_RE = re.compile(
+    rf"""
+    {_FENCE_RE}                   # opening fence, optional indent
+    (?P<quote>[{QUOTES}])              #   opening quote
+    (?P<path>[^\r\n]+?)                #   path (no EOL)
+    (?P=quote)                         #   closing quote
+    (?P<body>.*?)                 # body (non-greedy)
+    {_FENCE_RE}                   # closing fence, its own line
     """,
-    re.VERBOSE
+    re.MULTILINE | re.DOTALL | re.VERBOSE,
 )
 
 
-def extract_base64json_block(response: str) -> str:
-    """
-    Extracts the Base64 string from a ```base64json ... ``` fenced block.
-    Raises if not found.
-    """
-    pattern = re.compile(
-        r"```base64json\s*\n(?P<b64>[\s\S]+?)\n?```",
-        re.DOTALL
-    )
-    match = pattern.search(response)
-    if not match:
-        raise RuntimeError("⛔️ No ```base64json``` fenced block found in response")
-    return match.group("b64").strip()
+# ────────────────────────── public API ──────────────────────────
+def parse_code_response(
+    response: str,
+    root: str | Path | None = None,
+) -> OD[str, str]:
+    files: OD[str, str] = OrderedDict()
+    base = Path(root).resolve() if root else None
 
+    for match in CODE_BLOCK_RE.finditer(response):
+        raw_path = match.group("path").strip().strip(QUOTES)
+        code = match.group("body")
 
-def decode_b64(path: str, b64_content: str) -> Optional[str]:
-    if not isinstance(path, str) or not isinstance(b64_content, str):
-        print("Skipping invalid entry: %r → %r", path, b64_content)
-        return None
-    try:
-        clean_b64 = "".join(b64_content.split())
-        raw = base64.b64decode(clean_b64)
-        return raw.decode("utf-8", errors="replace")
-    except Exception as err:
-        raise ValueError(f"Failed to Base64-decode `{path}`: {err}")
+        if not raw_path:
+            continue
+
+        norm = Path(raw_path).as_posix()
+
+        if base and not (base / norm).resolve().is_relative_to(base):
+            logger.warning("Rejected path outside root sandbox: %s", norm)
+            continue
+
+        if norm in files:
+            logger.warning("Duplicate file path in response: %s (overwriting)", norm)
+
+        files[norm] = code
+        logger.debug("Extracted %s (len=%d)", norm, len(code))
+
+    if not files:
+        logger.warning("No file/code blocks found in model response.")
+    else:
+        logger.info("Decoded %d file(s) from model response.", len(files))
+
+    return files

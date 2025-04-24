@@ -1,78 +1,79 @@
-import json
-from pathlib import Path
+# db/file_db.py
+from __future__ import annotations
+import logging
 
-FILE_SET_HISTORY = Path.home() / ".file_set_history.json"
+from db.history_db import HistoryDB
+from logging_setup import get_log_file_handler
+from util.file_util import create_session_file
 
-
-def load_file_history() -> list[list[str]]:
-    if FILE_SET_HISTORY.exists():
-        try:
-            with open(FILE_SET_HISTORY, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except Exception as e:
-            print(f"⚠️ Failed to load file history: {e}")
-    return [[]]
+log = logging.getLogger(__name__)
+log.addHandler(get_log_file_handler(__name__))
 
 
-def save_file_history(history: list[list[str]]):
+# ───── underlying generic store ─────────────────────────────────────
+
+_file_db: HistoryDB[list[str]] = HistoryDB(
+    create_session_file("file_set_history"),
+    empty=[],
+    normalise=lambda lst: sorted({p.strip() for p in lst if p.strip()}),
+    pretty=lambda lst: "\n".join(["📁 files:"] + [f"- {p}" for p in lst]) or "(none)",
+)
+
+# ---------- internal helper ----------------------------------------
+
+
+def _snap() -> list[str]:
+    """Return a *copy* of the current snapshot so we can mutate safely."""
+    return list(_file_db.latest())
+
+# ───── public helpers consumed by your CLI ──────────────────────────
+
+
+def clear_files() -> None:
+    _file_db.clear()
+    log.info("🧹 File set cleared.")
+
+
+def append_file(path: str) -> None:
+    p = path.strip()
+    if not p:
+        log.warning("⚠️  Empty path — nothing added.")
+        return
+    files = _snap()
+    if p in files:
+        log.warning(f"⚠️  Path already present: {p}")
+        return
+    files.append(p)
+    _file_db.push(files)
+    log.info(f"➕ Added {p}")
+
+
+def remove_file(path: str) -> None:
+    p = path.strip()
+    if not p:
+        log.warning("⚠️  Empty path — nothing removed.")
+        return
+    files = _snap()
     try:
-        with open(FILE_SET_HISTORY, "w", encoding="utf-8") as f:
-            json.dump(history, f, indent=2)
-    except Exception as e:
-        print(f"❌ Failed to save file history: {e}")
-
-
-def get_latest_files() -> set[str]:
-    history = load_file_history()
-    return set(history[-1]) if history else set()
-
-
-def clear_files():
-    save_file_history([[]])
-    print("🧹 File set cleared.")
-
-
-def append_file(path: str):
-    path = path.strip()
-    if not path:
-        print("⚠️ No file path to append.")
+        files.remove(p)
+    except ValueError:
+        log.warning(f"⚠️  Path not tracked: {p}")
         return
-    current = get_latest_files()
-    current.add(path)
-    history = load_file_history()
-    history.append(sorted(current))
-    save_file_history(history)
-    print(f"➕ File path added: {path}")
+    _file_db.push(files)
+    log.info(f"➖ Removed {p}")
 
 
-def remove_file(path: str):
-    path = path.strip()
-    if not path:
-        print("⚠️ No file path to append.")
-        return
-    current = get_latest_files()
-    if path not in current:
-        print(f"⚠️ No path not in file db: {path}")
-    current.remove(path)
-    history = load_file_history()
-    history.append(sorted(current))
-    save_file_history(history)
-    print(f"➖ File path removed: {path}")
-
-
-def undo_files():
-    history = load_file_history()
-    if len(history) <= 1:
-        print("⚠️ No file history to undo.")
-        return
-    history.pop()
-    save_file_history(history)
-    print("↩️ Reverted last added file.")
+def undo_files() -> None:
+    if _file_db.undo():
+        log.info("↩️ Reverted last change.")
+    else:
+        log.warning("⚠️  Nothing to undo.")
 
 
 def summary_files() -> str:
-    latest = get_latest_files()
-    strings = [f"📁 File set size: {len(latest)}"]
-    for p in sorted(latest):
-        strings.append(f"- {p}")
-    return '\n'.join(strings)
+    return _file_db.summary()
+
+
+def get_latest_files() -> set[str]:
+    """Convenience for other modules that need the current set."""
+    return set(_file_db.latest())

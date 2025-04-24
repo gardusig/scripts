@@ -15,18 +15,17 @@ class OpenAIClient(AIClient):
 
     def build_messages(
         self,
-        instructions: Optional[str],
+        instructions: Optional[list[str]],
         files: dict[str, str],
-        last_messages: str,
+        final_prompt: str,
     ) -> list[ChatCompletionMessageParam]:
         msgs: list[ChatCompletionMessageParam] = []
 
         if instructions:
             msgs.append({
                 "role": "system",
-                "content": instructions.strip()
+                "content": "\n".join(instructions)
             })
-
         for fname, content in files.items():
             msgs.append({
                 "role": "user",
@@ -37,21 +36,21 @@ class OpenAIClient(AIClient):
             })
         msgs.append({
             "role": "user",
-            "content": last_messages.strip()
+            "content": final_prompt.strip()
         })
 
         return msgs
 
     def get_response(
         self,
-        instructions: Optional[str],
+        instructions: Optional[list[str]],
         context: dict[str, str],
-        last_messages: str,
+        final_prompt: str,
         **kwargs
     ) -> str:
         config = OpenAIConfig(**kwargs)
 
-        messages = self.build_messages(instructions, context, last_messages)
+        messages = self.build_messages(instructions, context, final_prompt)
         print(f"📨 Sending request to {config.model}...")
         response = self.client.chat.completions.create(
             model=config.model,
