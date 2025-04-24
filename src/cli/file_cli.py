@@ -7,11 +7,9 @@ from db.file_db import (
     summary_files,
 )
 from util.file_util import get_all_files
-from cli.app_cli import app
 
 
 file_app = typer.Typer(help="📁 File path management CLI")
-app.add_typer(file_app, name="file", help="Manage resources (clipboard).")
 
 
 @file_app.command(help="Clear all files")

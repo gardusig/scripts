@@ -3,7 +3,7 @@ import logging
 
 from db.history_db import HistoryDB
 from config.log_setup import get_log_file_handler
-from util.file_util import create_session_file
+from util.session_util import create_session_file
 
 log = logging.getLogger(__name__)
 log.addHandler(get_log_file_handler(__name__))

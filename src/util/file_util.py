@@ -1,22 +1,17 @@
-# util/file_util.py
 from __future__ import annotations
 
 import fnmatch
 import logging
-import os
-import sys
-import hashlib
 from pathlib import Path
-from typing import Iterable, Sequence
+from typing import Iterable, OrderedDict, Sequence
 
+from db.file_db import append_file
 from rich.logging import RichHandler
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level="INFO", handlers=[RichHandler()])
 
-# ────────────────────────────────────────────────────────────────────
-# constants
-# ────────────────────────────────────────────────────────────────────
+
 DEFAULT_IGNORES: tuple[str, ...] = (
     "__pycache__",
     "*.py[co]",
@@ -33,48 +28,6 @@ DEFAULT_IGNORES: tuple[str, ...] = (
     "*.webp",
     "*.jpe?g",
 )
-
-CACHE_DIR = Path.home() / ".cache" / "cli_history"
-CACHE_DIR.mkdir(parents=True, exist_ok=True)
-
-# ────────────────────────────────────────────────────────────────────
-# session helpers
-# ────────────────────────────────────────────────────────────────────
-
-
-def _hash(text: str) -> str:
-    return hashlib.md5(text.encode()).hexdigest()[:8]
-
-
-def get_session_id() -> str:
-    """
-    Return a stable hash for the current *terminal* session/pane.
-
-    Order of precedence:
-      1. $HISTORY_SESSION_ID   – explicit override (great for tests)
-      2. controlling TTY path  – /dev/pts/N (Unix)
-      3. $WT_SESSION           – Windows Terminal / VS-Code
-      4. parent PID
-    """
-    raw = (
-        os.getenv("HISTORY_SESSION_ID")
-        or _try_pty()
-        or os.getenv("WT_SESSION")
-        or str(os.getppid())
-    )
-    return _hash(raw)
-
-
-def _try_pty() -> str | None:
-    try:
-        return os.ttyname(sys.stdin.fileno())
-    except Exception:
-        return None
-
-
-def create_session_file(name: str) -> Path:
-    """Return a file path under ~/.cache/cli_history/ incorporating the session id."""
-    return CACHE_DIR / f"{name}.{get_session_id()}.json"
 
 
 # ────────────────────────────────────────────────────────────────────
@@ -138,11 +91,15 @@ def stringify_file_contents(files: Iterable[str]) -> dict[str, str]:
 # ────────────────────────────────────────────────────────────────────
 # write helpers
 # ────────────────────────────────────────────────────────────────────
+def rewrite_files(files: OrderedDict[str, str]) -> None:
+    for file_path, content in files.items():
+        rewrite_file(file_path, content)
+
+
 def rewrite_file(file_path: str, content: str) -> None:
     """
     Overwrite `file_path` with `content`, creating parent dirs as needed.
     """
-    from db.file_db import append_file  # late import to dodge circular refs
 
     path = Path(file_path).expanduser()
     try:

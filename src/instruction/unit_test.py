@@ -1,7 +1,6 @@
 UNIT_TEST_INSTRUCTIONS = [
-    "✅ MANDATORY: Your response must only include generated test files in the form of a single JSON object.",
+    "✅ MANDATORY: Your response must only include generated test files.",
     "Use the `pytest` framework. Place each test file inside a top-level `tests/` directory using the format `tests/module/test_<moduleA/moduleB>_<filename>.py`.",
-    "Each test file must contain tests for a corresponding source file. Only output test files that start with `test_` and end with `.py`.",
     "Import and test only the public functions or classes defined in the corresponding source module.",
     "Inspect function signatures, docstrings, and logic to infer intended behavior before writing tests.",
     "Enumerate normal cases, boundary values, and error conditions for every function.",

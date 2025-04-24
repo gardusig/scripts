@@ -13,9 +13,14 @@ from db.instruction_db import (
 )
 from instruction.response.response_format import RESPONSE_FORMAT_INSTRUCTIONS
 from util.ai_util import get_ai_client, send_message
+from util.file_util import rewrite_files
 from util.string_util import parse_code_response
+from cli.file_cli import file_app
+from cli.instruction_cli import instruction_app
 
 app = typer.Typer(help="🧰 Kirby CLI – manage instructions & files")
+app.add_typer(file_app, name="file", help="Manage resources (clipboard).")
+app.add_typer(instruction_app, name="instruction", help="AI Instruction Analysis.")
 
 # ───────────────────────── helpers ────────────────────────── #
 
@@ -88,4 +93,4 @@ def create_tests():
     ai_client = get_ai_client()
     response = send_message(ai_client, instructions)
     file_map = parse_code_response(response)
-    print(file_map)
+    rewrite_files(file_map)

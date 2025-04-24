@@ -4,11 +4,9 @@ from db.instruction_db import (
     undo_instructions,
 )
 import typer
-from cli.app_cli import app
 
 
 instruction_app = typer.Typer(help="Instruction processing CLI")
-app.add_typer(instruction_app, name="instruction", help="AI Instruction Analysis.")
 
 
 @instruction_app.command(help="Clear all instructions")
