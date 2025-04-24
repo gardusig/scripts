@@ -1,9 +1,8 @@
-# db/file_db.py
 from __future__ import annotations
 import logging
 
 from db.history_db import HistoryDB
-from logging_setup import get_log_file_handler
+from config.log_setup import get_log_file_handler
 from util.file_util import create_session_file
 
 log = logging.getLogger(__name__)

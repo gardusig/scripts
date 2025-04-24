@@ -3,8 +3,7 @@ from contextlib import suppress
 import logging
 from pathlib import Path
 from typing import Callable, Generic, List, TypeVar
-
-from logging_setup import get_log_file_handler
+from config.log_setup import get_log_file_handler
 
 log = logging.getLogger(__name__)
 log.addHandler(get_log_file_handler(__name__))
