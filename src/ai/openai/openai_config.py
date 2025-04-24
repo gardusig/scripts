@@ -5,5 +5,5 @@ from dataclasses import dataclass
 class OpenAIConfig:
     model: str = "gpt-4o"
     temperature: float = 0.2
-    max_tokens: int = 8192
+    max_tokens: int = 4096
     top_p: float = 0.96
