@@ -95,3 +95,13 @@ def create_tests():
     response = send_message(ai_client, instructions)
     file_map = parse_code_response(response)
     rewrite_files(file_map)
+
+
+@app.command(name="code")
+def update_code():
+    instructions = []
+    instructions.extend(RESPONSE_FORMAT_INSTRUCTIONS)
+    ai_client = get_ai_client()
+    response = send_message(ai_client, instructions)
+    file_map = parse_code_response(response)
+    rewrite_files(file_map)
