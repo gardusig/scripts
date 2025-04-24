@@ -4,6 +4,7 @@ import os
 import fnmatch
 from pathlib import Path
 from typing import Optional
+from db.file_db import append_file
 from rich import print
 
 DEFAULT_IGNORES = [
@@ -98,5 +99,6 @@ def rewrite_file(file_path: str, content: str):
         with open(file_path, "w", encoding="utf-8") as file:
             file.write(content)
         print(f"✅ File rewritten: {file_path}")
+        append_file(file_path)
     except Exception as e:
         print(f"❌ Error writing to {file_path}: {e}")

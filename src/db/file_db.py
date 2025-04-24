@@ -45,6 +45,21 @@ def append_file(path: str):
     print(f"➕ File path added: {path}")
 
 
+def remove_file(path: str):
+    path = path.strip()
+    if not path:
+        print("⚠️ No file path to append.")
+        return
+    current = get_latest_files()
+    if path not in current:
+        print(f"⚠️ No path not in file db: {path}")
+    current.remove(path)
+    history = load_file_history()
+    history.append(sorted(current))
+    save_file_history(history)
+    print(f"➖ File path removed: {path}")
+
+
 def undo_files():
     history = load_file_history()
     if len(history) <= 1:

@@ -2,6 +2,7 @@ import typer
 from db.file_db import (
     clear_files,
     append_file,
+    remove_file,
     undo_files,
     summary_files,
 )
@@ -27,6 +28,15 @@ def add(string: str = typer.Argument(..., help="File path to append")):
         append_file(file)
 
 
+@file_app.command(help="Remove a file path")
+def remove(string: str = typer.Argument(..., help="File path to append")):
+    string = string.strip()
+    if not string:
+        print("⚠️ Empty string provided.")
+        raise typer.Exit(code=1)
+    remove_file(string)
+
+
 @file_app.command(help="Undo last file operation")
 def undo():
     undo_files()
@@ -35,10 +45,3 @@ def undo():
 @file_app.command(help="List all files")
 def list():
     print(summary_files())
-
-
-@file_app.command(help="Usage for file operations")
-def usage():
-    print("Usage examples for file operations:")
-    print("- clear: Remove all tracked files.")
-    print("- add: Append a new file path to the list.")

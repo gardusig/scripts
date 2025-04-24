@@ -69,6 +69,7 @@ def parse_code_response(response: str) -> dict[str, str]:
     Each value is expected to be base64-encoded UTF-8 text.
     """
     try:
+        print('response:', response)
         json_str = extract_base64json_block(response)
         filemap_b64: dict[str, str] = json.loads(json_str)
     except Exception as e:
