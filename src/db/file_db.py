@@ -25,6 +25,7 @@ def _snap() -> list[str]:
     """Return a *copy* of the current snapshot so we can mutate safely."""
     return list(_file_db.latest())
 
+
 # ───── public helpers consumed by your CLI ──────────────────────────
 
 

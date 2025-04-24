@@ -14,7 +14,8 @@ class AbstractAWSBedrockClient(AIClient, ABC):
     def __init__(self):
         try:
             self.client = boto3.client(
-                service_name="bedrock-runtime", region_name="us-east-1")
+                service_name="bedrock-runtime", region_name="us-east-1"
+            )
         except (BotoCoreError, ClientError) as e:
             raise RuntimeError(f"£ Failed to create AWS Bedrock client: {e}")
 
@@ -32,9 +33,15 @@ class AbstractAWSBedrockClient(AIClient, ABC):
     def parse_response(self, response_body: dict) -> str:
         pass
 
-    def get_response(self, instructions: Optional[list[str]], context: dict[str, str], final_prompt: str, **kwargs) -> str:
+    def get_response(
+        self,
+        instructions: Optional[list[str]],
+        context: dict[str, str],
+        final_prompt: str,
+        **kwargs,
+    ) -> str:
         # print(f"Sending request to {self.get_model_id}()}...\n\n")
-        return ''
+        return ""
 
         # try:
         #     config = BedrockConfig**(kwargs) if kwargs else BedrockConfig()

@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 # ─────────────────────────── regex ──────────────────────────────
 DEFAULT_FENCE = "~~~"
 _FENCE_RE = re.escape(DEFAULT_FENCE)
-QUOTES = '\"\'`'
+QUOTES = "\"'`"
 
 
 CODE_BLOCK_RE = re.compile(

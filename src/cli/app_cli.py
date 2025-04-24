@@ -11,7 +11,7 @@ from db.instruction_db import (
     clear_instructions,
     summary_instruction,
 )
-from instruction.response.response_format import RESPONSE_FORMAT_INSTRUCTIONS
+from instruction.response_format import RESPONSE_FORMAT_INSTRUCTIONS
 from util.ai_util import get_ai_client, send_message
 from util.file_util import rewrite_files
 from util.string_util import parse_code_response
@@ -39,6 +39,7 @@ def _clipboard_set(text: str) -> None:
     except PyperclipException:
         print(text)
         typer.echo("⚠️  Clipboard not available; printed instead.", err=True)
+
 
 # ───────────────────────── commands ───────────────────────── #
 

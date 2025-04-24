@@ -65,7 +65,7 @@ def test_duplicate_paths_last_one_wins():
 
 @pytest.mark.parametrize("quote", ["'", "`"])
 def test_different_quote_styles(quote):
-    src = block(f'{quote}quoted.txt{quote}', "\nX\n")
+    src = block(f"{quote}quoted.txt{quote}", "\nX\n")
     res = parse_code_response(src)
     assert res == {"quoted.txt": "\nX\n"}
 
@@ -79,5 +79,5 @@ def test_reject_path_outside_root(tmp_path):
 
 
 def test_carriage_return_line_endings():
-    src = "~~~\"foo.txt\"\r\nFOO\r\n~~~\r\n"
+    src = '~~~"foo.txt"\r\nFOO\r\n~~~\r\n'
     assert parse_code_response(src) == {"foo.txt": "\r\nFOO\r\n"}

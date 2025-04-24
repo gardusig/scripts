@@ -11,10 +11,7 @@ class CommandRunner:
             raise ValueError(f"Invalid base path: {self.base_path}")
 
     def run(
-        self,
-        cmd: List[str],
-        env: Optional[dict] = None,
-        activate_venv: bool = True
+        self, cmd: List[str], env: Optional[dict] = None, activate_venv: bool = True
     ) -> Tuple[int, str, str]:
         shell_commands = []
 
@@ -32,7 +29,7 @@ class CommandRunner:
             text=True,
             env={**os.environ, **(env or {})},
             shell=True,
-            executable="/bin/bash"
+            executable="/bin/bash",
         )
         return result.returncode, result.stdout.strip(), result.stderr.strip()
 

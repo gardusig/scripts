@@ -22,22 +22,15 @@ class OpenAIClient(AIClient):
         msgs: list[ChatCompletionMessageParam] = []
 
         if instructions:
-            msgs.append({
-                "role": "system",
-                "content": "\n".join(instructions)
-            })
+            msgs.append({"role": "system", "content": "\n".join(instructions)})
         for fname, content in files.items():
-            msgs.append({
-                "role": "user",
-                "content": (
-                    f"--- File: {fname} ---\n"
-                    f"```{content}```"
-                )
-            })
-        msgs.append({
-            "role": "user",
-            "content": final_prompt.strip()
-        })
+            msgs.append(
+                {
+                    "role": "user",
+                    "content": (f"--- File: {fname} ---\n" f"```{content}```"),
+                }
+            )
+        msgs.append({"role": "user", "content": final_prompt.strip()})
 
         return msgs
 
@@ -46,7 +39,7 @@ class OpenAIClient(AIClient):
         instructions: Optional[list[str]],
         context: dict[str, str],
         final_prompt: str,
-        **kwargs
+        **kwargs,
     ) -> str:
         config = OpenAIConfig(**kwargs)
 

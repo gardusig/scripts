@@ -1,7 +1,7 @@
 RESPONSE_FORMAT_INSTRUCTIONS = [
     # ───────────── mandatory rules ─────────────
     "✅ MANDATORY: Emit one fenced code block *per file* using exactly this pattern:\n"
-    "   ~~~\"relative/path.ext\"  (opening fence + quoted path)\n"
+    '   ~~~"relative/path.ext"  (opening fence + quoted path)\n'
     "   …file contents…\n"
     "   ~~~                     (closing fence)\n"
     "   Absolutely nothing may appear outside those fences.",
@@ -13,15 +13,12 @@ RESPONSE_FORMAT_INSTRUCTIONS = [
     "🧼 DO NOT base64-encode, escape, or otherwise transform the file contents.",
     "🚫 DO NOT wrap multiple files in JSON; the parser expects *separate* blocks.",
     "🚫 No comments, markdown headings, or prose before, between, or after the blocks.",
-    "🚫 Paths must be relative and must not escape the sandbox (e.g., avoid \"../\").",
+    '🚫 Paths must be relative and must not escape the sandbox (e.g., avoid "../").',
     "",
     # ───────────── examples ───────────────
-    "📄 Example – single file:\n"
-    "~~~\"main.py\"\n"
-    "print('hello world')\n"
-    "~~~",
+    "📄 Example – single file:\n" '~~~"main.py"\n' "print('hello world')\n" "~~~",
     "📄 Example – three files:\n"
-    "~~~\"a.py\"\nA = 1\n~~~\n"
+    '~~~"a.py"\nA = 1\n~~~\n'
     "~~~'b.txt'\nHello\n~~~\n"
     "~~~`dir with space/data.txt`\nX\n~~~",
     "",

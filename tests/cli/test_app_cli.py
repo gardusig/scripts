@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from unittest.mock import MagicMock
 
-from instruction.response.response_format import RESPONSE_FORMAT_INSTRUCTIONS
+from instruction.response_format import RESPONSE_FORMAT_INSTRUCTIONS
 from instruction.unit_test import UNIT_TEST_INSTRUCTIONS
 import pytest
 import typer
@@ -22,6 +22,7 @@ def _invoke(args: list[str] | str, **runner_kwargs):
 
 
 # ───────────────────────── _clipboard_get / _clipboard_set ────────────────── #
+
 
 def test_clipboard_get_success(monkeypatch):
     monkeypatch.setattr(app_cli.pyperclip, "paste", lambda: "hi")
@@ -57,6 +58,7 @@ def test_clipboard_set_failure(monkeypatch, capsys):
 
 # ───────────────────────── clear command ──────────────────── #
 
+
 @pytest.mark.parametrize(
     ("flags", "expect_ins", "expect_files"),
     [
@@ -68,8 +70,7 @@ def test_clipboard_set_failure(monkeypatch, capsys):
 def test_clear(monkeypatch, flags, expect_ins, expect_files):
     cleared = {"ins": False, "files": False}
 
-    monkeypatch.setattr(app_cli, "clear_instructions",
-                        lambda: cleared.update(ins=True))
+    monkeypatch.setattr(app_cli, "clear_instructions", lambda: cleared.update(ins=True))
     monkeypatch.setattr(app_cli, "clear_files", lambda: cleared.update(files=True))
 
     res, _ = _invoke(["clear", *flags])
@@ -79,6 +80,7 @@ def test_clear(monkeypatch, flags, expect_ins, expect_files):
 
 
 # ───────────────────────── add / add-clip commands ─────────────────── #
+
 
 def test_add_instruction_success(monkeypatch):
     recorded = {}
@@ -103,8 +105,9 @@ def test_add_clipboard(monkeypatch):
     monkeypatch.setattr(app_cli, "_clipboard_get", lambda: "from clip")
     called = {}
 
-    monkeypatch.setattr(app_cli, "append_instruction",
-                        lambda txt: called.setdefault("val", txt))
+    monkeypatch.setattr(
+        app_cli, "append_instruction", lambda txt: called.setdefault("val", txt)
+    )
 
     res, _ = _invoke("add-clip")
     assert res.exit_code == 0
@@ -113,19 +116,22 @@ def test_add_clipboard(monkeypatch):
 
 # ───────────────────────── copy command ──────────────────── #
 
+
 def test_copy_summary(monkeypatch):
     monkeypatch.setattr(app_cli, "summary_instruction", lambda: "INS")
     monkeypatch.setattr(app_cli, "summary_files", lambda: "FILES")
 
     buff = {}
-    monkeypatch.setattr(app_cli, "_clipboard_set",
-                        lambda txt: buff.setdefault("v", txt))
+    monkeypatch.setattr(
+        app_cli, "_clipboard_set", lambda txt: buff.setdefault("v", txt)
+    )
 
     _invoke("copy")
     assert buff["v"] == "INS\nFILES"
 
 
 # ───────────────────────── unit-test command ──────────────────── #
+
 
 def test_create_tests(monkeypatch):
     monkeypatch.setattr(app_cli, "get_ai_client", lambda: "dummy_client")
@@ -139,7 +145,8 @@ def test_create_tests(monkeypatch):
     res, _ = _invoke("unit-test")
 
     send_spy.assert_called_once_with(
-        "dummy_client", RESPONSE_FORMAT_INSTRUCTIONS + UNIT_TEST_INSTRUCTIONS)
+        "dummy_client", RESPONSE_FORMAT_INSTRUCTIONS + UNIT_TEST_INSTRUCTIONS
+    )
     assert res.exit_code == 0
 
 

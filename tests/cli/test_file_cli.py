@@ -57,8 +57,9 @@ def test_add_happy_path(user_input, expanded, monkeypatch, monkey_append):
 
 
 def test_add_rejects_empty(monkeypatch):
-    monkeypatch.setattr(file_cli, "get_all_files",
-                        lambda _: (_ for _ in ()).throw(RuntimeError))
+    monkeypatch.setattr(
+        file_cli, "get_all_files", lambda _: (_ for _ in ()).throw(RuntimeError)
+    )
     result = runner.invoke(file_cli.file_app, ["add", "  "])
     assert result.exit_code == 1
     assert "Empty string" in result.output

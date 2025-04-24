@@ -40,7 +40,9 @@ def should_ignore(path_part: str, patterns: Sequence[str] = DEFAULT_IGNORES) -> 
 # ────────────────────────────────────────────────────────────────────
 # file discovery
 # ────────────────────────────────────────────────────────────────────
-def get_all_files(root: str | Path, ignore_patterns: Sequence[str] = DEFAULT_IGNORES) -> list[str]:
+def get_all_files(
+    root: str | Path, ignore_patterns: Sequence[str] = DEFAULT_IGNORES
+) -> list[str]:
     """
     Recursively collect *text* files under `root`, honouring ignore patterns.
 
@@ -55,7 +57,9 @@ def get_all_files(root: str | Path, ignore_patterns: Sequence[str] = DEFAULT_IGN
 
     for path in root.rglob("*"):
         rel = path.relative_to(root)
-        if should_ignore(rel.name, ignore_patterns) or should_ignore(str(rel), ignore_patterns):
+        if should_ignore(rel.name, ignore_patterns) or should_ignore(
+            str(rel), ignore_patterns
+        ):
             log.debug("⏭️  Skipping ignored: %s", rel)
             continue
         if path.is_file():

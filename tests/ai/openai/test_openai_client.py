@@ -1,4 +1,3 @@
-
 import pytest
 from unittest.mock import MagicMock, patch
 from ai.openai.openai_client import OpenAIClient
@@ -6,7 +5,7 @@ from ai.openai.openai_client import OpenAIClient
 
 @pytest.fixture
 def mock_openai():
-    with patch('ai.openai.openai_client.OpenAI') as MockOpenAI:
+    with patch("ai.openai.openai_client.OpenAI") as MockOpenAI:
         yield MockOpenAI
 
 
@@ -32,12 +31,18 @@ def test_build_messages():
     messages = client.build_messages(instructions, files, final_prompt)
 
     assert len(messages) == 4  # Adjusted to match the actual number of messages
-    assert messages[0] == {"role": "system",
-                           "content": "Follow the instructions carefully."}
-    assert messages[1] == {"role": "user",
-                           "content": "--- File: file1.txt ---\n```Content of file 1```"}
-    assert messages[2] == {"role": "user",
-                           "content": "--- File: file2.txt ---\n```Content of file 2```"}
+    assert messages[0] == {
+        "role": "system",
+        "content": "Follow the instructions carefully.",
+    }
+    assert messages[1] == {
+        "role": "user",
+        "content": "--- File: file1.txt ---\n```Content of file 1```",
+    }
+    assert messages[2] == {
+        "role": "user",
+        "content": "--- File: file2.txt ---\n```Content of file 2```",
+    }
     assert messages[3] == {"role": "user", "content": "What is your response?"}
 
 
@@ -57,7 +62,7 @@ def test_get_response(mock_openai, monkeypatch):
         model="gpt-4o",
         temperature=0.2,
         max_tokens=4096,
-        top_p=0.96
+        top_p=0.96,
     )
 
     assert response == "Test response"

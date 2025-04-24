@@ -45,8 +45,9 @@ def test_instruction_undo_calls_db(spy_undo):
 
 
 def test_instruction_list_prints_summary(monkeypatch):
-    monkeypatch.setattr(instruction_cli, "summary_instruction",
-                        lambda: "foo\nbar\nbaz\n")
+    monkeypatch.setattr(
+        instruction_cli, "summary_instruction", lambda: "foo\nbar\nbaz\n"
+    )
     result = runner.invoke(app, ["instruction", "list"])
     assert result.exit_code == 0
     assert "foo" in result.output and "baz" in result.output

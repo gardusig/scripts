@@ -27,7 +27,7 @@ def setup_and_cleanup():
         ("file.py", ["*.pyc"], False),
         ("__pycache__", ["__pycache__"], True),
         ("image.jpg", ["*.jpg"], True),
-    ]
+    ],
 )
 def test_should_ignore(name, patterns, expected):
     assert should_ignore(name, patterns) is expected

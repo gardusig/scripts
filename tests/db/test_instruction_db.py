@@ -15,9 +15,7 @@ def fresh_history(tmp_path: Path, monkeypatch):
         empty=[],
         normalise=lambda l: [ln.rstrip() for ln in l if ln.strip()],
         pretty=lambda l: (
-            "\n".join(["📜 instructions:"] + [f"- {ln}" for ln in l])
-            if l
-            else "(none)"
+            "\n".join(["📜 instructions:"] + [f"- {ln}" for ln in l]) if l else "(none)"
         ),
     )
     monkeypatch.setattr(instr_db, "_instruction_db", new_db)
@@ -36,6 +34,7 @@ def _latest():
 
 
 # ───────────────────────── tests ─────────────────────────────────────────────
+
 
 def test_append_and_latest(caplog):
     with caplog.at_level(logging.INFO):

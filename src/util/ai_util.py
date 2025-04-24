@@ -38,6 +38,7 @@ def get_ai_client() -> AIClient:
 
 # ───────────────────────── prompt + context helpers ─────────────────────────
 
+
 def _latest_prompt() -> str:
     """Join the most-recent instruction snapshot into one prompt."""
     return "\n".join(get_latest_instructions())

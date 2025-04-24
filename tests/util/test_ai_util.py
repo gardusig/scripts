@@ -29,13 +29,15 @@ def test_get_ai_client_supported(monkeypatch, name, cls):
 def test_latest_prompt(monkeypatch):
     # note: trailing blanks after 'line 1' are preserved by _latest_prompt()
     monkeypatch.setattr(
-        ai_util, "get_latest_instructions", lambda: [
+        ai_util,
+        "get_latest_instructions",
+        lambda: [
             " line 1 ",
             " line 2",
             "line 3 ",
             "line 4",
             "line 5   ",
-        ]
+        ],
     )
     assert ai_util._latest_prompt() == " line 1 \n line 2\nline 3 \nline 4\nline 5   "
 
@@ -81,9 +83,7 @@ def test_send_message_passes_through(monkeypatch):
             )
             return "ok"
 
-    resp = ai_util.send_message(
-        DummyClient(), instructions=["ins"], files={"file.txt"}
-    )
+    resp = ai_util.send_message(DummyClient(), instructions=["ins"], files={"file.txt"})
 
     assert resp == "ok"
     assert captured["instructions"] == ["ins"]
