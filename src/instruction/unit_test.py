@@ -1,4 +1,4 @@
-[
+UNIT_TEST_INSTRUCTIONS = [
     "✅ MANDATORY: Your response must only include generated test files in the form of a single JSON object.",
     "Use the `pytest` framework. Place each test file inside a top-level `tests/` directory using the format `tests/module/test_<moduleA/moduleB>_<filename>.py`.",
     "Each test file must contain tests for a corresponding source file. Only output test files that start with `test_` and end with `.py`.",
@@ -10,5 +10,5 @@
     "Stub or mock external dependencies (file I/O, network, databases) using fixtures or `monkeypatching` to isolate logic.",
     "Ensure tests are independent: use setup/teardown fixtures and avoid shared state.",
     "Assert both return values and side effects such as written files, logs, or state changes.",
-    "Verify exceptions: test both the raised types and relevant message content."
+    "Verify exceptions: test both the raised types and relevant message content.",
 ]

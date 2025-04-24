@@ -1,4 +1,4 @@
-[
+RESPONSE_FORMAT_INSTRUCTIONS = [
     "✅ MANDATORY: Respond with a single fenced code block using the format ```base64json ... ``` — and nothing else.",
     "🔹 The contents must be a valid JSON object where:",
     "- Keys are file paths (e.g., 'main.py')",
@@ -13,5 +13,5 @@
     "}",
     "```",
     "💡 Base64 values must be inline, without line breaks or extra formatting.",
-    "🚫 Avoid using non-UTF-8 characters, escaped triple quotes, or fancy quotes in strings."
+    "🚫 Avoid using non-UTF-8 characters, escaped triple quotes, or fancy quotes in strings.",
 ]
