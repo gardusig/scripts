@@ -1,5 +1,6 @@
 import pytest
-from util.string_util import DEFAULT_FENCE, parse_code_response
+
+from kirby.util.string_util import DEFAULT_FENCE, parse_code_response
 
 
 def block(path: str, body: str = "") -> str:

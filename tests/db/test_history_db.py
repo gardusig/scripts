@@ -1,5 +1,5 @@
 import json
-from db.history_db import HistoryDB
+from kirby.db.history_db import HistoryDB
 
 
 def test_history_db_push_undo_clear(tmp_path):

@@ -2,13 +2,13 @@ from __future__ import annotations
 
 from unittest.mock import MagicMock
 
-from instruction.response_format import RESPONSE_FORMAT_INSTRUCTIONS
-from instruction.unit_test import UNIT_TEST_INSTRUCTIONS
+from kirby.instruction.response_format import RESPONSE_FORMAT_INSTRUCTIONS
+from kirby.instruction.unit_test import UNIT_TEST_INSTRUCTIONS
 import pytest
 import typer
 from typer.testing import CliRunner
 
-from cli import app_cli
+from kirby.cli import app_cli
 
 runner = CliRunner()
 
@@ -25,7 +25,7 @@ def _invoke(args: list[str] | str, **runner_kwargs):
 
 
 def test_clipboard_get_success(monkeypatch):
-    monkeypatch.setattr(app_cli.pyperclip, "paste", lambda: "hi")
+    monkeypatch.setattr(app_cli, "pyperclip_paste", lambda: "hi")
     assert app_cli._clipboard_get() == "hi"
 
 
@@ -33,14 +33,14 @@ def test_clipboard_get_failure(monkeypatch):
     def boom():
         raise app_cli.PyperclipException("no display")
 
-    monkeypatch.setattr(app_cli.pyperclip, "paste", boom)
+    monkeypatch.setattr(app_cli, "pyperclip_paste", boom)
     with pytest.raises(typer.Exit):
         app_cli._clipboard_get()
 
 
 def test_clipboard_set_success(monkeypatch):
     sink = {}
-    monkeypatch.setattr(app_cli.pyperclip, "copy", sink.setdefault)
+    monkeypatch.setattr(app_cli, "pyperclip_copy", sink.setdefault)
     app_cli._clipboard_set("abc")
     assert "abc" in sink
 
@@ -49,7 +49,7 @@ def test_clipboard_set_failure(monkeypatch, capsys):
     def boom(_):
         raise app_cli.PyperclipException()
 
-    monkeypatch.setattr(app_cli.pyperclip, "copy", boom)
+    monkeypatch.setattr(app_cli, "pyperclip_copy", boom)
     app_cli._clipboard_set("xyz")
     captured = capsys.readouterr()
     assert "xyz" in captured.out
@@ -102,7 +102,7 @@ def test_add_instruction_empty():
 
 
 def test_add_clipboard(monkeypatch):
-    monkeypatch.setattr(app_cli, "_clipboard_get", lambda: "from clip")
+    monkeypatch.setattr(app_cli, "_clipboard_get", lambda: "from kirby.clip")
     called = {}
 
     monkeypatch.setattr(
@@ -111,7 +111,7 @@ def test_add_clipboard(monkeypatch):
 
     res, _ = _invoke("add-clip")
     assert res.exit_code == 0
-    assert called["val"] == "from clip"
+    assert called["val"] == "from kirby.clip"
 
 
 # ───────────────────────── copy command ──────────────────── #
@@ -166,7 +166,7 @@ def test_copy_summary_no_clipboard(monkeypatch, capsys):
     def boom(_):
         raise app_cli.PyperclipException()
 
-    monkeypatch.setattr(app_cli.pyperclip, "copy", boom)
+    monkeypatch.setattr(app_cli, "pyperclip_copy", boom)
 
     res, out = _invoke("copy")
 

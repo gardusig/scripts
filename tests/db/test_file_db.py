@@ -3,8 +3,8 @@ from typing import List
 
 import pytest
 
-from db import file_db
-from db.history_db import HistoryDB
+from kirby.db import file_db
+from kirby.db.history_db import HistoryDB
 
 
 @pytest.fixture(autouse=True)

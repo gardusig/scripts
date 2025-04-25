@@ -3,11 +3,11 @@ requires = ["setuptools>=61", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "scripts"
+name = "kirby"
 version = "0.1.0"
 description = "A Python toolkit"
 authors = [{ name = "Gustavo Gardusi", email = "gustavo.gardusi@gmail.com" }]
-readme = "README.md"
+readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
 requires-python = ">=3.8"
 dependencies = [
@@ -15,22 +15,27 @@ dependencies = [
   "python-dotenv",
   "rich",
   "typer[all]",
-  "mypy",
   "boto3",
   "pyperclip",
-  "black",
-  "flake8",
-  "pytest",
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
 ]
 
+[project.optional-dependencies]
+dev = ["pytest", "mypy", "black", "flake8"]
+
 [project.urls]
-Homepage = "https://github.com/gardusig/scripts"
+Homepage = "https://github.com/gardusig/kirbyCLI"
 
 [tool.setuptools]
-package-dir = { "" = "src" }
+package-dir = { "" = "kirby" }
 
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["kirby"]
 
 [tool.black]
 line-length = 88
@@ -48,4 +53,13 @@ exclude = '''
 '''
 
 [project.scripts]
-scripts = "util.cli:app"
+kirby = "kirby.main:app"
+
+[tool.mypy]
+disallow_untyped_defs = true
+ignore_missing_imports = true
+
+[tool.flake8]
+max-line-length = 88
+extend-ignore = ["E203", "W503"]
+exclude = [".git", "__pycache__", "build", "dist", "lib", "tests"]

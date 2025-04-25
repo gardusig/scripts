@@ -1,11 +1,11 @@
 import pytest
 from unittest.mock import MagicMock, patch
-from ai.openai.openai_client import OpenAIClient
+from kirby.ai.openai.openai_client import OpenAIClient
 
 
 @pytest.fixture
 def mock_openai():
-    with patch("ai.openai.openai_client.OpenAI") as MockOpenAI:
+    with patch("kirby.ai.openai.openai_client.OpenAIClient") as MockOpenAI:
         yield MockOpenAI
 
 
@@ -30,7 +30,7 @@ def test_build_messages():
 
     messages = client.build_messages(instructions, files, final_prompt)
 
-    assert len(messages) == 4  # Adjusted to match the actual number of messages
+    assert len(messages) == 4
     assert messages[0] == {
         "role": "system",
         "content": "Follow the instructions carefully.",
@@ -59,10 +59,7 @@ def test_get_response(mock_openai, monkeypatch):
         instructions=["Instruction"],
         context={"file.txt": "File content"},
         final_prompt="Final prompt",
-        model="gpt-4o",
-        temperature=0.2,
-        max_tokens=4096,
-        top_p=0.96,
+        config=None
     )
 
     assert response == "Test response"

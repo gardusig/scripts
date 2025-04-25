@@ -1,22 +1,23 @@
 from __future__ import annotations
 
-from instruction.unit_test import UNIT_TEST_INSTRUCTIONS
-import pyperclip
+from kirby.instruction.unit_test import UNIT_TEST_INSTRUCTIONS
 import typer
+from pyperclip import paste as pyperclip_paste
+from pyperclip import copy as pyperclip_copy
 from pyperclip import PyperclipException
 
-from db.file_db import clear_files, summary_files
-from db.instruction_db import (
+from kirby.db.file_db import clear_files, summary_files
+from kirby.db.instruction_db import (
     append_instruction,
     clear_instructions,
     summary_instruction,
 )
-from instruction.response_format import RESPONSE_FORMAT_INSTRUCTIONS
-from util.ai_util import get_ai_client, send_message
-from util.file_util import rewrite_files
-from util.string_util import parse_code_response
-from cli.file_cli import file_app
-from cli.instruction_cli import instruction_app
+from kirby.instruction.response_format import RESPONSE_FORMAT_INSTRUCTIONS
+from kirby.util.ai_util import get_ai_client, send_message
+from kirby.util.file_util import rewrite_files
+from kirby.util.string_util import parse_code_response
+from kirby.cli.file_cli import file_app
+from kirby.cli.instruction_cli import instruction_app
 
 app = typer.Typer(help="🧰 Kirby CLI – manage instructions & files")
 app.add_typer(file_app, name="file", help="Manage resources (clipboard).")
@@ -27,7 +28,7 @@ app.add_typer(instruction_app, name="instruction", help="AI Instruction Analysis
 
 def _clipboard_get() -> str:
     try:
-        return pyperclip.paste()
+        return pyperclip_paste()
     except PyperclipException:
         typer.echo("⚠️  Clipboard not available on this system.", err=True)
         raise typer.Exit(1)
@@ -35,7 +36,7 @@ def _clipboard_get() -> str:
 
 def _clipboard_set(text: str) -> None:
     try:
-        pyperclip.copy(text)
+        pyperclip_copy(text)
     except PyperclipException:
         print(text)
         typer.echo("⚠️  Clipboard not available; printed instead.", err=True)
@@ -75,7 +76,7 @@ def add_instruction(text: str = typer.Argument(..., help="Instruction line")):
 
 @app.command(name="add-clip")
 def add_from_clipboard():
-    """Append instruction from clipboard contents."""
+    """Append instruction from kirby.clipboard contents."""
     add_instruction(_clipboard_get())
 
 

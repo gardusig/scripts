@@ -2,14 +2,14 @@ from pathlib import Path
 from typing import List
 import pytest
 from typer.testing import CliRunner
-from cli import file_cli
+from kirby.cli import file_cli
 
 
 runner = CliRunner()
 
 
 @pytest.fixture
-def monkey_append(monkeypatch):
+def monkey_append(monkeypatch) -> list[Path]:
     recorded: List[Path] = []
 
     def fake_append(path: str) -> None:
@@ -20,7 +20,7 @@ def monkey_append(monkeypatch):
 
 
 @pytest.fixture
-def monkey_remove(monkeypatch):
+def monkey_remove(monkeypatch) -> list[str]:
     removed: List[str] = []
 
     def fake_remove(path: str) -> None:

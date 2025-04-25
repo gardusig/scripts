@@ -1,6 +1,6 @@
-from config.log_setup import setup_logging
+from kirby.config.log_setup import setup_logging
 from dotenv import load_dotenv
-from cli.app_cli import app
+from kirby.cli.app_cli import app
 
 
 def main():

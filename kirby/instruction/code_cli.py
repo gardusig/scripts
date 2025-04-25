@@ -1,4 +1,4 @@
-[
+CODE_CLI_INSTRUCTIONS = [
     "For each instruction file in the instructions directory (e.g., `code_cli.json`, `unit_test.json`, `api_contract.json`), extract the filename (without extension) and treat it as a command identifier.",
     "Create a Python function named exactly after the filename (e.g., `def code_cli():`) that will act as the CLI entry point for this instruction set.",
     "Within each function, load the corresponding instruction file and pass its contents to the analysis engine or AI interface.",

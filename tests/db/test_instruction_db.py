@@ -2,8 +2,8 @@ import logging
 import pytest
 from pathlib import Path
 
-import db.instruction_db as instr_db
-from db.history_db import HistoryDB
+import kirby.db.instruction_db as instr_db
+from kirby.db.history_db import HistoryDB
 
 
 @pytest.fixture(autouse=True)

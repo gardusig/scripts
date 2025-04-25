@@ -1,8 +1,8 @@
 import pytest
 from typer.testing import CliRunner
 
-from cli import instruction_cli
-from cli.app_cli import app
+from kirby.cli import instruction_cli
+from kirby.cli.app_cli import app
 
 runner = CliRunner()
 

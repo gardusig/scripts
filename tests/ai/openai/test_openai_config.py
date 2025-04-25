@@ -1,4 +1,4 @@
-from ai.openai.openai_config import OpenAIConfig
+from kirby.ai.openai.openai_config import OpenAIConfig
 
 
 def test_openai_config_custom_values():

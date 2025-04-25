@@ -5,7 +5,7 @@ import logging
 from pathlib import Path
 from typing import Iterable, OrderedDict, Sequence
 
-from db.file_db import append_file
+from kirby.db.file_db import append_file
 from rich.logging import RichHandler
 
 log = logging.getLogger(__name__)

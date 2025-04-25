@@ -1,23 +1,23 @@
-# ai/ai_util.py
 from __future__ import annotations
 
 import logging
 import os
 from typing import Optional
 
-from ai.ai_client_interface import AIClient
-from ai.aws.anthropic.claude_35_client import Claude35Client
-from ai.openai.openai_client import OpenAIClient
-from db.file_db import get_latest_files
-from db.instruction_db import get_latest_instructions
-from util.file_util import stringify_file_contents
+from kirby.ai.ai_client_config import AIConfig
+from kirby.ai.ai_client_interface import AIClient
+from kirby.ai.aws.anthropic.claude_client import ClaudeClient
+from kirby.ai.openai.openai_client import OpenAIClient
+from kirby.db.file_db import get_latest_files
+from kirby.db.instruction_db import get_latest_instructions
+from kirby.util.file_util import stringify_file_contents
 
 logger = logging.getLogger(__name__)
 
 # ──────────────────────── AI-client registry ──────────────────────────
 AI_CLIENTS: dict[str, type[AIClient]] = {
     "openai": OpenAIClient,
-    "claude_35": Claude35Client,
+    # "claude": ClaudeClient,
 }
 
 
@@ -55,11 +55,13 @@ def send_message(
     ai_client: AIClient,
     instructions: Optional[list[str]] = None,
     files: Optional[set[str]] = None,
+    config: Optional[AIConfig] = None,
 ) -> str:
     """High-level helper used by the CLI layer."""
     response = ai_client.get_response(
         instructions=instructions,
         context=build_context(files),
         final_prompt=_latest_prompt(),
+        config=config,
     )
     return response

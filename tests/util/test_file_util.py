@@ -3,7 +3,7 @@ import shutil
 import pytest
 from pathlib import Path
 
-from util.file_util import (
+from kirby.util.file_util import (
     should_ignore,
     get_all_files,
     stringify_file_contents,

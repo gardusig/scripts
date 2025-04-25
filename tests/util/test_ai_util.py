@@ -1,8 +1,8 @@
-# tests/util/test_ai_util.py
 from typing import Optional
 import pytest
-from ai.ai_client_interface import AIClient
-import util.ai_util as ai_util
+from kirby.ai.ai_client_config import AIConfig
+from kirby.ai.ai_client_interface import AIClient
+import kirby.util.ai_util as ai_util
 
 
 # ─────────────────────────── get_ai_client ────────────────────────────
@@ -68,17 +68,17 @@ def test_send_message_passes_through(monkeypatch):
     class DummyClient(AIClient):
         def get_response(
             self,
-            instructions: Optional[list[str]],
-            context: dict[str, str],
-            final_prompt: str,
-            **kwargs,
+            instructions: Optional[list[str]] = None,
+            context: dict[str, str] = {},
+            final_prompt: Optional[str] = None,
+            config: Optional[AIConfig] = None,
         ) -> str:
             captured.update(
                 dict(
                     instructions=instructions,
                     context=context,
                     prompt=final_prompt,
-                    kwargs=kwargs,  # always present
+                    config=config,
                 )
             )
             return "ok"

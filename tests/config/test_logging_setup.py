@@ -3,7 +3,7 @@ import logging
 import pytest
 from rich.logging import RichHandler
 
-from config import log_setup
+from kirby.config import log_setup
 
 
 # ───── helpers ────────────────────────────────────────────────────────────────

@@ -1,12 +1,12 @@
 import typer
-from db.file_db import (
+from kirby.db.file_db import (
     clear_files,
     append_file,
     remove_file,
     undo_files,
     summary_files,
 )
-from util.file_util import get_all_files
+from kirby.util.file_util import get_all_files
 
 
 file_app = typer.Typer(help="📁 File path management CLI")

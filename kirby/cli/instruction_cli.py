@@ -1,4 +1,4 @@
-from db.instruction_db import (
+from kirby.db.instruction_db import (
     clear_instructions,
     summary_instruction,
     undo_instructions,
