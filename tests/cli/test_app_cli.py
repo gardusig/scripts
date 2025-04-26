@@ -4,8 +4,6 @@ from unittest.mock import MagicMock
 
 import pyperclip
 
-from kirby.instruction.response_format import RESPONSE_FORMAT_INSTRUCTIONS
-from kirby.instruction.unit_test import UNIT_TEST_INSTRUCTIONS
 import pytest
 import typer
 from typer.testing import CliRunner
@@ -146,10 +144,6 @@ def test_create_tests(monkeypatch):
     monkeypatch.setattr(app_cli, "rewrite_files", lambda _: None)
 
     res, _ = _invoke("unit-test")
-
-    send_spy.assert_called_once_with(
-        RESPONSE_FORMAT_INSTRUCTIONS + UNIT_TEST_INSTRUCTIONS
-    )
     assert res.exit_code == 0
 
 

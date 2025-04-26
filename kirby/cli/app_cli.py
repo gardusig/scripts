@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from kirby.instruction.unit_test import UNIT_TEST_INSTRUCTIONS
 import typer
 import pyperclip
 from pyperclip import PyperclipException
@@ -11,7 +10,6 @@ from kirby.db.instruction_db import (
     clear_instructions,
     summary_instruction,
 )
-from kirby.instruction.response_format import RESPONSE_FORMAT_INSTRUCTIONS
 from kirby.ai.ai_client_factory import get_ai_client
 from kirby.util.file_util import rewrite_files
 from kirby.util.string_util import parse_code_response
@@ -45,26 +43,21 @@ def _clipboard_set(text: str) -> None:
 
 
 @app.command()
-def clear(
-    instructions: bool = typer.Option(True, "--instructions/--no-instructions"),
-    files: bool = typer.Option(True, "--files/--no-files"),
-) -> None:
+def clear():
     """Clear instructions and/or files."""
-    if instructions:
-        clear_instructions()
-    if files:
-        clear_files()
+    clear_instructions()
+    clear_files()
 
 
 @app.command(name="show")
-def preview() -> None:
+def preview():
     """Display current instructions and files."""
     typer.echo(summary_instruction())
     typer.echo(summary_files())
 
 
 @app.command(name="add")
-def add_instruction(text: str = typer.Argument(..., help="Instruction line")) -> None:
+def add_instruction(text: str = typer.Argument(..., help="Instruction line")):
     """Append an instruction string."""
     text = text.strip()
     if not text:
@@ -74,34 +67,28 @@ def add_instruction(text: str = typer.Argument(..., help="Instruction line")) ->
 
 
 @app.command(name="add-clip")
-def add_from_clipboard() -> None:
+def add_instruction_from_clipboard():
     """Append instruction from kirby.clipboard contents."""
     add_instruction(_clipboard_get())
 
 
 @app.command(name="copy")
-def copy_summary() -> None:
+def copy_summary():
     """Copy a combined summary (instructions + files) to clipboard."""
     _clipboard_set("\n".join([summary_instruction(), summary_files()]))
 
 
 @app.command(name="unit-test")
-def create_tests() -> None:
-    instructions = []
-    instructions.extend(RESPONSE_FORMAT_INSTRUCTIONS)
-    instructions.extend(UNIT_TEST_INSTRUCTIONS)
-
+def create_tests():
     ai_client = get_ai_client()
-    response = ai_client.send_message(instructions)
+    response = ai_client.send_message()
     file_map = parse_code_response(response)
     rewrite_files(file_map)
 
 
 @app.command(name="code")
-def update_code() -> None:
-    instructions = []
-    instructions.extend(RESPONSE_FORMAT_INSTRUCTIONS)
+def update_code():
     ai_client = get_ai_client()
-    response = ai_client.send_message(instructions)
+    response = ai_client.send_message()
     file_map = parse_code_response(response)
     rewrite_files(file_map)
