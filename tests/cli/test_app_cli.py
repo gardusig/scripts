@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from unittest.mock import MagicMock
 
+import pyperclip
+
 from kirby.instruction.response_format import RESPONSE_FORMAT_INSTRUCTIONS
 from kirby.instruction.unit_test import UNIT_TEST_INSTRUCTIONS
 import pytest
@@ -25,7 +27,7 @@ def _invoke(args: list[str] | str, **runner_kwargs):
 
 
 def test_clipboard_get_success(monkeypatch):
-    monkeypatch.setattr(app_cli, "pyperclip_paste", lambda: "hi")
+    monkeypatch.setattr(pyperclip, "paste", lambda: "hi")
     assert app_cli._clipboard_get() == "hi"
 
 
@@ -33,14 +35,14 @@ def test_clipboard_get_failure(monkeypatch):
     def boom():
         raise app_cli.PyperclipException("no display")
 
-    monkeypatch.setattr(app_cli, "pyperclip_paste", boom)
+    monkeypatch.setattr(pyperclip, "paste", boom)
     with pytest.raises(typer.Exit):
         app_cli._clipboard_get()
 
 
 def test_clipboard_set_success(monkeypatch):
     sink = {}
-    monkeypatch.setattr(app_cli, "pyperclip_copy", sink.setdefault)
+    monkeypatch.setattr(pyperclip, "copy", sink.setdefault)
     app_cli._clipboard_set("abc")
     assert "abc" in sink
 
@@ -49,7 +51,7 @@ def test_clipboard_set_failure(monkeypatch, capsys):
     def boom(_):
         raise app_cli.PyperclipException()
 
-    monkeypatch.setattr(app_cli, "pyperclip_copy", boom)
+    monkeypatch.setattr(pyperclip, "copy", boom)
     app_cli._clipboard_set("xyz")
     captured = capsys.readouterr()
     assert "xyz" in captured.out
@@ -167,7 +169,7 @@ def test_copy_summary_no_clipboard(monkeypatch, capsys):
     def boom(_):
         raise app_cli.PyperclipException()
 
-    monkeypatch.setattr(app_cli, "pyperclip_copy", boom)
+    monkeypatch.setattr(pyperclip, "copy", boom)
 
     res, out = _invoke("copy")
 
