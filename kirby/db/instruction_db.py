@@ -11,12 +11,10 @@ log = logging.getLogger(__name__)
 _instruction_db: HistoryDB[list[str]] = HistoryDB(
     create_session_file("instruction_history"),
     empty=[],
-    # strip trailing whitespace, drop blank lines – duplicates allowed
     normalise=lambda lines: [ln.strip() for ln in lines if ln.strip()],
     pretty=lambda lines: (
-        "\n".join(["📜 instructions:"] + [f"- {ln}" for ln in lines])
-        if lines
-        else "(none)"
+        "📜 instructions:\n"
+        + ("\n".join([f"- {ln}" for ln in lines]) if lines else "(none)")
     ),
 )
 

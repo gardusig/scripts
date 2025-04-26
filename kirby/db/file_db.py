@@ -13,7 +13,9 @@ _file_db: HistoryDB[list[str]] = HistoryDB(
     create_session_file("file_set_history"),
     empty=[],
     normalise=lambda lst: sorted({p.strip() for p in lst if p.strip()}),
-    pretty=lambda lst: "\n".join(["📁 files:"] + [f"- {p}" for p in lst]) or "(none)",
+    pretty=lambda lst: (
+        "📁 files:\n" + ("\n".join([f"- {p}" for p in lst]) or "(none)")
+    ),
 )
 
 # ---------- internal helper ----------------------------------------
