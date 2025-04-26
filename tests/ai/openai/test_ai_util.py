@@ -39,7 +39,10 @@ def test_latest_prompt(monkeypatch):
             "line 5   ",
         ],
     )
-    assert ai_client_factory._latest_prompt() == " line 1 \n line 2\nline 3 \nline 4\nline 5   "
+    assert (
+        ai_client_factory._latest_prompt()
+        == " line 1 \n line 2\nline 3 \nline 4\nline 5   "
+    )
 
 
 # ────────────────────────── build_context ─────────────────────────────
@@ -84,7 +87,8 @@ def test_send_message_passes_through(monkeypatch):
             return "ok"
 
     resp = ai_client_factory.send_message(
-        DummyClient(), instructions=["ins"], files={"file.txt"})
+        DummyClient(), instructions=["ins"], files={"file.txt"}
+    )
 
     assert resp == "ok"
     assert captured["instructions"] == ["ins"]

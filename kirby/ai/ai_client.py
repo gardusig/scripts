@@ -10,9 +10,6 @@ from kirby.util.file_util import stringify_file_contents
 from kirby.ai.ai_client_config import AIConfig
 
 from abc import ABC, abstractmethod
-from typing import Optional
-
-from kirby.ai.ai_client_config import AIConfig
 
 logger = logging.getLogger(__name__)
 

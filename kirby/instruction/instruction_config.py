@@ -1,3 +1,1 @@
-InstructionConfig = {
-    
-}
+InstructionConfig = {}
