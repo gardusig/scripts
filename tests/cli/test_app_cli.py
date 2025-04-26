@@ -134,18 +134,19 @@ def test_copy_summary(monkeypatch):
 
 
 def test_create_tests(monkeypatch):
-    monkeypatch.setattr(app_cli, "get_ai_client", lambda: "dummy_client")
+    dummy_client = MagicMock()
+    send_spy = dummy_client.send_message
+    send_spy.return_value = "raw-response"
 
-    send_spy = MagicMock(return_value="raw-response")
-    monkeypatch.setattr(app_cli, "send_message", send_spy)
-
+    monkeypatch.setattr(app_cli, "get_ai_client", lambda: dummy_client)
     parsed = {"tests/test_sample.py": "assert 1"}
     monkeypatch.setattr(app_cli, "parse_code_response", lambda _: parsed)
+    monkeypatch.setattr(app_cli, "rewrite_files", lambda _: None)
 
     res, _ = _invoke("unit-test")
 
     send_spy.assert_called_once_with(
-        "dummy_client", RESPONSE_FORMAT_INSTRUCTIONS + UNIT_TEST_INSTRUCTIONS
+        RESPONSE_FORMAT_INSTRUCTIONS + UNIT_TEST_INSTRUCTIONS
     )
     assert res.exit_code == 0
 

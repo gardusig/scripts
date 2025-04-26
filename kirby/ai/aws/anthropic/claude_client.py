@@ -1,50 +1,30 @@
 from __future__ import annotations
 from typing import Any, Optional, cast
 
-from kirby.ai.aws.bedrock_client_config import BedrockClientConfig
+from kirby.ai.ai_client_config import AIConfig
+
 from kirby.ai.aws.anthropic.claude_client_config import Claude37ClientConfig, ClaudeClientConfig
-from kirby.ai.aws.bedrock_client_interface import BedrockClient
+from kirby.ai.aws.bedrock_client import BedrockClient
 
 
 class ClaudeClient(BedrockClient):
+    def __init__(self, config: Optional[AIConfig] = None):
+        if not config:
+            config = Claude37ClientConfig()
+        super().__init__(config)
+
     def _format_request_body(
         self,
-        instructions: Optional[list[str]] = None,
-        context: dict[str, str] = {},
-        final_prompt: Optional[str] = None,
-        config: Optional[BedrockClientConfig] = None,
+        messages: list[dict[str, Any]]
     ) -> dict[str, Any]:
-        msgs: list[dict[str, Any]] = []
-
-        if instructions:
-            msgs.append(
-                {
-                    "role": "system",
-                    "content": "\n".join(instructions),
-                }
-            )
-        for fname, content in (context or {}).items():
-            msgs.append(
-                {
-                    "role": "user",
-                    "content": f"--- File: {fname} ---\n```{content}```",
-                }
-            )
-        if final_prompt:
-            msgs.append(
-                {
-                    "role": "user",
-                    "content": final_prompt.strip(),
-                }
-            )
-        config = cast(ClaudeClientConfig, config or Claude37ClientConfig())
+        self.config = cast(ClaudeClientConfig, self.config)
         return {
-            "anthropic_version": config.anthropic_version,
-            "model": config.model,
-            "max_tokens": config.max_tokens,
-            "temperature": config.temperature,
-            "top_p": config.top_p,
-            "messages": msgs,
+            "anthropic_version": self.config.anthropic_version,
+            "model": self.config.model,
+            "max_tokens": self.config.max_tokens,
+            "temperature": self.config.temperature,
+            "top_p": self.config.top_p,
+            "messages": messages,
         }
 
     def _parse_response(self, raw: dict[str, Any]) -> str:

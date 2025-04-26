@@ -4,7 +4,6 @@ import logging
 import re
 from collections import OrderedDict
 from pathlib import Path
-from typing import OrderedDict as OD
 
 logger = logging.getLogger(__name__)
 
@@ -31,8 +30,8 @@ CODE_BLOCK_RE = re.compile(
 def parse_code_response(
     response: str,
     root: str | Path | None = None,
-) -> OD[str, str]:
-    files: OD[str, str] = OrderedDict()
+) -> OrderedDict[str, str]:
+    files: OrderedDict[str, str] = OrderedDict()
     base = Path(root).resolve() if root else None
 
     for match in CODE_BLOCK_RE.finditer(response):

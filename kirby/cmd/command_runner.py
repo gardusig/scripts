@@ -34,7 +34,7 @@ class CommandRunner:
         commands = self.get_startup_commands()
         commands.extend(cmd_list)
 
-        cmd = ' && '.join(commands)
+        cmd = " && ".join(commands)
 
         proc = subprocess.run(
             cmd,

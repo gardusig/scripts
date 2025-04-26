@@ -13,7 +13,7 @@ from kirby.db.instruction_db import (
     summary_instruction,
 )
 from kirby.instruction.response_format import RESPONSE_FORMAT_INSTRUCTIONS
-from kirby.util.ai_util import get_ai_client, send_message
+from kirby.ai.ai_client_factory import get_ai_client
 from kirby.util.file_util import rewrite_files
 from kirby.util.string_util import parse_code_response
 from kirby.cli.file_cli import file_app
@@ -49,7 +49,7 @@ def _clipboard_set(text: str) -> None:
 def clear(
     instructions: bool = typer.Option(True, "--instructions/--no-instructions"),
     files: bool = typer.Option(True, "--files/--no-files"),
-):
+) -> None:
     """Clear instructions and/or files."""
     if instructions:
         clear_instructions()
@@ -58,14 +58,14 @@ def clear(
 
 
 @app.command(name="show")
-def preview():
+def preview() -> None:
     """Display current instructions and files."""
     typer.echo(summary_instruction())
     typer.echo(summary_files())
 
 
 @app.command(name="add")
-def add_instruction(text: str = typer.Argument(..., help="Instruction line")):
+def add_instruction(text: str = typer.Argument(..., help="Instruction line")) -> None:
     """Append an instruction string."""
     text = text.strip()
     if not text:
@@ -75,34 +75,34 @@ def add_instruction(text: str = typer.Argument(..., help="Instruction line")):
 
 
 @app.command(name="add-clip")
-def add_from_clipboard():
+def add_from_clipboard() -> None:
     """Append instruction from kirby.clipboard contents."""
     add_instruction(_clipboard_get())
 
 
 @app.command(name="copy")
-def copy_summary():
+def copy_summary() -> None:
     """Copy a combined summary (instructions + files) to clipboard."""
     _clipboard_set("\n".join([summary_instruction(), summary_files()]))
 
 
 @app.command(name="unit-test")
-def create_tests():
+def create_tests() -> None:
     instructions = []
     instructions.extend(RESPONSE_FORMAT_INSTRUCTIONS)
     instructions.extend(UNIT_TEST_INSTRUCTIONS)
 
     ai_client = get_ai_client()
-    response = send_message(ai_client, instructions)
+    response = ai_client.send_message(instructions)
     file_map = parse_code_response(response)
     rewrite_files(file_map)
 
 
 @app.command(name="code")
-def update_code():
+def update_code() -> None:
     instructions = []
     instructions.extend(RESPONSE_FORMAT_INSTRUCTIONS)
     ai_client = get_ai_client()
-    response = send_message(ai_client, instructions)
+    response = ai_client.send_message(instructions)
     file_map = parse_code_response(response)
     rewrite_files(file_map)

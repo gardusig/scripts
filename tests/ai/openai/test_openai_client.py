@@ -59,7 +59,7 @@ def test_get_response(mock_openai, monkeypatch):
         instructions=["Instruction"],
         context={"file.txt": "File content"},
         final_prompt="Final prompt",
-        config=None
+        config=None,
     )
 
     assert response == "Test response"

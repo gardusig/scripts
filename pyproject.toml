@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "kirby"
 version = "0.1.0"
-description = "A Python toolkit"
+description = "Boost your productivity with some real-world AI functionality"
 authors = [{ name = "Gustavo Gardusi", email = "gustavo.gardusi@gmail.com" }]
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
@@ -54,12 +54,3 @@ exclude = '''
 
 [project.scripts]
 kirby = "kirby.main:app"
-
-[tool.mypy]
-disallow_untyped_defs = true
-ignore_missing_imports = true
-
-[tool.flake8]
-max-line-length = 88
-extend-ignore = ["E203", "W503"]
-exclude = [".git", "__pycache__", "build", "dist", "lib", "tests"]

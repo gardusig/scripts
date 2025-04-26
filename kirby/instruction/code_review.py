@@ -8,5 +8,5 @@ CODE_REVIEW_INSTRUCTIONS = [
     "Ensure that the code is secure and devoid of vulnerabilities.",
     "Verify that all necessary documentation is clear and beneficial.",
     "Review test coverage and suggest additional tests where necessary.",
-    "Provide constructive feedback and actionable suggestions for improvement."
+    "Provide constructive feedback and actionable suggestions for improvement.",
 ]

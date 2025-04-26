@@ -1,0 +1,27 @@
+import os
+from typing import Callable, Optional
+
+from kirby.ai.ai_client_config import AIConfig
+
+from kirby.ai.ai_client import AIClient
+from kirby.ai.aws.anthropic.claude_client import ClaudeClient
+from kirby.ai.openai.openai_client import OpenAIClient
+
+
+AI_CLIENTS: dict[str, Callable[[Optional[AIConfig]], AIClient]] = {
+    "openai": OpenAIClient,
+    "claude": ClaudeClient,
+}
+
+
+def get_ai_client(config: Optional[AIConfig] = None) -> AIClient:
+    client_name = (os.getenv("AI_CLIENT") or "").strip().lower()
+    if not client_name:
+        raise RuntimeError("⛔️  AI_CLIENT environment variable not set.")
+    try:
+        return AI_CLIENTS[client_name](config)
+    except KeyError as exc:
+        raise ValueError(
+            f"❌ Unsupported AI_CLIENT '{client_name}'. "
+            f"Supported: {list(AI_CLIENTS.keys())}"
+        ) from exc

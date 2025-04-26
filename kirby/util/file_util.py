@@ -95,7 +95,7 @@ def stringify_file_contents(files: Iterable[str]) -> dict[str, str]:
 # ────────────────────────────────────────────────────────────────────
 # write helpers
 # ────────────────────────────────────────────────────────────────────
-def rewrite_files(files: OrderedDict[str, str]) -> None:
+def rewrite_files(files: OrderedDict[str, str], allowed_file_patterns: list[str] = [], deny_file_patterns: list[str] = []) -> None:
     for file_path, content in files.items():
         rewrite_file(file_path, content)
 
