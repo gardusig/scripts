@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from kirby.instruction.unit_test import UNIT_TEST_INSTRUCTIONS
 import typer
-from pyperclip import paste as pyperclip_paste
-from pyperclip import copy as pyperclip_copy
+import pyperclip
 from pyperclip import PyperclipException
 
 from kirby.db.file_db import clear_files, summary_files
@@ -28,7 +27,7 @@ app.add_typer(instruction_app, name="instruction", help="AI Instruction Analysis
 
 def _clipboard_get() -> str:
     try:
-        return pyperclip_paste()
+        return pyperclip.paste()
     except PyperclipException:
         typer.echo("⚠️  Clipboard not available on this system.", err=True)
         raise typer.Exit(1)
@@ -36,7 +35,7 @@ def _clipboard_get() -> str:
 
 def _clipboard_set(text: str) -> None:
     try:
-        pyperclip_copy(text)
+        pyperclip.copy(text)
     except PyperclipException:
         print(text)
         typer.echo("⚠️  Clipboard not available; printed instead.", err=True)
