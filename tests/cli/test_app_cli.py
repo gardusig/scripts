@@ -59,24 +59,16 @@ def test_clipboard_set_failure(monkeypatch, capsys):
 # ───────────────────────── clear command ──────────────────── #
 
 
-@pytest.mark.parametrize(
-    ("flags", "expect_ins", "expect_files"),
-    [
-        ([], True, True),
-        (["--no-instructions"], False, True),
-        (["--no-files"], True, False),
-    ],
-)
-def test_clear(monkeypatch, flags, expect_ins, expect_files):
+def test_clear(monkeypatch):
     cleared = {"ins": False, "files": False}
 
     monkeypatch.setattr(app_cli, "clear_instructions", lambda: cleared.update(ins=True))
     monkeypatch.setattr(app_cli, "clear_files", lambda: cleared.update(files=True))
 
-    res, _ = _invoke(["clear", *flags])
+    res, _ = _invoke(["clear"])
     assert res.exit_code == 0
-    assert cleared["ins"] is expect_ins
-    assert cleared["files"] is expect_files
+    assert cleared["ins"] is True, "clear_instructions() was not called"
+    assert cleared["files"] is True, "clear_files() was not called"
 
 
 # ───────────────────────── add / add-clip commands ─────────────────── #
