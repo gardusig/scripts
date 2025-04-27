@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from kirby.instruction.instructions.readme import README_INSTRUCTION
+
 from kirby.db.process_file_db import get_processing_files
 
 from kirby.util.file_util import find_repo_root, rewrite_files, source_to_test_path
@@ -48,6 +50,26 @@ def create_test(force: bool, filepath: str, repo_root: Path):
         ],
         prompt_files=[src, dest],
         final_prompt=f'Focus only on creating a test for "{filepath}"',
+    )
+    file_map = parse_code_response(response)
+    rewrite_files(files=file_map, force=force)
+
+
+@code_app.command("readme")
+def create_readme(
+    force: bool = typer.Option(
+        False,
+        "--force",
+        help="Skip prompts and overwrite tests unconditionally.",
+    ),
+):
+    ai_client = get_ai_client()
+    response = ai_client.send_message(
+        instructions=[
+            RESPONSE_FORMAT_INSTRUCTION,
+            README_INSTRUCTION,
+        ],
+        final_prompt=f'Focus only on creating a single "README.md"',
     )
     file_map = parse_code_response(response)
     rewrite_files(files=file_map, force=force)

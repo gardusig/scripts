@@ -1,8 +1,9 @@
 from __future__ import annotations
+import os
 import subprocess
 import typer
 
-import fnmatch
+from fnmatch import fnmatch
 from pathlib import Path
 from typing import OrderedDict, Sequence
 
@@ -13,48 +14,60 @@ DEFAULT_IGNORES: tuple[str, ...] = (
     "*.egg-info",
     ".DS_Store",
     ".git",
-    ".venv",
     "venv",
-    "build",
-    "dist",
-    ".copyignore",
     ".env",
+    ".pytest_cache",
+    ".mypy_cache",
     "LICENSE",
     "*.webp",
     "*.jpe?g",
+    "*.gif",
 )
-
 
 # ────────────────────────────────────────────────────────────────────
 # ignore helpers
 # ────────────────────────────────────────────────────────────────────
-def should_ignore(path_part: str, patterns: Sequence[str] = DEFAULT_IGNORES) -> bool:
-    return any(fnmatch.fnmatch(path_part, pat) for pat in patterns)
+
+
+def should_ignore(name: str, patterns: Sequence[str] = DEFAULT_IGNORES) -> bool:
+    """
+    Returns True if `name` (a single path component or filename)
+    matches any of the glob patterns.
+    """
+    return any(fnmatch(name, pat) for pat in patterns)
 
 
 # ────────────────────────────────────────────────────────────────────
 # file discovery
 # ────────────────────────────────────────────────────────────────────
 def get_all_files(
-    root: str | Path, ignore_patterns: Sequence[str] = DEFAULT_IGNORES
+    root: str | Path,
+    ignore_patterns: Sequence[str] = DEFAULT_IGNORES,
 ) -> list[str]:
     root = Path(root).expanduser().resolve()
+
     if not root.exists():
-        print("⛔️ Path does not exist: %s", root)
+        typer.echo(f"⛔️  Path does not exist: {root}", err=True)
         return []
+
     if root.is_file():
         return [str(root)]
-    paths: list[str] = []
-    for path in root.rglob("*"):
-        rel = path.relative_to(root)
-        if should_ignore(rel.name, ignore_patterns) or should_ignore(
-            str(rel), ignore_patterns
-        ):
-            print("⏭️  Skipping ignored: %s", rel)
-            continue
-        if path.is_file():
-            paths.append(str(path))
-    return paths
+
+    results: list[str] = []
+
+    for dirpath, dirnames, filenames in os.walk(root):
+        dirnames[:] = [
+            d for d in dirnames
+            if not should_ignore(d, ignore_patterns)
+        ]
+
+        for fname in filenames:
+            if should_ignore(fname, ignore_patterns):
+                continue
+            full = Path(dirpath) / fname
+            results.append(str(full))
+
+    return results
 
 
 # ────────────────────────────────────────────────────────────────────
