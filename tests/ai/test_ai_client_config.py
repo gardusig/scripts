@@ -3,7 +3,7 @@ import pytest
 from kirby.ai.ai_client_config import AIConfig
 
 
-class DummyAIConfig:
+class DummyAIConfig(AIConfig):
     temperature: float = 0.7
     max_tokens: int = 256
     top_p: float = 0.9
@@ -32,8 +32,10 @@ def test_dummy_ai_config_implements_aiconfig():
 )
 def test_various_aiconfig_values(temperature, max_tokens, top_p, model):
     # Use an instance with __init__ to avoid NameError in class scope
-    class CustomConfig:
-        def __init__(self, temperature, max_tokens, top_p, model):
+    class CustomConfig(AIConfig):
+        def __init__(
+            self, temperature: float, max_tokens: int, top_p: float, model: str
+        ):
             self.temperature = temperature
             self.max_tokens = max_tokens
             self.top_p = top_p
@@ -47,11 +49,16 @@ def test_various_aiconfig_values(temperature, max_tokens, top_p, model):
 
 
 def test_missing_attribute_raises_attribute_error():
-    class IncompleteConfig:
+    class IncompleteConfig(AIConfig):
         temperature = 0.5
         max_tokens = 100
         # top_p is missing
         model = "gpt-4"
+
+        def __getattribute__(self, name):
+            if name == "top_p":
+                raise AttributeError("top_p is missing")
+            return super().__getattribute__(name)
 
     config = IncompleteConfig()
     with pytest.raises(AttributeError):

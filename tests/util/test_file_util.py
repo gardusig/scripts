@@ -1,6 +1,7 @@
 import pytest
 from pathlib import Path
 from collections import OrderedDict
+from typing import Any
 
 import kirby.util.file_util as file_util
 
@@ -62,7 +63,7 @@ def test_stringify_file_contents_reads_files(tmp_path, monkeypatch):
 
 
 def test_stringify_file_contents_handles_exception(monkeypatch, tmp_path):
-    def bad_read(*a, **k):
+    def bad_read(*a: Any, **k: Any) -> str:
         raise Exception("fail")
 
     monkeypatch.setattr(file_util, "stringify_file_content", bad_read)
@@ -88,10 +89,15 @@ def test_stringify_file_content_too_big(tmp_path):
 
 def test_stringify_file_content_handles_exception(monkeypatch):
     class DummyPath:
-        def stat(self):
+        def stat(self) -> Any:
             raise Exception("fail")
 
-    out = file_util.stringify_file_content(DummyPath())
+        def __fspath__(self) -> str:
+            return "dummy"
+
+    # Provide a type hint to satisfy mypy: str | Path
+    dummy_path: "str | Path" = DummyPath()  # type: ignore
+    out = file_util.stringify_file_content(dummy_path)
     assert out == ""
 
 

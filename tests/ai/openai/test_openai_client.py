@@ -1,4 +1,5 @@
 import pytest
+from typing import List, Dict, Any
 
 from kirby.ai.openai.openai_client import OpenAIClient
 
@@ -54,7 +55,8 @@ def test_get_response_returns_content(
     monkeypatch, set_openai_api_key, dummy_openai, capsys
 ):
     client = OpenAIClient()
-    messages = [{"role": "user", "content": "Say hi"}]
+    # Use the correct type for messages to satisfy mypy
+    messages: List[Any] = [{"role": "user", "content": "Say hi"}]
     result = client.get_response(messages)
     assert result == "Hello, world!"
     out = capsys.readouterr().out
@@ -88,6 +90,7 @@ def test_get_response_returns_empty_string_if_no_content(
         "kirby.ai.openai.openai_client.OpenAI", lambda api_key: DummyClient()
     )
     client = OpenAIClient()
-    messages = [{"role": "user", "content": "Say hi"}]
+    # Use the correct type for messages to satisfy mypy
+    messages: List[Any] = [{"role": "user", "content": "Say hi"}]
     result = client.get_response(messages)
     assert result == ""

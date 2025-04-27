@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from kirby.instruction.instructions.mypy import MYPY_INSTRUCTION
+
 from kirby.instruction.instructions.readme import README_INSTRUCTION
 
 from kirby.db.process_file_db import get_processing_files
@@ -74,3 +76,31 @@ def create_readme(
     )
     file_map = parse_code_response(response)
     rewrite_files(files=file_map, force=force)
+
+
+@code_app.command("mypy")
+def fix_mypy_errors(
+    force: bool = typer.Option(
+        False,
+        "--force",
+        help="Skip prompts and overwrite tests unconditionally.",
+    ),
+):
+    ai_client = get_ai_client()
+    for filepath in get_processing_files():
+        try:
+            response = ai_client.send_message(
+                instructions=[
+                    RESPONSE_FORMAT_INSTRUCTION,
+                    MYPY_INSTRUCTION,
+                ],
+                prompt_files=[filepath],
+                final_prompt=f"Focus on fixing only mypy errors related to {filepath}",
+            )
+            file_map = parse_code_response(response)
+            rewrite_files(files=file_map, force=force)
+        except Exception as e:
+            typer.secho(
+                f"⚠️  Failed to create test for {filepath!r}: {e}",
+                fg="yellow",
+            )
