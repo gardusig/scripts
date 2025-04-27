@@ -1,8 +1,6 @@
 from __future__ import annotations
 import subprocess
 import typer
-from typing import Optional, Sequence
-from collections import OrderedDict
 
 import fnmatch
 import logging

@@ -1,8 +1,6 @@
-
 import pyperclip
-import pytest
 from typer.testing import CliRunner
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from kirby.cli.app import app
 
 runner = CliRunner()

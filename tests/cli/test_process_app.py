@@ -1,20 +1,21 @@
-
 import pytest
 from typer.testing import CliRunner
 from kirby.cli.process_app import process_app
-from unittest.mock import patch
+from unittest.mock import patch, call
 
 runner = CliRunner()
 
 
 @pytest.fixture(autouse=True)
 def mock_file_operations():
-    with patch('kirby.cli.process_app.get_all_files') as mock_get_all_files, \
-            patch('kirby.cli.process_app.append_processing_file') as mock_append, \
-            patch('kirby.cli.process_app.remove_processing_file') as mock_remove, \
-            patch('kirby.cli.process_app.clear_processing_files') as mock_clear, \
-            patch('kirby.cli.process_app.summary_processing_files') as mock_summary, \
-            patch('kirby.cli.process_app.undo_processing_files') as mock_undo:
+    with (
+        patch("kirby.cli.process_app.get_all_files") as mock_get_all_files,
+        patch("kirby.cli.process_app.append_processing_file") as mock_append,
+        patch("kirby.cli.process_app.remove_processing_file") as mock_remove,
+        patch("kirby.cli.process_app.clear_processing_files") as mock_clear,
+        patch("kirby.cli.process_app.summary_processing_files") as mock_summary,
+        patch("kirby.cli.process_app.undo_processing_files") as mock_undo,
+    ):
         mock_get_all_files.return_value = ["file1.txt", "file2.txt"]
         mock_summary.return_value = "Current files: file1.txt, file2.txt"
         yield mock_get_all_files, mock_append, mock_remove, mock_clear, mock_summary, mock_undo
@@ -25,7 +26,7 @@ def test_add_file(mock_file_operations):
     result = runner.invoke(process_app, ["add", "dummy_path"])
     assert result.exit_code == 0
     mock_get_all_files.assert_called_once_with("dummy_path")
-    mock_append.assert_has_calls([patch.call("file1.txt"), patch.call("file2.txt")])
+    mock_append.assert_has_calls([call("file1.txt"), call("file2.txt")])
 
 
 def test_remove_file(mock_file_operations):
