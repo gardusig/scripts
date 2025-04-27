@@ -1,30 +1,32 @@
 from __future__ import annotations
 
-from kirby.util.file_util import get_file_contents
+from kirby.db.file_db import clear_processing_files, clear_shared_files, summary_processing_files, summary_shared_files
+from kirby.db.prompt_db import append_prompt, clear_prompts, summary_prompts
 
-from kirby.db.instruction_db import append_instruction, clear_instructions, summary_instruction
 import typer
 import pyperclip
 from pyperclip import PyperclipException
 
-from kirby.db.file_db import clear_files, summary_files
-from kirby.cli.clear_app import clear_app
-from kirby.cli.add_app import add_app
 from kirby.cli.code_app import code_app
-from kirby.cli.list_app import list_app
-from kirby.cli.remove_app import remove_app
-from kirby.cli.undo_app import undo_app
+from kirby.cli.process_app import process_app
+from kirby.cli.prompt_app import prompt_app
+from kirby.cli.file_app import file_app
 
 app = typer.Typer(help="🧰 Kirby CLI – manage instructions & files")
-app.add_typer(add_app)
-app.add_typer(clear_app)
 app.add_typer(code_app)
-app.add_typer(list_app)
-app.add_typer(remove_app)
-app.add_typer(undo_app)
+app.add_typer(file_app)
+app.add_typer(process_app)
+app.add_typer(prompt_app)
 
 
 # ───────────────────────── helpers ────────────────────────── #
+
+def _clipboard_get() -> str:
+    try:
+        return pyperclip.paste()
+    except pyperclip.PyperclipException:
+        typer.echo("⚠️  Clipboard not available on this system.", err=True)
+        raise typer.Exit(1)
 
 
 def _clipboard_set(text: str) -> None:
@@ -40,29 +42,28 @@ def _clipboard_set(text: str) -> None:
 
 @app.command(name="show")
 def preview():
-    """Display current instructions and files."""
-    typer.echo(summary_instruction())
-    typer.echo(summary_files())
+    typer.echo(summary_prompts())
+    typer.echo(summary_shared_files())
+    typer.echo(summary_processing_files())
 
 
-@app.command(name="copy")
-def copy_summary():
-    messages = [summary_instruction()]
-    messages.extend(get_file_contents())
-    _clipboard_set("\n".join(messages))
+@app.command(name="clipboard")
+def add_prompt_from_clipboard():
+    append_prompt(_clipboard_get())
 
 
-@app.command(name="eat")
-def add_instruction(text: str = typer.Argument(..., help="Instruction line")):
-    """Append an instruction string."""
+@app.command(name="add")
+def add_prompt(text: str = typer.Argument(..., help="Prompt line")):
+    """Append an prompt string."""
     text = text.strip()
     if not text:
-        typer.echo("⚠️  Empty instruction provided.", err=True)
+        typer.echo("⚠️  Empty prompt provided.", err=True)
         raise typer.Exit(1)
-    append_instruction(text)
+    append_prompt(text)
 
 
-@app.command(name="poop")
+@app.command(name="clear")
 def clear_all():
-    clear_instructions()
-    clear_files()
+    clear_prompts()
+    clear_shared_files()
+    clear_processing_files()

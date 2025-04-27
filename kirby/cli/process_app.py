@@ -1,0 +1,40 @@
+import typer
+from kirby.db.file_db import (
+    append_processing_file,
+    remove_processing_file,
+    clear_processing_files,
+    summary_processing_files,
+    undo_processing_files,
+)
+
+process_app = typer.Typer(name="process", help="Manage your processing-file history")
+
+
+@process_app.command("add")
+def add_file(path: str = typer.Argument(..., help="Path to append")):
+    """Append a file to the processing queue."""
+    append_processing_file(path)
+
+
+@process_app.command("remove")
+def remove_file(path: str = typer.Argument(..., help="Path to remove")):
+    """Remove a file from the processing queue."""
+    remove_processing_file(path)
+
+
+@process_app.command("clear")
+def clear_files():
+    """Clear the entire processing-file history."""
+    clear_processing_files()
+
+
+@process_app.command("list")
+def list_files():
+    """Show a summary of your processing-file history."""
+    typer.echo(summary_processing_files())
+
+
+@process_app.command("undo")
+def undo_file():
+    """Undo the last change to your processing-file history."""
+    undo_processing_files()
