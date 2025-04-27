@@ -44,7 +44,8 @@
 #             capture_output=True,
 #             check=check,
 #         )
-#         return CommandResult(proc.returncode, proc.stdout.strip(), proc.stderr.strip())
+#         return CommandResult(proc.returncode,
+# proc.stdout.strip(), proc.stderr.strip())
 
 #     # ───────────── public helpers ─────────────
 #     def pytest(self, paths: list[str]) -> CommandResult:
