@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-import logging
 import re
 from collections import OrderedDict
 from pathlib import Path
+from typing import Optional
 
-logger = logging.getLogger(__name__)
+from kirby.instruction.instruction_model import Instruction
+from builtins import print
 
 # ─────────────────────────── regex ──────────────────────────────
 DEFAULT_FENCE = "~~~"
@@ -44,18 +45,28 @@ def parse_code_response(
         norm = Path(raw_path).as_posix()
 
         if base and not (base / norm).resolve().is_relative_to(base):
-            logger.warning("Rejected path outside root sandbox: %s", norm)
+            print("Rejected path outside root sandbox: %s", norm)
             continue
 
         if norm in files:
-            logger.warning("Duplicate file path in response: %s (overwriting)", norm)
+            print("Duplicate file path in response: %s (overwriting)", norm)
 
         files[norm] = code
-        logger.debug("Extracted %s (len=%d)", norm, len(code))
+        print("Extracted %s (len=%d)", norm, len(code))
 
     if not files:
-        logger.warning("No file/code blocks found in model response.")
+        print("No file/code blocks found in model response.")
     else:
-        logger.info("Decoded %d file(s) from model response.", len(files))
+        print("Decoded %d file(s) from model response.", len(files))
 
     return files
+
+
+def get_instruction_strings(
+    instructions: Optional[list[Instruction]] = None,
+) -> list[str]:
+    instruction_strings: list[str] = []
+    if instructions:
+        for instruction in instructions:
+            instruction_strings.extend(instruction.instructions)
+    return instruction_strings

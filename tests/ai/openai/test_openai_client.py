@@ -1,66 +1,96 @@
 import pytest
-from unittest.mock import MagicMock, patch
+from typing import List, Dict, Any
+
 from kirby.ai.openai.openai_client import OpenAIClient
 
 
+class DummyResponse:
+    class DummyChoice:
+        class DummyMessage:
+            content = "Hello, world!"
+
+        message = DummyMessage()
+
+    choices = [DummyChoice()]
+
+
 @pytest.fixture
-def mock_openai():
-    with patch("kirby.ai.openai.openai_client.OpenAIClient") as MockOpenAI:
-        yield MockOpenAI
+def dummy_openai(monkeypatch):
+    class DummyChatCompletions:
+        def create(self, **kwargs):
+            return DummyResponse()
+
+    class DummyChat:
+        completions = DummyChatCompletions()
+
+    class DummyClient:
+        chat = DummyChat()
+
+    monkeypatch.setattr(
+        "kirby.ai.openai.openai_client.OpenAI", lambda api_key: DummyClient()
+    )
 
 
-def test_openai_client_initialization_without_api_key(monkeypatch):
+@pytest.fixture
+def set_openai_api_key(monkeypatch):
+    monkeypatch.setenv("OPENAI_API_KEY", "dummy-key")
+
+
+def test_init_raises_if_no_api_key(monkeypatch):
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
-    with pytest.raises(RuntimeError, match="❌ OPENAI_API_KEY is not set."):
+    with pytest.raises(RuntimeError, match="OPENAI_API_KEY is not set"):
         OpenAIClient()
 
 
-def test_openai_client_initialization_with_api_key(monkeypatch, mock_openai):
-    monkeypatch.setenv("OPENAI_API_KEY", "test_key")
-    client = OpenAIClient()
-    assert client.client is not None
-    mock_openai.assert_called_once_with(api_key="test_key")
-
-
-def test_build_messages():
-    client = OpenAIClient()
-    instructions = ["Follow the instructions carefully."]
-    files = {"file1.txt": "Content of file 1", "file2.txt": "Content of file 2"}
-    final_prompt = "What is your response?"
-
-    messages = client.build_messages(instructions, files, final_prompt)
-
-    assert len(messages) == 4
-    assert messages[0] == {
-        "role": "system",
-        "content": "Follow the instructions carefully.",
-    }
-    assert messages[1] == {
-        "role": "user",
-        "content": "--- File: file1.txt ---\n```Content of file 1```",
-    }
-    assert messages[2] == {
-        "role": "user",
-        "content": "--- File: file2.txt ---\n```Content of file 2```",
-    }
-    assert messages[3] == {"role": "user", "content": "What is your response?"}
-
-
-def test_get_response(mock_openai, monkeypatch):
-    monkeypatch.setenv("OPENAI_API_KEY", "test_key")
-    mock_client = MagicMock()
-    mock_openai.return_value = mock_client
-    mock_response = MagicMock()
-    mock_response.choices = [MagicMock(message=MagicMock(content="Test response"))]
-    mock_client.chat.completions.create.return_value = mock_response
-
-    client = OpenAIClient()
-    response = client.get_response(
-        instructions=["Instruction"],
-        context={"file.txt": "File content"},
-        final_prompt="Final prompt",
-        config=None,
+def test_init_sets_client(monkeypatch, set_openai_api_key):
+    dummy_client = object()
+    monkeypatch.setattr(
+        "kirby.ai.openai.openai_client.OpenAI", lambda api_key: dummy_client
     )
+    client = OpenAIClient()
+    assert client.client is dummy_client
 
-    assert response == "Test response"
-    mock_client.chat.completions.create.assert_called_once()
+
+def test_get_response_returns_content(
+    monkeypatch, set_openai_api_key, dummy_openai, capsys
+):
+    client = OpenAIClient()
+    # Use the correct type for messages to satisfy mypy
+    messages: List[Any] = [{"role": "user", "content": "Say hi"}]
+    result = client.get_response(messages)
+    assert result == "Hello, world!"
+    out = capsys.readouterr().out
+    assert "📨 Sending request to" in out
+    assert "✅ Response received from" in out
+
+
+def test_get_response_returns_empty_string_if_no_content(
+    monkeypatch, set_openai_api_key
+):
+    class DummyResponseNoContent:
+        class DummyChoice:
+            class DummyMessage:
+                content = None
+
+            message = DummyMessage()
+
+        choices = [DummyChoice()]
+
+    class DummyChatCompletions:
+        def create(self, **kwargs):
+            return DummyResponseNoContent()
+
+    class DummyChat:
+        completions = DummyChatCompletions()
+
+    class DummyClient:
+        chat = DummyChat()
+
+    monkeypatch.setattr(
+        "kirby.ai.openai.openai_client.OpenAI", lambda api_key: DummyClient()
+    )
+    client = OpenAIClient()
+    # Use the correct type for messages to satisfy mypy
+    messages: List[Any] = [{"role": "user", "content": "Say hi"}]
+    result = client.get_response(messages)
+    assert result == ""

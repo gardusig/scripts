@@ -3,7 +3,10 @@ from typing import Any, Optional, cast
 
 from kirby.ai.ai_client_config import AIConfig
 
-from kirby.ai.aws.anthropic.claude_client_config import Claude37ClientConfig, ClaudeClientConfig
+from kirby.ai.aws.anthropic.claude_client_config import (
+    Claude37ClientConfig,
+    ClaudeClientConfig,
+)
 from kirby.ai.aws.bedrock_client import BedrockClient
 
 
@@ -13,10 +16,7 @@ class ClaudeClient(BedrockClient):
             config = Claude37ClientConfig()
         super().__init__(config)
 
-    def _format_request_body(
-        self,
-        messages: list[dict[str, Any]]
-    ) -> dict[str, Any]:
+    def _format_request_body(self, messages: list[dict[str, Any]]) -> dict[str, Any]:
         self.config = cast(ClaudeClientConfig, self.config)
         return {
             "anthropic_version": self.config.anthropic_version,

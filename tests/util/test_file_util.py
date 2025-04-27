@@ -1,59 +1,204 @@
-import logging
-import shutil
 import pytest
 from pathlib import Path
+from collections import OrderedDict
+from typing import Any
 
-from kirby.util.file_util import (
-    should_ignore,
-    get_all_files,
-    stringify_file_contents,
-)
-
-TEST_DIR = Path("/tmp/kirby_test")
-TEST_FILE = TEST_DIR / "file.txt"
-INSTRUCTION_FILE = TEST_DIR / "instruction.json"
-
-
-@pytest.fixture(autouse=True)
-def setup_and_cleanup():
-    TEST_DIR.mkdir(parents=True, exist_ok=True)
-    yield
-    shutil.rmtree(TEST_DIR)
+import kirby.util.file_util as file_util
 
 
 @pytest.mark.parametrize(
-    "name, patterns, expected",
+    "path_part,patterns,expected",
     [
-        ("file.py", ["*.pyc"], False),
-        ("__pycache__", ["__pycache__"], True),
-        ("image.jpg", ["*.jpg"], True),
+        ("__pycache__", file_util.DEFAULT_IGNORES, True),
+        ("foo.pyc", file_util.DEFAULT_IGNORES, True),
+        ("foo.txt", file_util.DEFAULT_IGNORES, False),
+        ("LICENSE", file_util.DEFAULT_IGNORES, True),
+        ("randomfile", [], False),
+        ("venv", file_util.DEFAULT_IGNORES, True),
+        ("foo/bar.py", ["foo/bar.py"], True),
     ],
 )
-def test_should_ignore(name, patterns, expected):
-    assert should_ignore(name, patterns) is expected
+def test_should_ignore(path_part, patterns, expected):
+    assert file_util.should_ignore(path_part, patterns) == expected
 
 
-def test_get_all_files(tmp_path):
-    TEST_DIR = tmp_path
-    (TEST_DIR / "a.txt").write_text("hi")
-    (TEST_DIR / "__pycache__").mkdir()
-    (TEST_DIR / "__pycache__" / "ignored.pyc").write_text("ignored")
-
-    files = [Path(p).resolve() for p in get_all_files(str(TEST_DIR))]
-
-    assert (TEST_DIR / "a.txt").resolve() in files
-    assert all("__pycache__" not in p.parts for p in files)
+def test_get_all_files_returns_empty_for_nonexistent(monkeypatch, tmp_path):
+    nonexist = tmp_path / "doesnotexist"
+    files = file_util.get_all_files(nonexist)
+    assert files == []
 
 
-def test_stringify_file_contents():
-    TEST_FILE.write_text("hello\n")
-    result = stringify_file_contents({str(TEST_FILE)})
-    assert result == {str(TEST_FILE): "hello"}
+def test_get_all_files_returns_file_for_file(monkeypatch, tmp_path):
+    f = tmp_path / "a.txt"
+    f.write_text("hi")
+    files = file_util.get_all_files(f)
+    assert files == [str(f)]
 
 
-def test_stringify_file_contents_error(caplog):
-    bad_path = TEST_DIR / "missing.txt"
-    with caplog.at_level(logging.DEBUG):
-        result = stringify_file_contents({str(bad_path)})
-        assert result.get(str(bad_path), "") == ""
-        assert any("Error reading" in rec.message for rec in caplog.records)
+def test_get_all_files_ignores_patterns(tmp_path):
+    (tmp_path / "__pycache__").mkdir()
+    (tmp_path / "foo.pyc").write_text("x")
+    (tmp_path / "bar.txt").write_text("y")
+    (tmp_path / "baz.py").write_text("z")
+    files = file_util.get_all_files(tmp_path)
+    assert str(tmp_path / "bar.txt") in files
+    assert str(tmp_path / "baz.py") in files
+    assert all("__pycache__" not in f and f.endswith(".pyc") is False for f in files)
+
+
+def test_stringify_file_contents_empty(monkeypatch):
+    assert file_util.stringify_file_contents([]) == []
+
+
+def test_stringify_file_contents_reads_files(tmp_path, monkeypatch):
+    f1 = tmp_path / "a.txt"
+    f2 = tmp_path / "b.txt"
+    f1.write_text("foo")
+    f2.write_text("bar")
+    files = [str(f1), str(f2)]
+    result = file_util.stringify_file_contents(files, label="Test")
+    assert result[0] == "📁 Test:"
+    assert any("foo" in s for s in result)
+    assert any("bar" in s for s in result)
+
+
+def test_stringify_file_contents_handles_exception(monkeypatch, tmp_path):
+    def bad_read(*a: Any, **k: Any) -> str:
+        raise Exception("fail")
+
+    monkeypatch.setattr(file_util, "stringify_file_content", bad_read)
+    f = tmp_path / "bad.txt"
+    f.write_text("x")
+    result = file_util.stringify_file_contents([str(f)])
+    assert result == ["📁 Files:"]
+
+
+def test_stringify_file_content_reads_file(tmp_path):
+    f = tmp_path / "a.txt"
+    f.write_text("hello\n")
+    out = file_util.stringify_file_content(f)
+    assert out == "hello"
+
+
+def test_stringify_file_content_too_big(tmp_path):
+    f = tmp_path / "big.txt"
+    f.write_bytes(b"x" * (file_util._MAX_MB * 1024 * 1024 + 1))
+    out = file_util.stringify_file_content(f)
+    assert out == ""
+
+
+def test_stringify_file_content_handles_exception(monkeypatch):
+    class DummyPath:
+        def stat(self) -> Any:
+            raise Exception("fail")
+
+        def __fspath__(self) -> str:
+            return "dummy"
+
+    # Provide a type hint to satisfy mypy: str | Path
+    dummy_path: "str | Path" = DummyPath()  # type: ignore
+    out = file_util.stringify_file_content(dummy_path)
+    assert out == ""
+
+
+def test_rewrite_files_force_true(monkeypatch, tmp_path):
+    called = []
+
+    def fake_rewrite_file(path, content):
+        called.append((path, content))
+
+    monkeypatch.setattr(file_util, "rewrite_file", fake_rewrite_file)
+    monkeypatch.setattr(file_util.typer, "secho", lambda *a, **k: None)
+    files = OrderedDict([("foo.txt", "abc"), ("bar.txt", "def")])
+    file_util.rewrite_files(files, force=True)
+    assert ("foo.txt", "abc") in called and ("bar.txt", "def") in called
+
+
+def test_rewrite_files_force_false_confirm(monkeypatch):
+    called = []
+    monkeypatch.setattr(file_util, "rewrite_file", lambda p, c: called.append((p, c)))
+    monkeypatch.setattr(file_util.typer, "secho", lambda *a, **k: None)
+    confirms = iter([True, False])
+    monkeypatch.setattr(file_util.typer, "confirm", lambda msg: next(confirms))
+    files = OrderedDict([("foo.txt", "abc"), ("bar.txt", "def")])
+    file_util.rewrite_files(files, force=False)
+    assert ("foo.txt", "abc") in called
+    assert ("bar.txt", "def") not in called
+
+
+def test_rewrite_file_writes(tmp_path):
+    f = tmp_path / "x/y/z.txt"
+    content = "hello"
+    file_util.rewrite_file(str(f), content)
+    assert f.read_text() == content
+
+
+def test_rewrite_file_handles_exception(monkeypatch, tmp_path):
+    class DummyPath:
+        parent = type("P", (), {"mkdir": staticmethod(lambda **k: None)})
+
+        def expanduser(self):
+            return self
+
+        def write_text(self, *a, **k):
+            raise Exception("fail")
+
+    monkeypatch.setattr(file_util, "Path", lambda x: DummyPath())
+    file_util.rewrite_file("foo.txt", "abc")  # Should not raise
+
+
+def test_find_repo_root_git(monkeypatch, tmp_path):
+    class DummyCompleted:
+        def decode(self):
+            return str(tmp_path)
+
+        def strip(self):
+            return str(tmp_path)
+
+    def fake_check_output(cmd, stderr=None):
+        class Dummy:
+            def decode(self):
+                return str(tmp_path)
+
+            def strip(self):
+                return str(tmp_path)
+
+        return Dummy()
+
+    monkeypatch.setattr(
+        file_util.subprocess,
+        "check_output",
+        lambda *a, **k: bytes(str(tmp_path), "utf-8"),
+    )
+    out = file_util.find_repo_root()
+    assert out == tmp_path
+
+
+def test_find_repo_root_fallback(monkeypatch):
+    monkeypatch.setattr(
+        file_util.subprocess,
+        "check_output",
+        lambda *a, **k: (_ for _ in ()).throw(Exception("fail")),
+    )
+    cwd = Path.cwd()
+    out = file_util.find_repo_root()
+    assert out == cwd
+
+
+def test_source_to_test_path_success(tmp_path):
+    repo_root = tmp_path
+    src = tmp_path / "kirby" / "cli" / "app.py"
+    (tmp_path / "kirby" / "cli").mkdir(parents=True)
+    src.write_text("x")
+    out = file_util.source_to_test_path(src, repo_root)
+    assert out.parts[-2] == "cli"
+    assert out.name.startswith("test_app.py")
+    assert str(out).startswith(str(tmp_path / "tests"))
+
+
+def test_source_to_test_path_too_short(tmp_path):
+    repo_root = tmp_path
+    src = tmp_path / "foo.py"
+    src.write_text("x")
+    with pytest.raises(Exception):
+        file_util.source_to_test_path(src, repo_root)

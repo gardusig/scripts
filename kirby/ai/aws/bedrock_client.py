@@ -24,12 +24,14 @@ class BedrockClient(AIClient, ABC):
 
     @abstractmethod
     def _format_request_body(
-        self, messages: list[dict[str, Any]],
+        self,
+        messages: list[dict[str, Any]],
     ) -> dict[str, Any]: ...
 
     @abstractmethod
     def _parse_response(
-        self, raw: dict[str, Any],
+        self,
+        raw: dict[str, Any],
     ) -> str: ...
 
     def get_response(self, messages: list[dict[str, Any]]) -> str:
