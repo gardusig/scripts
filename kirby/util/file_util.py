@@ -56,10 +56,7 @@ def get_all_files(
     results: list[str] = []
 
     for dirpath, dirnames, filenames in os.walk(root):
-        dirnames[:] = [
-            d for d in dirnames
-            if not should_ignore(d, ignore_patterns)
-        ]
+        dirnames[:] = [d for d in dirnames if not should_ignore(d, ignore_patterns)]
 
         for fname in filenames:
             if should_ignore(fname, ignore_patterns):

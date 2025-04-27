@@ -69,7 +69,8 @@ def create_readme(
             RESPONSE_FORMAT_INSTRUCTION,
             README_INSTRUCTION,
         ],
-        final_prompt=f'Focus only on creating a single "README.md"',
+        prompt_files=["./README.md"],
+        final_prompt='Focus only on creating a single "README.md"',
     )
     file_map = parse_code_response(response)
     rewrite_files(files=file_map, force=force)

@@ -8,8 +8,6 @@ Welcome to **Kirby CLI** – your friendly, pink command-line assistant for wran
   <img src="./media/kirby-work.gif" alt="kirby-work" height="200" />
 </div>
 
-
-
 ## Table of Contents 📚
 
 - [Kirby CLI 🧰](#kirby-cli-)
@@ -29,8 +27,6 @@ Welcome to **Kirby CLI** – your friendly, pink command-line assistant for wran
   - [Contributing 🤝](#contributing-)
   - [Questions? Bugs? 💬](#questions-bugs-)
 
-
-
 ## Features ✨
 
 - **Prompt history management**: Add, remove, list, undo, and clear prompts for your AI workflows.
@@ -39,8 +35,6 @@ Welcome to **Kirby CLI** – your friendly, pink command-line assistant for wran
 - **Code generation**: Auto-generate unit tests or README files using your favorite LLM.
 - **Batch operations**: Clear or show all tracked items in one go.
 - **Undo support**: Oops? Undo your last action for prompts, files, or processing queues.
-
-
 
 ## Installation & Setup 🚀
 
@@ -67,8 +61,6 @@ For development tools:
 pip install -e ".[dev]"
 ```
 
-
-
 ## Environment Configuration 🔐
 
 Kirby CLI uses OpenAI (or other LLM) APIs. Set your API key in a `.env` file at the project root:
@@ -82,8 +74,6 @@ Or export it in your shell:
 ```bash
 export OPENAI_API_KEY=sk-...
 ```
-
-
 
 ## CLI Usage 🛠️
 
@@ -219,8 +209,6 @@ Let Kirby and your LLM do the heavy lifting:
   python -m kirby clear
   ```
 
-
-
 ## Example Workflow 🔄
 
 Let's say you want to generate tests for your codebase:
@@ -244,8 +232,6 @@ Or, to quickly create a README:
 python -m kirby code readme
 ```
 
-
-
 ## Contributing 🤝
 
 Kirby loves new friends! If you'd like to contribute:
@@ -255,13 +241,9 @@ Kirby loves new friends! If you'd like to contribute:
 3. Make your changes and add tests
 4. Submit a pull request 🚀
 
-
-
 ## Questions? Bugs? 💬
 
 Open an issue or start a discussion on the [GitHub repo](https://github.com/your-org/kirbyCLI). Kirby is always hungry for feedback!
-
-
 
 <div align="center">
   <img src="./media/kirby-cook.gif" alt="kirby-cook" height="100" />

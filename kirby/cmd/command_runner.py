@@ -1,63 +1,63 @@
-from __future__ import annotations
+# from __future__ import annotations
 
-import os
-import subprocess
-from dataclasses import dataclass
-from pathlib import Path
-from typing import Mapping
-
-
-@dataclass(slots=True)
-class CommandResult:
-    code: int
-    out: str
-    err: str
+# import os
+# import subprocess
+# from dataclasses import dataclass
+# from pathlib import Path
+# from typing import Mapping
 
 
-class CommandRunner:
-    """Run commands inside *base_path* (optionally inside its venv)."""
+# @dataclass(slots=True)
+# class CommandResult:
+#     code: int
+#     out: str
+#     err: str
 
-    def __init__(self, base_path: Path | str) -> None:
-        self.base_path = Path(base_path).resolve(strict=True)
 
-    # ──────────────────────────────────────────────────────────
-    def get_startup_commands(self) -> list[str]:
-        venv_bin = self.base_path / "venv" / "bin" / "activate"
-        return [f"source {venv_bin}"]
+# class CommandRunner:
+#     """Run commands inside *base_path* (optionally inside its venv)."""
 
-    def _run(
-        self,
-        cmd_list: list[str],
-        env: Mapping[str, str] | None = None,
-        check: bool = False,
-    ) -> CommandResult:
-        commands = self.get_startup_commands()
-        commands.extend(cmd_list)
+#     def __init__(self, base_path: Path | str) -> None:
+#         self.base_path = Path(base_path).resolve(strict=True)
 
-        cmd = " && ".join(commands)
+#     # ──────────────────────────────────────────────────────────
+#     def get_startup_commands(self) -> list[str]:
+#         venv_bin = self.base_path / "venv" / "bin" / "activate"
+#         return [f"source {venv_bin}"]
 
-        proc = subprocess.run(
-            cmd,
-            cwd=self.base_path,
-            env={**os.environ, **(env or {})},
-            text=True,
-            capture_output=True,
-            check=check,
-        )
-        return CommandResult(proc.returncode, proc.stdout.strip(), proc.stderr.strip())
+#     def _run(
+#         self,
+#         cmd_list: list[str],
+#         env: Mapping[str, str] | None = None,
+#         check: bool = False,
+#     ) -> CommandResult:
+#         commands = self.get_startup_commands()
+#         commands.extend(cmd_list)
 
-    # ───────────── public helpers ─────────────
-    def pytest(self, paths: list[str]) -> CommandResult:
-        paths = [str(p) for p in paths] or ["tests"]
-        return self._run(["pytest", *paths])
+#         cmd = " && ".join(commands)
 
-    def black(self, *targets: str, use_venv: bool = True) -> CommandResult:
-        return self._run(["black", targets], use_venv=use_venv)
+#         proc = subprocess.run(
+#             cmd,
+#             cwd=self.base_path,
+#             env={**os.environ, **(env or {})},
+#             text=True,
+#             capture_output=True,
+#             check=check,
+#         )
+#         return CommandResult(proc.returncode, proc.stdout.strip(), proc.stderr.strip())
 
-    def custom(
-        self,
-        *cmd: str,
-        env: Mapping[str, str] | None = None,
-        use_venv: bool = True,
-    ) -> CommandResult:
-        return self._run([str(c) for c in cmd], env=env, use_venv=use_venv)
+#     # ───────────── public helpers ─────────────
+#     def pytest(self, paths: list[str]) -> CommandResult:
+#         paths = [str(p) for p in paths] or ["tests"]
+#         return self._run(["pytest", *paths])
+
+#     def black(self, *targets: str, use_venv: bool = True) -> CommandResult:
+#         return self._run(["black", targets], use_venv=use_venv)
+
+#     def custom(
+#         self,
+#         *cmd: str,
+#         env: Mapping[str, str] | None = None,
+#         use_venv: bool = True,
+#     ) -> CommandResult:
+#         return self._run([str(c) for c in cmd], env=env, use_venv=use_venv)
