@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from kirby.instruction.instructions.typer_log import TYPER_LOG_INSTRUCTION
+
 from kirby.instruction.instructions.mypy import MYPY_INSTRUCTION
 
 from kirby.instruction.instructions.readme import README_INSTRUCTION
@@ -101,6 +103,34 @@ def fix_mypy_errors(
             rewrite_files(files=file_map, force=force)
         except Exception as e:
             typer.secho(
-                f"⚠️  Failed to create test for {filepath!r}: {e}",
+                f"⚠️  Failed to fix mypy errors for {filepath!r}: {e}",
+                fg="yellow",
+            )
+
+
+@code_app.command("typer-log")
+def improve_typer_logs(
+    force: bool = typer.Option(
+        False,
+        "--force",
+        help="Skip prompts and overwrite tests unconditionally.",
+    ),
+):
+    ai_client = get_ai_client()
+    for filepath in get_processing_files():
+        try:
+            response = ai_client.send_message(
+                instructions=[
+                    RESPONSE_FORMAT_INSTRUCTION,
+                    TYPER_LOG_INSTRUCTION,
+                ],
+                prompt_files=[filepath],
+                final_prompt=f"Focus on only {filepath}",
+            )
+            file_map = parse_code_response(response)
+            rewrite_files(files=file_map, force=force)
+        except Exception as e:
+            typer.secho(
+                f"⚠️  Failed to improve typer logs for {filepath!r}: {e}",
                 fg="yellow",
             )

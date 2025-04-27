@@ -33,7 +33,4 @@ UNIT_TEST_INSTRUCTION = Instruction(
         "Keep each test focused on a single behavior or scenario for maximum"
         "clarity and maintainability.",
     ],
-    allow_file_patterns=[
-        r"^tests/(?:[A-Za-z0-9_]+/)*test_[A-Za-z0-9_]+(?:_[A-Za-z0-9_]+)*\.py$",
-    ],
 )
