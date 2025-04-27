@@ -3,14 +3,8 @@ import subprocess
 import typer
 
 import fnmatch
-import logging
 from pathlib import Path
 from typing import OrderedDict, Sequence
-
-from rich.logging import RichHandler
-
-log = logging.getLogger(__name__)
-logging.basicConfig(level="INFO", handlers=[RichHandler()])
 
 
 DEFAULT_IGNORES: tuple[str, ...] = (
@@ -46,7 +40,7 @@ def get_all_files(
 ) -> list[str]:
     root = Path(root).expanduser().resolve()
     if not root.exists():
-        log.warning("⛔️ Path does not exist: %s", root)
+        print("⛔️ Path does not exist: %s", root)
         return []
     if root.is_file():
         return [str(root)]
@@ -56,7 +50,7 @@ def get_all_files(
         if should_ignore(rel.name, ignore_patterns) or should_ignore(
             str(rel), ignore_patterns
         ):
-            log.debug("⏭️  Skipping ignored: %s", rel)
+            print("⏭️  Skipping ignored: %s", rel)
             continue
         if path.is_file():
             paths.append(str(path))
@@ -84,8 +78,8 @@ def stringify_file_contents(
             if text != "":
                 string_list.append(f"File: {filepath}\n```\n{text}\n```")
         except Exception as err:
-            log.error("Error reading %s: %s", filepath, err)
-    log.info("📄 Read %d file(s)", len(string_list) - 1)
+            print("Error reading %s: %s", filepath, err)
+    print("📄 Read %d file(s)", len(string_list) - 1)
     return string_list
 
 
@@ -94,13 +88,13 @@ def stringify_file_content(path: str | Path) -> str:
         if isinstance(path, str):
             path = Path(path)
         if path.stat().st_size > _MAX_MB * 1024 * 1024:
-            log.warning("⚠️  %s bigger than %d MB; skipped.", path, _MAX_MB)
+            print("⚠️  %s bigger than %d MB; skipped.", path, _MAX_MB)
             return ""
         text = path.read_text(encoding="utf-8", errors="replace").strip()
-        log.info("📄 Read file(s) %s", path)
+        print("📄 Read file(s) %s", path)
         return text
     except Exception as err:
-        log.error("Error reading %s: %s", str(path), err)
+        print("Error reading %s: %s", str(path), err)
         return ""
 
 
@@ -131,9 +125,9 @@ def rewrite_file(file_path: str, content: str) -> None:
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content, encoding="utf-8")
-        log.info("✅ Rewrote %s", path)
+        print("✅ Rewrote %s", path)
     except Exception as err:
-        log.error("❌ Error writing %s: %s", path, err)
+        print("❌ Error writing %s: %s", path, err)
 
 
 def find_repo_root() -> Path:

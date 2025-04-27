@@ -1,10 +1,7 @@
 from __future__ import annotations
-import logging
 
 from kirby.db.history_db import HistoryDB
 from kirby.util.session_util import create_session_file
-
-log = logging.getLogger(__name__)
 
 
 class PromptHistoryStore:
@@ -26,40 +23,40 @@ class PromptHistoryStore:
 
     def clear(self) -> None:
         self._db.clear()
-        log.info(f"🧹 {self.name} cleared.")
+        print(f"🧹 {self.name} cleared.")
 
     def append(self, prompt: str) -> None:
         p = prompt.strip()
         if not p:
-            log.warning("⚠️  Empty prompt — nothing added.")
+            print("⚠️  Empty prompt — nothing added.")
             return
         items = self._snap()
         if p in items:
-            log.warning(f"⚠️  Prompt already present: {p}")
+            print(f"⚠️  Prompt already present: {p}")
             return
         items.append(p)
         self._db.push(items)
-        log.info(f"➕ Added prompt: {p}")
+        print(f"➕ Added prompt: {p}")
 
     def remove(self, prompt: str) -> None:
         p = prompt.strip()
         if not p:
-            log.warning("⚠️  Empty prompt — nothing removed.")
+            print("⚠️  Empty prompt — nothing removed.")
             return
         items = self._snap()
         try:
             items.remove(p)
         except ValueError:
-            log.warning(f"⚠️  Prompt not tracked: {p}")
+            print(f"⚠️  Prompt not tracked: {p}")
             return
         self._db.push(items)
-        log.info(f"➖ Removed prompt: {p}")
+        print(f"➖ Removed prompt: {p}")
 
     def undo(self) -> None:
         if self._db.undo():
-            log.info("↩️  Reverted last prompt change.")
+            print("↩️  Reverted last prompt change.")
         else:
-            log.warning("⚠️  Nothing to undo.")
+            print("⚠️  Nothing to undo.")
 
     def summary(self) -> str:
         return self._db.summary()

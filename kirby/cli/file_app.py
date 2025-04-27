@@ -1,12 +1,12 @@
-import typer
-from kirby.util.file_util import get_all_files
-from kirby.db.file_db import (
+from kirby.db.shared_file_db import (
     append_shared_file,
-    remove_shared_file,
     clear_shared_files,
+    remove_shared_file,
     summary_shared_files,
     undo_shared_files,
 )
+import typer
+from kirby.util.file_util import get_all_files
 
 file_app = typer.Typer(name="file", help="Manage your shared-file history")
 

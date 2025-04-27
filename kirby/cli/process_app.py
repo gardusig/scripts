@@ -1,12 +1,12 @@
-import typer
-from kirby.util.file_util import get_all_files
-from kirby.db.file_db import (
+from kirby.db.process_file_db import (
     append_processing_file,
-    remove_processing_file,
     clear_processing_files,
+    remove_processing_file,
     summary_processing_files,
     undo_processing_files,
 )
+import typer
+from kirby.util.file_util import get_all_files
 
 process_app = typer.Typer(name="process", help="Manage your processing-file history")
 

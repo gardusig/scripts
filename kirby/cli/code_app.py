@@ -1,6 +1,7 @@
 from pathlib import Path
 
-from kirby.db.file_db import get_processing_files
+from kirby.db.process_file_db import get_processing_files
+
 from kirby.util.file_util import find_repo_root, rewrite_files, source_to_test_path
 from kirby.instruction.instructions.response_format import RESPONSE_FORMAT_INSTRUCTION
 from kirby.instruction.instructions.unit_test import UNIT_TEST_INSTRUCTION

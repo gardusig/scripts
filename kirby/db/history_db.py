@@ -1,10 +1,7 @@
 import json
 from contextlib import suppress
-import logging
 from pathlib import Path
 from typing import Callable, Generic, List, TypeVar
-
-log = logging.getLogger(__name__)
 
 T = TypeVar("T")
 
@@ -62,7 +59,7 @@ class HistoryDB(Generic[T]):
         with suppress(Exception):
             with open(self._file, "r", encoding="utf-8") as f:
                 return json.load(f)
-        log.warning(f"⚠️  Failed to load {self._file.name}; resetting.")
+        print(f"⚠️  Failed to load {self._file.name}; resetting.")
         return [self._empty]
 
     def _save(self, history: List[T]) -> None:
@@ -70,4 +67,4 @@ class HistoryDB(Generic[T]):
             with open(self._file, "w", encoding="utf-8") as f:
                 json.dump(history, f, indent=2)
         except Exception as e:
-            log.warning(f"❌ Failed to save {self._file.name}: {e}")
+            print(f"❌ Failed to save {self._file.name}: {e}")

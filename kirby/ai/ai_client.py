@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-import logging
 from pathlib import Path
 from typing import Any, Optional
 
-from kirby.db.file_db import get_shared_files
+from kirby.db.shared_file_db import get_shared_files
+
 from kirby.db.prompt_db import get_latest_prompts
 from kirby.util.file_util import stringify_file_contents
 
@@ -15,8 +15,6 @@ from kirby.instruction.instruction_model import Instruction
 from kirby.ai.ai_client_config import AIConfig
 
 from abc import ABC, abstractmethod
-
-logger = logging.getLogger(__name__)
 
 
 class AIClient(ABC):
@@ -38,8 +36,8 @@ class AIClient(ABC):
             prompt_files=prompt_files,
             final_prompt=final_prompt,
         )
-        # for message in messages:
-        #     print(message)
+        for message in messages:
+            print(message)
         response = self.get_response(
             messages=messages,
         )
