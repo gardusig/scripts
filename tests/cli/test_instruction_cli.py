@@ -1,53 +1,41 @@
-import pytest
 from typer.testing import CliRunner
 
-from kirby.cli import instruction_cli
-from kirby.cli.app_cli import app
+from kirby.cli.clear_app import clear_app
+from kirby.cli.list_app import list_app
+from kirby.cli.undo_app import undo_app
 
 runner = CliRunner()
 
-# ───────────────────────── fixtures ──────────────────────────
 
-
-@pytest.fixture
-def spy_clear(monkeypatch):
+def test_instruction_clear_calls_db(monkeypatch):
     called = {"flag": False}
 
-    def _fake():
+    def fake():
         called["flag"] = True
 
-    monkeypatch.setattr(instruction_cli, "clear_instructions", _fake)
-    return called
+    # clear instructions now lives under clear_app
+    monkeypatch.setattr("kirby.cli.clear_app.clear_instructions", fake)
+    result = runner.invoke(clear_app, ["instructions"])
+    assert result.exit_code == 0
+    assert called["flag"]
 
 
-@pytest.fixture
-def spy_undo(monkeypatch):
+def test_instruction_undo_calls_db(monkeypatch):
     called = {"flag": False}
 
-    def _fake():
+    def fake():
         called["flag"] = True
 
-    monkeypatch.setattr(instruction_cli, "undo_instructions", _fake)
-    return called
-
-
-# ────────────────────────── tests ────────────────────────────
-def test_instruction_clear_calls_db(spy_clear):
-    result = runner.invoke(app, ["instruction", "clear"])
+    # undo instructions now under undo_app
+    monkeypatch.setattr("kirby.cli.undo_app.undo_instructions", fake)
+    result = runner.invoke(undo_app, ["instruction"])
     assert result.exit_code == 0
-    assert spy_clear["flag"]
-
-
-def test_instruction_undo_calls_db(spy_undo):
-    result = runner.invoke(app, ["instruction", "undo"])
-    assert result.exit_code == 0
-    assert spy_undo["flag"]
+    assert called["flag"]
 
 
 def test_instruction_list_prints_summary(monkeypatch):
-    monkeypatch.setattr(
-        instruction_cli, "summary_instruction", lambda: "foo\nbar\nbaz\n"
-    )
-    result = runner.invoke(app, ["instruction", "list"])
+    monkeypatch.setattr("kirby.cli.list_app.summary_instruction",
+                        lambda: "foo\nbar\nbaz\n")
+    result = runner.invoke(list_app, ["list"])
     assert result.exit_code == 0
-    assert "foo" in result.output and "baz" in result.output
+    assert "foo" in result.stdout and "baz" in result.stdout

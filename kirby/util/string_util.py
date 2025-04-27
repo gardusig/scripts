@@ -4,6 +4,9 @@ import logging
 import re
 from collections import OrderedDict
 from pathlib import Path
+from typing import Optional
+
+from kirby.instruction.instruction_model import Instruction
 
 logger = logging.getLogger(__name__)
 
@@ -59,3 +62,11 @@ def parse_code_response(
         logger.info("Decoded %d file(s) from model response.", len(files))
 
     return files
+
+
+def get_instruction_strings(instructions: Optional[list[Instruction]] = None) -> list[str]:
+    instruction_strings: list[str] = []
+    if instructions:
+        for instruction in instructions:
+            instruction_strings.extend(instruction.instructions)
+    return instruction_strings

@@ -1,11 +1,14 @@
 from __future__ import annotations
+import typer  # or click, or just use input()
+from typing import Optional, Sequence
+from collections import OrderedDict
 
 import fnmatch
 import logging
 from pathlib import Path
 from typing import Iterable, OrderedDict, Sequence
 
-from kirby.db.file_db import append_file
+from kirby.db.file_db import append_file, get_latest_files
 from rich.logging import RichHandler
 
 log = logging.getLogger(__name__)
@@ -43,23 +46,16 @@ def should_ignore(path_part: str, patterns: Sequence[str] = DEFAULT_IGNORES) -> 
 def get_all_files(
     root: str | Path, ignore_patterns: Sequence[str] = DEFAULT_IGNORES
 ) -> list[str]:
-    """
-    Recursively collect *text* files under `root`, honouring ignore patterns.
-
-    Returns **absolute paths** as strings.
-    """
     root = Path(root).expanduser().resolve()
     if not root.exists():
         log.warning("⛔️ Path does not exist: %s", root)
         return []
-
+    if root.is_file():
+        return [str(root)]
     paths: list[str] = []
-
     for path in root.rglob("*"):
         rel = path.relative_to(root)
-        if should_ignore(rel.name, ignore_patterns) or should_ignore(
-            str(rel), ignore_patterns
-        ):
+        if should_ignore(rel.name, ignore_patterns) or should_ignore(str(rel), ignore_patterns):
             log.debug("⏭️  Skipping ignored: %s", rel)
             continue
         if path.is_file():
@@ -95,13 +91,27 @@ def stringify_file_contents(files: Iterable[str]) -> dict[str, str]:
 # ────────────────────────────────────────────────────────────────────
 # write helpers
 # ────────────────────────────────────────────────────────────────────
+
+
 def rewrite_files(
     files: OrderedDict[str, str],
-    allowed_file_patterns: list[str] = [],
-    deny_file_patterns: list[str] = [],
+    allowed_file_patterns: Optional[list[str]] = None,
+    deny_file_patterns:  Optional[list[str]] = None,
+    force: bool = False,
 ) -> None:
-    for file_path, content in files.items():
-        rewrite_file(file_path, content)
+    for path, content in files.items():
+        if any(fnmatch.fnmatch(path, pat) for pat in deny_file_patterns or []):
+            typer.secho(f"⛔ Skipping denied file {path}", fg="yellow")
+            continue
+        if allowed_file_patterns and any(fnmatch.fnmatch(path, pat) for pat in allowed_file_patterns):
+            typer.secho(f"⚠️  Skipping non-allowed file {path}", fg="yellow")
+            continue
+        if not force:
+            if not typer.confirm(f"Overwrite {path}?"):
+                typer.secho(f"✋  Skipped {path}", fg="cyan")
+                continue
+        rewrite_file(path, content)
+        typer.secho(f"✅ Wrote {path}", fg="green")
 
 
 def rewrite_file(file_path: str, content: str) -> None:
@@ -117,3 +127,14 @@ def rewrite_file(file_path: str, content: str) -> None:
         append_file(str(path))
     except Exception as err:
         log.error("❌ Error writing %s: %s", path, err)
+
+
+def get_file_contents() -> list[str]:
+    files = get_latest_files()
+    if len(files) == 0:
+        return []
+    file_dict = stringify_file_contents(files)
+    file_contents = ["📁 files:"]
+    for fname, content in file_dict.items():
+        file_contents.append(f"File: {fname}\n```\n{content}\n```")
+    return file_contents
