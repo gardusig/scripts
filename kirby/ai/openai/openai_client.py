@@ -31,6 +31,6 @@ class OpenAIClient(AIClient):
             messages=messages,
         )
         result = response.choices[0].message.content or ""
-        print(result)
+        # print(result)
         print(f"✅ Response received from {self.config.model}")
         return result.strip()

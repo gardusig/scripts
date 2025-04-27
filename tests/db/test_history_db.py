@@ -1,7 +1,7 @@
 import pytest
 import json
 from pathlib import Path
-from unittest.mock import patch, mock_open, MagicMock
+from unittest.mock import patch, mock_open
 
 # Patch all external dependencies at the top of the module under test
 with (

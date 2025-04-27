@@ -36,8 +36,8 @@ class AIClient(ABC):
             prompt_files=prompt_files,
             final_prompt=final_prompt,
         )
-        for message in messages:
-            print(message)
+        # for message in messages:
+        #     print(message)
         response = self.get_response(
             messages=messages,
         )
