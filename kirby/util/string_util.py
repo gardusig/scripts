@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Optional
 
 from kirby.instruction.instruction_model import Instruction
+from builtins import print
 
 # ─────────────────────────── regex ──────────────────────────────
 DEFAULT_FENCE = "~~~"

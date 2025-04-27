@@ -1,4 +1,3 @@
-
 import pytest
 from pathlib import Path
 from collections import OrderedDict
@@ -16,7 +15,7 @@ import kirby.util.file_util as file_util
         ("randomfile", [], False),
         ("venv", file_util.DEFAULT_IGNORES, True),
         ("foo/bar.py", ["foo/bar.py"], True),
-    ]
+    ],
 )
 def test_should_ignore(path_part, patterns, expected):
     assert file_util.should_ignore(path_part, patterns) == expected
@@ -63,7 +62,9 @@ def test_stringify_file_contents_reads_files(tmp_path, monkeypatch):
 
 
 def test_stringify_file_contents_handles_exception(monkeypatch, tmp_path):
-    def bad_read(*a, **k): raise Exception("fail")
+    def bad_read(*a, **k):
+        raise Exception("fail")
+
     monkeypatch.setattr(file_util, "stringify_file_content", bad_read)
     f = tmp_path / "bad.txt"
     f.write_text("x")
@@ -87,7 +88,9 @@ def test_stringify_file_content_too_big(tmp_path):
 
 def test_stringify_file_content_handles_exception(monkeypatch):
     class DummyPath:
-        def stat(self): raise Exception("fail")
+        def stat(self):
+            raise Exception("fail")
+
     out = file_util.stringify_file_content(DummyPath())
     assert out == ""
 
@@ -97,6 +100,7 @@ def test_rewrite_files_force_true(monkeypatch, tmp_path):
 
     def fake_rewrite_file(path, content):
         called.append((path, content))
+
     monkeypatch.setattr(file_util, "rewrite_file", fake_rewrite_file)
     monkeypatch.setattr(file_util.typer, "secho", lambda *a, **k: None)
     files = OrderedDict([("foo.txt", "abc"), ("bar.txt", "def")])
@@ -126,31 +130,50 @@ def test_rewrite_file_writes(tmp_path):
 def test_rewrite_file_handles_exception(monkeypatch, tmp_path):
     class DummyPath:
         parent = type("P", (), {"mkdir": staticmethod(lambda **k: None)})
-        def expanduser(self): return self
-        def write_text(self, *a, **k): raise Exception("fail")
+
+        def expanduser(self):
+            return self
+
+        def write_text(self, *a, **k):
+            raise Exception("fail")
+
     monkeypatch.setattr(file_util, "Path", lambda x: DummyPath())
     file_util.rewrite_file("foo.txt", "abc")  # Should not raise
 
 
 def test_find_repo_root_git(monkeypatch, tmp_path):
     class DummyCompleted:
-        def decode(self): return str(tmp_path)
-        def strip(self): return str(tmp_path)
+        def decode(self):
+            return str(tmp_path)
+
+        def strip(self):
+            return str(tmp_path)
 
     def fake_check_output(cmd, stderr=None):
         class Dummy:
-            def decode(self): return str(tmp_path)
-            def strip(self): return str(tmp_path)
+            def decode(self):
+                return str(tmp_path)
+
+            def strip(self):
+                return str(tmp_path)
+
         return Dummy()
-    monkeypatch.setattr(file_util.subprocess, "check_output",
-                        lambda *a, **k: bytes(str(tmp_path), "utf-8"))
+
+    monkeypatch.setattr(
+        file_util.subprocess,
+        "check_output",
+        lambda *a, **k: bytes(str(tmp_path), "utf-8"),
+    )
     out = file_util.find_repo_root()
     assert out == tmp_path
 
 
 def test_find_repo_root_fallback(monkeypatch):
-    monkeypatch.setattr(file_util.subprocess, "check_output", lambda *a,
-                        **k: (_ for _ in ()).throw(Exception("fail")))
+    monkeypatch.setattr(
+        file_util.subprocess,
+        "check_output",
+        lambda *a, **k: (_ for _ in ()).throw(Exception("fail")),
+    )
     cwd = Path.cwd()
     out = file_util.find_repo_root()
     assert out == cwd
