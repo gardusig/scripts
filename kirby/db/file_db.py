@@ -68,11 +68,12 @@ class FileHistoryStore:
 
 # ───── instantiate two separate stores ────────────────────────────
 
-_shared_store = FileHistoryStore("file_set_history",    "📁 Shared files")
-_proc_store = FileHistoryStore("processing_history",  "🔄 Processing files")
+_shared_store = FileHistoryStore("file_set_history", "📁 Shared files")
+_proc_store = FileHistoryStore("processing_history", "🔄 Processing files")
 
 
 # ───── public API for “shared files” ────────────────────────────
+
 
 def clear_shared_files() -> None:
     _shared_store.clear()
@@ -99,6 +100,7 @@ def get_shared_files() -> set[str]:
 
 
 # ───── public API for “processing files” ────────────────────────
+
 
 def clear_processing_files() -> None:
     _proc_store.clear()

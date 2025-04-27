@@ -14,8 +14,6 @@ code_app = typer.Typer(
     invoke_without_command=True,
 )
 
-ai_client = get_ai_client()
-
 
 @code_app.command("unit-test")
 def create_tests(
@@ -37,15 +35,18 @@ def create_tests(
 
 
 def create_test(force: bool, filepath: str, repo_root: Path):
+    if filepath.endswith("__init__.py"):
+        return
     src = Path(filepath)
     dest = source_to_test_path(src, repo_root)
-    dest.parent.mkdir(parents=True, exist_ok=True)
+    ai_client = get_ai_client()
     response = ai_client.send_message(
         instructions=[
             RESPONSE_FORMAT_INSTRUCTION,
             UNIT_TEST_INSTRUCTION,
         ],
         prompt_files=[src, dest],
+        final_prompt=f'Focus only on creating a test for "{filepath}"',
     )
     file_map = parse_code_response(response)
     rewrite_files(files=file_map, force=force)

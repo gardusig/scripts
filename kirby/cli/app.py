@@ -1,6 +1,11 @@
 from __future__ import annotations
 
-from kirby.db.file_db import clear_processing_files, clear_shared_files, summary_processing_files, summary_shared_files
+from kirby.db.file_db import (
+    clear_processing_files,
+    clear_shared_files,
+    summary_processing_files,
+    summary_shared_files,
+)
 from kirby.db.prompt_db import append_prompt, clear_prompts, summary_prompts
 
 import typer
@@ -20,6 +25,7 @@ app.add_typer(prompt_app)
 
 
 # ───────────────────────── helpers ────────────────────────── #
+
 
 def _clipboard_get() -> str:
     try:

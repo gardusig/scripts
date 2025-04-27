@@ -14,10 +14,10 @@ class Instruction:
     deny_file_patterns: List[Pattern]
 
     def __init__(
-            self,
-            instructions: List[str],
-            allow_file_patterns: List[str] = [],
-            deny_file_patterns: List[str] = [],
+        self,
+        instructions: List[str],
+        allow_file_patterns: List[str] = [],
+        deny_file_patterns: List[str] = [],
     ):
         self.instructions = instructions
         self.allow_file_patterns = _compile(allow_file_patterns)

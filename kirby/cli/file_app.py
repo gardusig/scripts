@@ -1,4 +1,5 @@
 import typer
+from kirby.util.file_util import get_all_files
 from kirby.db.file_db import (
     append_shared_file,
     remove_shared_file,
@@ -13,7 +14,8 @@ file_app = typer.Typer(name="file", help="Manage your shared-file history")
 @file_app.command("add")
 def add_file(path: str = typer.Argument(..., help="Path to append")):
     """Append a file to the shared history."""
-    append_shared_file(path)
+    for file in get_all_files(path):
+        append_shared_file(file)
 
 
 @file_app.command("remove")

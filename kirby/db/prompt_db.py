@@ -76,6 +76,7 @@ _prompt_store = PromptHistoryStore("prompt_history", "📜 Prompts")
 
 # ───── public API for prompts ───────────────────────────────────
 
+
 def clear_prompts() -> None:
     _prompt_store.clear()
 

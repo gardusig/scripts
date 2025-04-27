@@ -1,4 +1,5 @@
 import typer
+from kirby.util.file_util import get_all_files
 from kirby.db.file_db import (
     append_processing_file,
     remove_processing_file,
@@ -13,7 +14,8 @@ process_app = typer.Typer(name="process", help="Manage your processing-file hist
 @process_app.command("add")
 def add_file(path: str = typer.Argument(..., help="Path to append")):
     """Append a file to the processing queue."""
-    append_processing_file(path)
+    for file in get_all_files(path):
+        append_processing_file(file)
 
 
 @process_app.command("remove")

@@ -1,37 +1,24 @@
 from kirby.instruction.instruction_model import Instruction
 
-
 UNIT_TEST_INSTRUCTION = Instruction(
     instructions=[
-        "✅ MANDATORY: Your response must only include generated test files.",
-        "Create only one test file per provided non-test files.",
-        "Consider the potentially provided previous error messages"
-        " and fix each of them. The more tests the better.",
-        "Use the `pytest` framework. Place each test file inside a top-level `tests/`"
-        " directory using the format `tests/module/test_<moduleA/moduleB>_<filename>.py`.",
-        "Import and test only the public functions or classes"
-        " defined in the corresponding source module.",
-        "Inspect function signatures, docstrings, and logic to infer intended"
-        " behavior before writing tests.",
-        "Enumerate normal cases, boundary values, and error conditions for every function.",
-        "Use the Arrange-Act-Assert pattern and group tests using descriptive test"
-        " functions or `pytest` classes.",
-        "Leverage `pytest.mark.parametrize` to consolidate similar cases"
-        " and reduce repetition.",
-        "Stub or mock external dependencies (file I/O, network, databases)"
-        " using fixtures or `monkeypatching` to isolate logic.",
-        "Ensure tests are independent: use setup/teardown fixtures"
-        " and avoid shared state.",
-        "Assert both return values and side effects such as written files,"
-        " logs, or state changes.",
-        "Verify exceptions: test both the raised types and"
-        " relevant message content.",
+        "✅ MANDATORY: Generate exactly one test file for each non-test source file.",
+        "Use the pytest framework and place all tests under a top-level `tests/` directory.",
+        "Name each test file following the pattern:"
+        "  • `tests/<module>/test_<module>_<filename>.py`",
+        "Stub every external dependency imported at the top of your module.",
+        "Example: `import path.to.lib` must be replaced with",
+        "`patch(\"your.module.name.dep_name\", return_value=...):`",
+        "Don't use `patch(\"path.to.lib\", ...)`, patch the current module directly.",
+        "Use pytest fixtures (e.g. `tmp_path`, `monkeypatch`) for setup/teardown and file system isolation.",
+        "Leverage `pytest.mark.parametrize` to cover multiple input/output variations in one test function.",
+        "Ensure tests are independent—no shared state—by mocking I/O, network, and DB calls.",
+        "Assert both return values and side effects (e.g., file writes, log messages, DB updates).",
+        "Cover normal cases, boundary conditions, and expected exceptions (use `with pytest.raises(...)`).",
+        "Give each test function a clear, descriptive name in snake_case that states the behavior under test.",
+        "Keep each test focused on a single behavior or scenario for maximum clarity and maintainability.",
     ],
     allow_file_patterns=[
-        #  - tests/test_foo.py
-        #  - tests/foo/test_foo_bar.py
-        #  - tests/foo/bar/test_foo_bar_baz.py
-        #  - tests/a/b/c/test_a_b_c_qux.py
         r"^tests/(?:[A-Za-z0-9_]+/)*test_[A-Za-z0-9_]+(?:_[A-Za-z0-9_]+)*\.py$",
     ],
 )

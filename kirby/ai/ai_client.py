@@ -31,13 +31,15 @@ class AIClient(ABC):
         self,
         instructions: Optional[list[Instruction]] = None,
         prompt_files: Optional[list[str] | list[Path]] = None,
+        final_prompt: Optional[str] = None,
     ) -> str:
         messages = self._format_messages(
             instructions=instructions,
             prompt_files=prompt_files,
+            final_prompt=final_prompt,
         )
-        for message in messages:
-            print(message)
+        # for message in messages:
+        #     print(message)
         response = self.get_response(
             messages=messages,
         )
@@ -47,32 +49,49 @@ class AIClient(ABC):
         self,
         instructions: Optional[list[Instruction]] = None,
         prompt_files: Optional[list[str] | list[Path]] = None,
+        final_prompt: Optional[str] = None,
     ) -> list[dict[str, Any]]:
         msgs: list[dict[str, Any]] = []
         if instructions:
             instruction_strings = get_instruction_strings(instructions)
-            msgs.append({
-                "role": "system",
-                "content": "\n".join(instruction_strings),
-            })
+            msgs.append(
+                {
+                    "role": "system",
+                    "content": "\n".join(instruction_strings),
+                }
+            )
         shared_files = get_shared_files()
         if shared_files:
             shared_files_content = stringify_file_contents(
-                list(shared_files), "File context")
-            msgs.append({
-                "role": "user",
-                "content": "\n".join(shared_files_content),
-            })
+                list(shared_files), "File context"
+            )
+            msgs.append(
+                {
+                    "role": "user",
+                    "content": "\n".join(shared_files_content),
+                }
+            )
         if prompt_files:
             prompt_files_content = stringify_file_contents(prompt_files)
-            msgs.append({
-                "role": "user",
-                "content": "\n".join(prompt_files_content),
-            })
+            msgs.append(
+                {
+                    "role": "user",
+                    "content": "\n".join(prompt_files_content),
+                }
+            )
         prompts = get_latest_prompts()
         if prompts:
-            msgs.append({
-                "role": "user",
-                "content": "\n".join(prompts),
-            })
+            msgs.append(
+                {
+                    "role": "user",
+                    "content": "\n".join(prompts),
+                }
+            )
+        if final_prompt:
+            msgs.append(
+                {
+                    "role": "user",
+                    "content": final_prompt,
+                }
+            )
         return msgs

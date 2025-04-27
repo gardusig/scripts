@@ -55,7 +55,9 @@ def get_all_files(
     paths: list[str] = []
     for path in root.rglob("*"):
         rel = path.relative_to(root)
-        if should_ignore(rel.name, ignore_patterns) or should_ignore(str(rel), ignore_patterns):
+        if should_ignore(rel.name, ignore_patterns) or should_ignore(
+            str(rel), ignore_patterns
+        ):
             log.debug("⏭️  Skipping ignored: %s", rel)
             continue
         if path.is_file():
@@ -69,7 +71,9 @@ def get_all_files(
 _MAX_MB = 1
 
 
-def stringify_file_contents(files: list[str] | list[Path], label: str = 'Files') -> list[str]:
+def stringify_file_contents(
+    files: list[str] | list[Path], label: str = "Files"
+) -> list[str]:
     """
     Read files into memory (≤ 1 MiB each). Returns {path: contents}.
     """
@@ -79,7 +83,7 @@ def stringify_file_contents(files: list[str] | list[Path], label: str = 'Files')
     for filepath in files:
         try:
             text = stringify_file_content(filepath)
-            if text != '':
+            if text != "":
                 string_list.append(f"File: {filepath}\n```\n{text}\n```")
         except Exception as err:
             log.error("Error reading %s: %s", filepath, err)
@@ -93,13 +97,14 @@ def stringify_file_content(path: str | Path) -> str:
             path = Path(path)
         if path.stat().st_size > _MAX_MB * 1024 * 1024:
             log.warning("⚠️  %s bigger than %d MB; skipped.", path, _MAX_MB)
-            return ''
+            return ""
         text = path.read_text(encoding="utf-8", errors="replace").strip()
         log.info("📄 Read file(s) %s", path)
         return text
     except Exception as err:
         log.error("Error reading %s: %s", str(path), err)
-        return ''
+        return ""
+
 
 # ────────────────────────────────────────────────────────────────────
 # write helpers
@@ -139,8 +144,9 @@ def find_repo_root() -> Path:
     """
     try:
         git_root = (
-            subprocess
-            .check_output(["git", "rev-parse", "--show-toplevel"], stderr=subprocess.DEVNULL)
+            subprocess.check_output(
+                ["git", "rev-parse", "--show-toplevel"], stderr=subprocess.DEVNULL
+            )
             .decode()
             .strip()
         )

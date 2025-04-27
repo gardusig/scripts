@@ -64,7 +64,9 @@ def parse_code_response(
     return files
 
 
-def get_instruction_strings(instructions: Optional[list[Instruction]] = None) -> list[str]:
+def get_instruction_strings(
+    instructions: Optional[list[Instruction]] = None,
+) -> list[str]:
     instruction_strings: list[str] = []
     if instructions:
         for instruction in instructions:
