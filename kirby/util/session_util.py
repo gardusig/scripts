@@ -3,6 +3,7 @@ import hashlib
 import os
 from pathlib import Path
 import sys
+from typing import Union
 import typer
 
 CACHE_DIR = Path.home() / ".cache" / "cli_history"
@@ -47,7 +48,7 @@ def get_session_id() -> str:
         raise
 
 
-def _try_pty() -> str | None:
+def _try_pty() -> Union[str, None]:
     try:
         return os.ttyname(sys.stdin.fileno())
     except Exception as e:

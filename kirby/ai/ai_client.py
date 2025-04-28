@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 import typer
 
@@ -31,7 +31,7 @@ class AIClient(ABC):
     def send_message(
         self,
         instructions: Optional[list[Instruction]] = None,
-        prompt_files: Optional[list[str] | list[Path]] = None,
+        prompt_files: Optional[Union[list[str], list[Path]]] = None,
         final_prompt: Optional[str] = None,
     ) -> str:
         typer.secho('🐛 Preparing to send message to AI client…', fg='blue')
@@ -50,7 +50,7 @@ class AIClient(ABC):
     def _format_messages(
         self,
         instructions: Optional[list[Instruction]] = None,
-        prompt_files: Optional[list[str] | list[Path]] = None,
+        prompt_files: Optional[Union[list[str], list[Path]]] = None,
         final_prompt: Optional[str] = None,
     ) -> list[dict[str, Any]]:
         msgs: list[dict[str, Any]] = []

@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 from collections import OrderedDict
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Union
 
 from kirby.instruction.instruction_model import Instruction
 from builtins import print
@@ -30,7 +30,7 @@ CODE_BLOCK_RE = re.compile(
 # ────────────────────────── public API ──────────────────────────
 def parse_code_response(
     response: str,
-    root: str | Path | None = None,
+    root: Union[str, Path, None] = None,
 ) -> OrderedDict[str, str]:
     files: OrderedDict[str, str] = OrderedDict()
     base = Path(root).resolve() if root else None
