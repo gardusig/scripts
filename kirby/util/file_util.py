@@ -5,7 +5,7 @@ import typer
 
 from fnmatch import fnmatch
 from pathlib import Path
-from typing import OrderedDict, Sequence
+from typing import OrderedDict, Sequence, Union
 
 
 DEFAULT_IGNORES: tuple[str, ...] = (
@@ -41,7 +41,7 @@ def should_ignore(name: str, patterns: Sequence[str] = DEFAULT_IGNORES) -> bool:
 # file discovery
 # ────────────────────────────────────────────────────────────────────
 def get_all_files(
-    root: str | Path,
+    root: Union[str, Path],
     ignore_patterns: Sequence[str] = DEFAULT_IGNORES,
 ) -> list[str]:
     root = Path(root).expanduser().resolve()
@@ -74,7 +74,7 @@ _MAX_MB = 1
 
 
 def stringify_file_contents(
-    files: list[str] | list[Path], label: str = "Files"
+    files: Union[list[str], list[Path]], label: str = "Files"
 ) -> list[str]:
     """
     Read files into memory (≤ 1 MiB each). Returns {path: contents}.
@@ -93,7 +93,7 @@ def stringify_file_contents(
     return string_list
 
 
-def stringify_file_content(path: str | Path) -> str:
+def stringify_file_content(path: Union[str, Path]) -> str:
     try:
         if isinstance(path, str):
             path = Path(path)
