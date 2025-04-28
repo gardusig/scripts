@@ -2,6 +2,7 @@ import hashlib
 import os
 from pathlib import Path
 import sys
+from typing import Union
 
 CACHE_DIR = Path.home() / ".cache" / "cli_history"
 CACHE_DIR.mkdir(parents=True, exist_ok=True)
@@ -35,7 +36,7 @@ def get_session_id() -> str:
     return _hash(raw)
 
 
-def _try_pty() -> str | None:
+def _try_pty() -> Union[str, None]:
     try:
         return os.ttyname(sys.stdin.fileno())
     except Exception:

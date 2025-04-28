@@ -1,7 +1,7 @@
 import json
 from contextlib import suppress
 from pathlib import Path
-from typing import Callable, Generic, List, TypeVar
+from typing import Callable, Generic, List, Optional, TypeVar
 
 T = TypeVar("T")
 
@@ -17,8 +17,8 @@ class HistoryDB(Generic[T]):
         file_path: Path,
         *,
         empty: T,
-        normalise: Callable[[T], T] | None = None,
-        pretty: Callable[[T], str] | None = None,
+        normalise: Optional[Callable[[T], T]] = None,
+        pretty: Optional[Callable[[T], str]] = None,
     ) -> None:
         self._file = file_path
         self._empty = empty
