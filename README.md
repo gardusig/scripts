@@ -4,7 +4,7 @@
 Welcome to **Sasori** – command-line toolkit for managing prompts, files, and AI-powered workflows! Sasori helps you organize prompt histories, file queues, and code-gen tasks, so you can focus on what matters: getting things done (with a sprinkle of fun).
 
 <div align="center">
-  <img src="./media/kirby-eat.webp" alt="eat" height="200" />
+  <img src="https://github.com/gardusig/sasori-cli/blob/main/media/kirby-eat.webp" alt="eat" height="200" />
   <img src="./media/kirby-work.gif" alt="work" height="200" />
 </div>
 
@@ -24,7 +24,6 @@ Welcome to **Sasori** – command-line toolkit for managing prompts, files, and 
     - [⚙️ Processing Queue](#️-processing-queue)
     - [🤖 Code Generation](#-code-generation)
     - [🌎 Global Commands](#-global-commands)
-  - [💬 Questions? Bugs?](#-questions-bugs)
 
 ## ✨ Features
 
@@ -233,11 +232,3 @@ Let Sasori and your LLM do the heavy lifting:
   ```
   sasori clear
   ```
-
-## 💬 Questions? Bugs?
-
-Open an issue or start a discussion on the [GitHub repo](https://github.com/gardusig/sasori-cli). Sasori is always hungry for feedback!
-
-<div align="center">
-  <img src="./media/kirby-cook.gif" alt="kirby-cook" height="100" />
-</div>
