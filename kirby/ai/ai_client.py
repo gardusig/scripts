@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 from pathlib import Path
@@ -46,7 +45,9 @@ class AIClient(ABC):
             typer.secho("☑️ Received response from AI client", fg="green")
             return response
         except Exception as e:
-            typer.secho(f"❌ Failed to send message to AI client: {e}", fg="red", err=True)
+            typer.secho(
+                f"❌ Failed to send message to AI client: {e}", fg="red", err=True
+            )
             raise
 
     def _format_messages(

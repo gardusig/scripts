@@ -1,4 +1,3 @@
-
 import typer
 from kirby.db.prompt_db import (
     append_prompt,

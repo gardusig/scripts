@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 from kirby.db.process_file_db import clear_processing_files, summary_processing_files

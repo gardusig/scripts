@@ -1,4 +1,3 @@
-
 from dotenv import load_dotenv
 from kirby.cli.app import app
 import typer

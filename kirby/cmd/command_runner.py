@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 import os
@@ -49,11 +48,15 @@ class CommandRunner:
                 check=check,
                 shell=True,
             )
-            result = CommandResult(proc.returncode, proc.stdout.strip(), proc.stderr.strip())
+            result = CommandResult(
+                proc.returncode, proc.stdout.strip(), proc.stderr.strip()
+            )
             # Logging only on exit of public command functions, not here.
             return result
         except Exception as exc:
-            typer.secho(f"❌  Exception running command: {cmd} ({exc})", fg="red", err=True)
+            typer.secho(
+                f"❌  Exception running command: {cmd} ({exc})", fg="red", err=True
+            )
             return CommandResult(-1, "", str(exc))
 
     # ───────────── public helpers ─────────────
@@ -84,5 +87,7 @@ class CommandRunner:
         if result.code == 0:
             typer.secho(f"☑️  Custom command completed: {' '.join(cmd)}", fg="green")
         else:
-            typer.secho(f"❌  Custom command failed: {' '.join(cmd)}", fg="red", err=True)
+            typer.secho(
+                f"❌  Custom command failed: {' '.join(cmd)}", fg="red", err=True
+            )
         return result

@@ -1,4 +1,3 @@
-
 from kirby.db.shared_file_db import (
     append_shared_file,
     clear_shared_files,

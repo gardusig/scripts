@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 import os
 import subprocess
@@ -158,7 +157,9 @@ def find_repo_root() -> Path:
         typer.secho(f"☑️ Found git repo root: {git_root}", fg="green")
         return Path(git_root)
     except Exception as err:
-        typer.secho(f"⚠️  Could not find git repo root, using cwd: {err}", fg="yellow", err=True)
+        typer.secho(
+            f"⚠️  Could not find git repo root, using cwd: {err}", fg="yellow", err=True
+        )
         return Path.cwd()
 
 

@@ -1,4 +1,3 @@
-
 from kirby.db.process_file_db import (
     append_processing_file,
     clear_processing_files,

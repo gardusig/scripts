@@ -1,4 +1,3 @@
-
 from pathlib import Path
 
 from kirby.instruction.instructions.typer_log import TYPER_LOG_INSTRUCTION

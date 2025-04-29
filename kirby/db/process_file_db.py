@@ -1,4 +1,3 @@
-
 from kirby.db.file_history_db import FileHistoryStore
 import typer
 

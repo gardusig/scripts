@@ -1,4 +1,3 @@
-
 from dataclasses import dataclass
 from kirby.ai.aws.bedrock_client_config import BedrockClientConfig
 

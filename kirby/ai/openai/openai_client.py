@@ -1,4 +1,3 @@
-
 import os
 from typing import Iterable, Optional
 
@@ -38,5 +37,9 @@ class OpenAIClient(AIClient):
             typer.secho(f"✅ Response received from {self.config.model}", fg="green")
             return result.strip()
         except Exception as e:
-            typer.secho(f"❌ Failed to get response from {self.config.model}: {e}", fg="red", err=True)
+            typer.secho(
+                f"❌ Failed to get response from {self.config.model}: {e}",
+                fg="red",
+                err=True,
+            )
             raise
