@@ -1,42 +1,42 @@
 import pytest
 from unittest.mock import patch
 from pathlib import Path
-from kirby.cli.code_app import create_tests, create_test
+from prompt_craft.cli.code_app import create_tests, create_test
 
 
 @pytest.fixture
 def mock_ai_client():
-    with patch("kirby.cli.code_app.get_ai_client") as mock:
+    with patch("prompt_craft.cli.code_app.get_ai_client") as mock:
         yield mock.return_value
 
 
 @pytest.fixture
 def mock_get_processing_files():
-    with patch("kirby.cli.code_app.get_processing_files") as mock:
+    with patch("prompt_craft.cli.code_app.get_processing_files") as mock:
         yield mock
 
 
 @pytest.fixture
 def mock_find_repo_root():
-    with patch("kirby.cli.code_app.find_repo_root") as mock:
+    with patch("prompt_craft.cli.code_app.find_repo_root") as mock:
         yield mock
 
 
 @pytest.fixture
 def mock_source_to_test_path():
-    with patch("kirby.cli.code_app.source_to_test_path") as mock:
+    with patch("prompt_craft.cli.code_app.source_to_test_path") as mock:
         yield mock
 
 
 @pytest.fixture
 def mock_rewrite_files():
-    with patch("kirby.cli.code_app.rewrite_files") as mock:
+    with patch("prompt_craft.cli.code_app.rewrite_files") as mock:
         yield mock
 
 
 @pytest.fixture
 def mock_parse_code_response():
-    with patch("kirby.cli.code_app.parse_code_response") as mock:
+    with patch("prompt_craft.cli.code_app.parse_code_response") as mock:
         yield mock
 
 

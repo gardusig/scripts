@@ -1,6 +1,6 @@
 import pytest
 
-from kirby.ai.aws.anthropic.claude_client import ClaudeClient
+from prompt_craft.ai.aws.anthropic.claude_client import ClaudeClient
 
 
 class DummyConfig:
@@ -39,7 +39,7 @@ def test_parse_response_extracts_text():
 
 def test_init_uses_default_config(monkeypatch):
     # Patch Claude37ClientConfig to a dummy config to check default usage
-    from kirby.ai.aws.anthropic import claude_client as cc_mod
+    from prompt_craft.ai.aws.anthropic import claude_client as cc_mod
 
     class DummyDefaultConfig(DummyConfig):
         pass

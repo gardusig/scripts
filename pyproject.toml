@@ -3,7 +3,7 @@ requires = ["setuptools>=61", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "kirby"
+name = "prompt-craft"
 version = "0.1.0"
 description = "Boost your productivity with some real-world AI functionality"
 authors = [{ name = "Gustavo Gardusi", email = "gustavo.gardusi@gmail.com" }]
@@ -29,13 +29,13 @@ classifiers = [
 dev = ["pytest", "mypy", "black", "flake8"]
 
 [project.urls]
-Homepage = "https://github.com/gardusig/kirbyCLI"
+Homepage = "https://github.com/gardusig/prompt_craftCLI"
 
 [tool.setuptools]
-package-dir = { "" = "kirby" }
+package-dir = { "" = "prompt_craft" }
 
 [tool.setuptools.packages.find]
-where = ["kirby"]
+where = ["prompt_craft"]
 
 [tool.black]
 line-length = 88
@@ -53,4 +53,4 @@ exclude = '''
 '''
 
 [project.scripts]
-kirby = "kirby.main:app"
+prompt_craft = "prompt_craft.main:app"

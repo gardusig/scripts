@@ -1,6 +1,6 @@
 import pytest
 
-import kirby.ai.aws.anthropic.claude_client_config as claude_client_config
+import prompt_craft.ai.aws.anthropic.claude_client_config as claude_client_config
 
 
 class DummyBedrockClientConfig:

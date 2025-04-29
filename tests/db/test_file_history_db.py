@@ -2,12 +2,13 @@ import pytest
 from unittest.mock import patch, MagicMock
 
 # Patch external dependencies at the top of the module
-patch("kirby.db.file_history_db.HistoryDB", autospec=True).start()
+patch("prompt_craft.db.file_history_db.HistoryDB", autospec=True).start()
 patch(
-    "kirby.db.file_history_db.create_session_file", return_value="mocked_session_file"
+    "prompt_craft.db.file_history_db.create_session_file",
+    return_value="mocked_session_file",
 ).start()
 
-from kirby.db.file_history_db import FileHistoryStore
+from prompt_craft.db.file_history_db import FileHistoryStore
 
 
 @pytest.fixture(autouse=True)
@@ -21,7 +22,9 @@ def cleanup_patches():
 def mock_historydb(monkeypatch):
     # Patch HistoryDB instance methods for each test
     mock_db = MagicMock()
-    monkeypatch.setattr("kirby.db.file_history_db.HistoryDB", lambda *a, **kw: mock_db)
+    monkeypatch.setattr(
+        "prompt_craft.db.file_history_db.HistoryDB", lambda *a, **kw: mock_db
+    )
     return mock_db
 
 

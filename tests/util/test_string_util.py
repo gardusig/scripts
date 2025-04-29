@@ -3,7 +3,7 @@ from collections import OrderedDict
 
 from types import SimpleNamespace
 
-import kirby.util.string_util as string_util
+import prompt_craft.util.string_util as string_util
 
 
 @pytest.fixture(autouse=True)
