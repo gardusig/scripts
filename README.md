@@ -24,7 +24,6 @@ Welcome to **Kirby CLI** – your friendly, pink command-line assistant for wran
     - [Code Generation 🤖](#code-generation-)
     - [Global Commands 🌎](#global-commands-)
   - [Example Workflow 🔄](#example-workflow-)
-  - [Contributing 🤝](#contributing-)
   - [Questions? Bugs? 💬](#questions-bugs-)
 
 ## Features ✨
@@ -232,21 +231,10 @@ Or, to quickly create a README:
 python -m kirby code readme
 ```
 
-## Contributing 🤝
-
-Kirby loves new friends! If you'd like to contribute:
-
-1. Fork the repo 🍴
-2. Create a new branch: `git checkout -b feature/my-feature`
-3. Make your changes and add tests
-4. Submit a pull request 🚀
-
 ## Questions? Bugs? 💬
 
-Open an issue or start a discussion on the [GitHub repo](https://github.com/your-org/kirbyCLI). Kirby is always hungry for feedback!
+Open an issue or start a discussion on the [GitHub repo](https://github.com/gardusig/kirbyCLI). Kirby is always hungry for feedback!
 
 <div align="center">
   <img src="./media/kirby-cook.gif" alt="kirby-cook" height="100" />
-  <br>
-  <b>Kirby CLI – Eat. Cook. Automate. Repeat.</b>
 </div>
