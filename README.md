@@ -1,7 +1,7 @@
 
-# Prompt Craft CLI 🧰
+# Sasori 🧰
 
-Welcome to **Prompt Craft CLI** – command-line toolkit for managing prompts, files, and AI-powered workflows! Prompt Craft CLI helps you organize prompt histories, file queues, and code-gen tasks, so you can focus on what matters: getting things done (with a sprinkle of fun).
+Welcome to **Sasori CLI** – command-line toolkit for managing prompts, files, and AI-powered workflows! Sasori CLI helps you organize prompt histories, file queues, and code-gen tasks, so you can focus on what matters: getting things done (with a sprinkle of fun).
 
 <div align="center">
   <img src="./media/kirby-eat.webp" alt="eat" height="200" />
@@ -10,10 +10,10 @@ Welcome to **Prompt Craft CLI** – command-line toolkit for managing prompts, f
 
 ## 📚 Table of Contents
 
-- [Prompt Craft CLI 🧰](#prompt-craft-cli-)
+- [Sasori 🧰](#sasori-)
   - [📚 Table of Contents](#-table-of-contents)
   - [✨ Features](#-features)
-  - [� Example Workflow](#-example-workflow)
+  - [🔄 Example Workflow](#-example-workflow)
   - [🚀 Installation \& Setup](#-installation--setup)
     - [macOS: Python \& Homebrew](#macos-python--homebrew)
     - [Project Setup](#project-setup)
@@ -41,13 +41,13 @@ Let's say you want to generate tests for your codebase:
 
 ```
 # Add files to process
-prompt_craft process add src/my_module.py
+sasori process add src/my_module.py
 
 # Add a prompt for the LLM
-prompt_craft prompt add "Write comprehensive unit tests."
+sasori prompt add "Write comprehensive unit tests."
 
 # Generate tests
-prompt_craft code unit-test
+sasori code unit-test
 
 # Review the generated tests in your project!
 ```
@@ -55,7 +55,7 @@ prompt_craft code unit-test
 Or, to quickly create a README:
 
 ```
-prompt_craft code readme
+sasori code readme
 ```
 
 ## 🚀 Installation & Setup
@@ -73,8 +73,8 @@ python3 -m pip install virtualenv
 Clone and set up your environment:
 
 ```bash
-git clone https://github.com/gardusig/prompt_craftCLI.git
-cd prompt_craftCLI
+git clone https://github.com/gardusig/sasoriCLI.git
+cd sasoriCLI
 python3 -m venv venv
 source venv/bin/activate
 pip install -e .
@@ -88,7 +88,7 @@ pip install -e ".[dev]"
 
 ## 🔐 Environment Configuration
 
-Prompt Craft CLI uses OpenAI (or other LLM) APIs. Set your API key in a `.env` file at the project root:
+Sasori CLI uses OpenAI (or other LLM) APIs. Set your API key in a `.env` file at the project root:
 
 ```env
 OPENAI_API_KEY=sk-...
@@ -102,16 +102,16 @@ export OPENAI_API_KEY=sk-...
 
 ## 🛠️ CLI Usage
 
-Invoke Prompt Craft CLI with:
+Invoke Sasori CLI with:
 
 ```bash
-python -m prompt_craft [COMMANDS...]
+python -m sasori [COMMANDS...]
 ```
 
 Or, if installed as a script:
 
 ```bash
-prompt_craft [COMMANDS...]
+sasori [COMMANDS...]
 ```
 
 ### 💡 Prompt Management
@@ -120,32 +120,32 @@ Manage your prompt history for AI interactions:
 
 - **Add a prompt:**
   ```
-  prompt_craft prompt add "Summarize the following text"
+  sasori prompt add "Summarize the following text"
   ```
 
 - **Remove a prompt:**
   ```
-  prompt_craft prompt remove "Summarize the following text"
+  sasori prompt remove "Summarize the following text"
   ```
 
 - **List all prompts:**
   ```
-  prompt_craft prompt list
+  sasori prompt list
   ```
 
 - **Undo last prompt change:**
   ```
-  prompt_craft prompt undo
+  sasori prompt undo
   ```
 
 - **Clear all prompts:**
   ```
-  prompt_craft prompt clear
+  sasori prompt clear
   ```
 
 - **Add prompt from clipboard:**
   ```
-  prompt_craft clipboard
+  sasori clipboard
   ```
 
 ### 📁 File Management
@@ -154,27 +154,27 @@ Track files you want to share with your LLM:
 
 - **Add a file or directory:**
   ```
-  prompt_craft file add path/to/file_or_folder
+  sasori file add path/to/file_or_folder
   ```
 
 - **Remove a file:**
   ```
-  prompt_craft file remove path/to/file
+  sasori file remove path/to/file
   ```
 
 - **List shared files:**
   ```
-  prompt_craft file list
+  sasori file list
   ```
 
 - **Undo last file change:**
   ```
-  prompt_craft file undo
+  sasori file undo
   ```
 
 - **Clear all shared files:**
   ```
-  prompt_craft file clear
+  sasori file clear
   ```
 
 ### ⚙️ Processing Queue
@@ -183,41 +183,41 @@ Queue files for processing (e.g., for test generation):
 
 - **Add file(s) to process:**
   ```
-  prompt_craft process add path/to/file_or_folder
+  sasori process add path/to/file_or_folder
   ```
 
 - **Remove file from process queue:**
   ```
-  prompt_craft process remove path/to/file
+  sasori process remove path/to/file
   ```
 
 - **List processing files:**
   ```
-  prompt_craft process list
+  sasori process list
   ```
 
 - **Undo last processing change:**
   ```
-  prompt_craft process undo
+  sasori process undo
   ```
 
 - **Clear processing queue:**
   ```
-  prompt_craft process clear
+  sasori process clear
   ```
 
 ### 🤖 Code Generation
 
-Let Prompt Craft and your LLM do the heavy lifting:
+Let Sasori and your LLM do the heavy lifting:
 
 - **Generate unit tests for queued files:**
   ```
-  prompt_craft code unit-test
+  sasori code unit-test
   ```
 
 - **Generate a README.md for your project:**
   ```
-  prompt_craft code readme
+  sasori code readme
   ```
 
   Add `--force` to overwrite existing files without confirmation.
@@ -226,18 +226,18 @@ Let Prompt Craft and your LLM do the heavy lifting:
 
 - **Show all prompts, shared files, and processing files:**
   ```
-  prompt_craft show
+  sasori show
   ```
 
 - **Clear everything (prompts, shared files, processing files):**
   ```
-  prompt_craft clear
+  sasori clear
   ```
 
 ## 💬 Questions? Bugs?
 
-Open an issue or start a discussion on the [GitHub repo](https://github.com/gardusig/prompt_craftCLI). Prompt Craft is always hungry for feedback!
+Open an issue or start a discussion on the [GitHub repo](https://github.com/gardusig/sasoriCLI). Sasori is always hungry for feedback!
 
 <div align="center">
-  <img src="./media/kirby-cook.gif" alt="prompt_craft-cook" height="100" />
+  <img src="./media/kirby-cook.gif" alt="kirby-cook" height="100" />
 </div>

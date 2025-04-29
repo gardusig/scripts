@@ -1,7 +1,7 @@
 import pytest
 from typer.testing import CliRunner
 from unittest.mock import patch
-from prompt_craft.cli.prompt_app import prompt_app
+from sasori.cli.prompt_app import prompt_app
 
 runner = CliRunner()
 
@@ -9,11 +9,11 @@ runner = CliRunner()
 @pytest.fixture(autouse=True)
 def mock_dependencies():
     with (
-        patch("prompt_craft.cli.prompt_app.append_prompt") as mock_append_prompt,
-        patch("prompt_craft.cli.prompt_app.remove_prompt") as mock_remove_prompt,
-        patch("prompt_craft.cli.prompt_app.clear_prompts") as mock_clear_prompts,
-        patch("prompt_craft.cli.prompt_app.summary_prompts") as mock_summary_prompts,
-        patch("prompt_craft.cli.prompt_app.undo_prompts") as mock_undo_prompts,
+        patch("sasori.cli.prompt_app.append_prompt") as mock_append_prompt,
+        patch("sasori.cli.prompt_app.remove_prompt") as mock_remove_prompt,
+        patch("sasori.cli.prompt_app.clear_prompts") as mock_clear_prompts,
+        patch("sasori.cli.prompt_app.summary_prompts") as mock_summary_prompts,
+        patch("sasori.cli.prompt_app.undo_prompts") as mock_undo_prompts,
     ):
         mock_summary_prompts.return_value = "📜 Prompts:\n(none)"
         yield {

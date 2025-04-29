@@ -1,6 +1,6 @@
 import pytest
 
-from prompt_craft.ai.ai_client_config import AIConfig
+from sasori.ai.ai_client_config import AIConfig
 
 
 class DummyAIConfig(AIConfig):

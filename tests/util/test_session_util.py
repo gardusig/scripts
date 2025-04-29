@@ -3,7 +3,7 @@ from pathlib import Path
 
 import sys
 
-import prompt_craft.util.session_util as session_util
+import sasori.util.session_util as session_util
 
 
 @pytest.fixture(autouse=True)

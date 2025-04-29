@@ -3,7 +3,7 @@ requires = ["setuptools>=61", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "prompt-craft"
+name = "sasori"
 version = "0.1.0"
 description = "Boost your productivity with some real-world AI functionality"
 authors = [{ name = "Gustavo Gardusi", email = "gustavo.gardusi@gmail.com" }]
@@ -29,13 +29,13 @@ classifiers = [
 dev = ["pytest", "mypy", "black", "flake8"]
 
 [project.urls]
-Homepage = "https://github.com/gardusig/prompt_craftCLI"
+Homepage = "https://github.com/gardusig/sasoriCLI"
 
 [tool.setuptools]
-package-dir = { "" = "prompt_craft" }
+package-dir = { "" = "sasori" }
 
 [tool.setuptools.packages.find]
-where = ["prompt_craft"]
+where = ["sasori"]
 
 [tool.black]
 line-length = 88
@@ -53,4 +53,4 @@ exclude = '''
 '''
 
 [project.scripts]
-prompt_craft = "prompt_craft.main:app"
+sasori = "sasori.main:app"

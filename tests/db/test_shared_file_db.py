@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import patch, MagicMock
 
-import prompt_craft.db.shared_file_db as shared_file_db
+import sasori.db.shared_file_db as shared_file_db
 
 
 @pytest.fixture(autouse=True)

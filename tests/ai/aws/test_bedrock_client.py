@@ -23,18 +23,16 @@ def patch_external_deps(monkeypatch):
     mock_botocore_exceptions.BotoCoreError = DummyBotoCoreError
     mock_botocore_exceptions.ClientError = DummyClientError
     monkeypatch.setitem(sys.modules, "botocore.exceptions", mock_botocore_exceptions)
-    # Patch prompt_craft.ai.ai_client_config.AIConfig
-    monkeypatch.setitem(sys.modules, "prompt_craft.ai.ai_client_config", MagicMock())
-    # Patch prompt_craft.ai.aws.bedrock_client_config.BedrockClientConfig
-    monkeypatch.setitem(
-        sys.modules, "prompt_craft.ai.aws.bedrock_client_config", MagicMock()
-    )
-    # Patch prompt_craft.ai.ai_client.AIClient
-    monkeypatch.setitem(sys.modules, "prompt_craft.ai.ai_client", MagicMock())
+    # Patch sasori.ai.ai_client_config.AIConfig
+    monkeypatch.setitem(sys.modules, "sasori.ai.ai_client_config", MagicMock())
+    # Patch sasori.ai.aws.bedrock_client_config.BedrockClientConfig
+    monkeypatch.setitem(sys.modules, "sasori.ai.aws.bedrock_client_config", MagicMock())
+    # Patch sasori.ai.ai_client.AIClient
+    monkeypatch.setitem(sys.modules, "sasori.ai.ai_client", MagicMock())
     yield
 
 
-import prompt_craft.ai.aws.bedrock_client as bedrock_client_mod
+import sasori.ai.aws.bedrock_client as bedrock_client_mod
 
 
 class DummyConfig:

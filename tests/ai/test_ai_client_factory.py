@@ -1,7 +1,7 @@
 import pytest
 import types
 
-import prompt_craft.ai.ai_client_factory as ai_client_factory
+import sasori.ai.ai_client_factory as ai_client_factory
 
 
 @pytest.fixture(autouse=True)
