@@ -217,13 +217,13 @@ Let's say you want to generate tests for your codebase:
 
 ```
 # Add files to process
-python -m prompt_craft process add src/my_module.py
+prompt_craft process add src/my_module.py
 
 # Add a prompt for the LLM
-python -m prompt_craft prompt add "Write comprehensive unit tests."
+prompt_craft prompt add "Write comprehensive unit tests."
 
 # Generate tests
-python -m prompt_craft code unit-test
+prompt_craft code unit-test
 
 # Review the generated tests in your project!
 ```
@@ -231,7 +231,7 @@ python -m prompt_craft code unit-test
 Or, to quickly create a README:
 
 ```
-python -m prompt_craft code readme
+prompt_craft code readme
 ```
 
 ## 💬 Questions? Bugs?
