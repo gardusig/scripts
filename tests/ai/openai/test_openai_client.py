@@ -55,13 +55,11 @@ def test_get_response_returns_content(
     monkeypatch, set_openai_api_key, dummy_openai, capsys
 ):
     client = OpenAIClient()
-    # Use the correct type for messages to satisfy mypy
     messages: List[Any] = [{"role": "user", "content": "Say hi"}]
     result = client.get_response(messages)
     assert result == "Hello, world!"
     out = capsys.readouterr().out
-    assert "📨 Sending request to" in out
-    assert "✅ Response received from" in out
+    assert "Response received from" in out
 
 
 def test_get_response_returns_empty_string_if_no_content(

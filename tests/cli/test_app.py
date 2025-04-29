@@ -81,4 +81,4 @@ def test_clipboard_get_unavailable():
     with patch("pyperclip.paste", side_effect=pyperclip.PyperclipException):
         result = runner.invoke(app, ["clipboard"])
         assert result.exit_code != 0
-        assert "⚠️  Clipboard not available on this system." in result.output
+        assert "Clipboard not available on this system." in result.output

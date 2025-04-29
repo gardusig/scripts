@@ -94,7 +94,7 @@ def test_load_handles_corrupt_file(tmp_path, capsys):
     result = db.latest()
     assert result == {"foo": "empty"}
     captured = capsys.readouterr()
-    assert "Failed to load" in captured.out
+    assert "Failed to load" in captured.err
 
 
 def test_save_handles_write_exception(tmp_path, capsys, monkeypatch):
@@ -111,4 +111,4 @@ def test_save_handles_write_exception(tmp_path, capsys, monkeypatch):
     monkeypatch.setattr("builtins.open", lambda *a, **kw: raise_exc())
     db._save([{"foo": "fail"}])
     captured = capsys.readouterr()
-    assert "Failed to save" in captured.out
+    assert "Failed to save" in captured.err

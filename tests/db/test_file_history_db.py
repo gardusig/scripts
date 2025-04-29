@@ -37,7 +37,7 @@ def test_append_adds_new_path(store, mock_historydb, capsys):
     args, kwargs = mock_historydb.push.call_args
     assert "/foo/bar.txt" in args[0]
     captured = capsys.readouterr()
-    assert "➕ Added /foo/bar.txt" in captured.out
+    assert "Added path: /foo/bar.txt" in captured.out
 
 
 @pytest.mark.parametrize("input_path", ["", "   "])
@@ -63,7 +63,7 @@ def test_remove_existing_path(store, mock_historydb, capsys):
     args, kwargs = mock_historydb.push.call_args
     assert "foo.txt" not in args[0]
     captured = capsys.readouterr()
-    assert "➖ Removed foo.txt" in captured.out
+    assert "Removed path: foo.txt" in captured.out
 
 
 def test_remove_empty_path(store, mock_historydb, capsys):
@@ -85,7 +85,7 @@ def test_clear_calls_db_clear_and_prints(store, mock_historydb, capsys):
     store.clear()
     assert mock_historydb.clear.called
     captured = capsys.readouterr()
-    assert "🧹 test_name cleared." in captured.out
+    assert "test_name cleared." in captured.out
 
 
 def test_undo_success(store, mock_historydb, capsys):

@@ -58,11 +58,7 @@ def preview():
 
 @app.command(name="clipboard")
 def add_prompt_from_clipboard():
-    try:
-        append_prompt(_clipboard_get())
-    except Exception as e:
-        typer.secho("❌  Failed to add prompt from clipboard.", fg="red", err=True)
-        raise typer.Exit(1)
+    append_prompt(_clipboard_get())
 
 
 @app.command(name="add")

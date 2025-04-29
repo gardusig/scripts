@@ -21,7 +21,10 @@ class BedrockClient(AIClient, ABC):
         super().__init__(config)
         try:
             self.client = boto3.client("bedrock-runtime", region_name=region)
-            typer.secho(f"☑️ Bedrock client initialized in region: {region}", fg="green")
+            typer.secho(
+                f"☑️ Bedrock client initialized in region: {region}",
+                fg="green",
+            )
         except (BotoCoreError, ClientError) as exc:
             typer.secho(
                 f"❌ Unable to create Bedrock client: {exc}", fg="red", err=True
