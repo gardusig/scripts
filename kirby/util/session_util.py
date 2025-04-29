@@ -12,9 +12,7 @@ CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
 def create_session_file(name: str) -> Path:
     """Return a file path under ~/.cache/cli_history/ incorporating the session id."""
-    typer.secho(f'ℹ️ Creating session file for: {name}', fg='green')
     session_file = CACHE_DIR / f"{name}.{get_session_id()}.json"
-    typer.secho(f'✅ Session file path: {session_file}', fg='green')
     return session_file
 
 
@@ -32,7 +30,6 @@ def get_session_id() -> str:
       3. $WT_SESSION           – Windows Terminal / VS-Code
       4. parent PID
     """
-    typer.secho('🐛 Determining session ID…', fg='blue')
     try:
         raw = (
             os.getenv("HISTORY_SESSION_ID")
@@ -41,10 +38,9 @@ def get_session_id() -> str:
             or str(os.getppid())
         )
         session_id = _hash(raw)
-        typer.secho(f'✅ Session ID determined: {session_id}', fg='green')
         return session_id
     except Exception as e:
-        typer.secho(f'❌ Failed to determine session ID: {e}', fg='red', err=True)
+        typer.secho(f"❌ Failed to determine session ID: {e}", fg="red", err=True)
         raise
 
 
@@ -52,5 +48,5 @@ def _try_pty() -> Union[str, None]:
     try:
         return os.ttyname(sys.stdin.fileno())
     except Exception as e:
-        typer.secho(f'⚠️  Could not get TTY name: {e}', fg='yellow', err=True)
+        typer.secho(f"⚠️  Could not get TTY name: {e}", fg="yellow", err=True)
         return None

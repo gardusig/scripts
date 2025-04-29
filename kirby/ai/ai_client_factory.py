@@ -18,20 +18,20 @@ AI_CLIENTS: dict[str, Callable[[Optional[AIConfig]], AIClient]] = {
 
 
 def get_ai_client(config: Optional[AIConfig] = None) -> AIClient:
-    typer.secho('🐛 Attempting to create AI client…', fg='blue')
     client_name = (os.getenv("AI_CLIENT") or "").strip().lower()
     if not client_name:
-        typer.secho('❌  AI_CLIENT environment variable not set.', fg='red', err=True)
+        typer.secho("❌  AI_CLIENT environment variable not set.", fg="red", err=True)
         raise RuntimeError("⛔️  AI_CLIENT environment variable not set.")
     try:
         client = AI_CLIENTS[client_name](config)
-        typer.secho(f'✅ AI client "{client_name}" created successfully.', fg='green')
+        typer.secho(f'☑️ AI client "{client_name}" created successfully.', fg="green")
         return client
     except KeyError as exc:
         typer.secho(
-            f'❌  Unsupported AI_CLIENT "{client_name}". Supported: {list(AI_CLIENTS.keys())}',
-            fg='red',
-            err=True
+            f'❌  Unsupported AI_CLIENT "{client_name}". '
+            f"Supported: {list(AI_CLIENTS.keys())}",
+            fg="red",
+            err=True,
         )
         raise ValueError(
             f"❌ Unsupported AI_CLIENT '{client_name}'. "

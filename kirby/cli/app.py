@@ -26,23 +26,25 @@ app.add_typer(prompt_app)
 
 def _clipboard_get() -> str:
     try:
-        typer.secho('ℹ️  Attempting to read from clipboard…', fg='green')
+        typer.secho("ℹ️  Attempting to read from clipboard…", fg="green")
         result = pyperclip.paste()
-        typer.secho('✅ Clipboard read successfully.', fg='green')
+        typer.secho("✅ Clipboard read successfully.", fg="green")
         return result
     except pyperclip.PyperclipException:
-        typer.secho("❌  Clipboard not available on this system.", fg='red', err=True)
+        typer.secho("❌  Clipboard not available on this system.", fg="red", err=True)
         raise typer.Exit(1)
 
 
 def _clipboard_set(text: str) -> None:
     try:
-        typer.secho('ℹ️  Attempting to write to clipboard…', fg='green')
+        typer.secho("ℹ️  Attempting to write to clipboard…", fg="green")
         pyperclip.copy(text)
-        typer.secho('✅ Clipboard updated successfully.', fg='green')
+        typer.secho("✅ Clipboard updated successfully.", fg="green")
     except PyperclipException:
         typer.echo(text)
-        typer.secho("⚠️  Clipboard not available; printed instead.", fg='yellow', err=True)
+        typer.secho(
+            "⚠️  Clipboard not available; printed instead.", fg="yellow", err=True
+        )
 
 
 # ───────────────────────── commands ───────────────────────── #
@@ -50,36 +52,32 @@ def _clipboard_set(text: str) -> None:
 
 @app.command(name="show")
 def preview():
-    typer.secho('ℹ️  Showing current prompt and file summaries…', fg='green')
     typer.echo(summary_prompts())
     typer.echo(summary_shared_files())
     typer.echo(summary_processing_files())
-    typer.secho('✅ Summary display complete.', fg='green')
 
 
 @app.command(name="clipboard")
 def add_prompt_from_clipboard():
-    typer.secho('ℹ️  Adding prompt from clipboard…', fg='green')
-    append_prompt(_clipboard_get())
-    typer.secho('✅ Prompt from clipboard added.', fg='green')
+    try:
+        append_prompt(_clipboard_get())
+    except Exception as e:
+        typer.secho("❌  Failed to add prompt from clipboard.", fg="red", err=True)
+        raise typer.Exit(1)
 
 
 @app.command(name="add")
 def add_prompt(text: str = typer.Argument(..., help="Prompt line")):
     """Append an prompt string."""
-    typer.secho('ℹ️  Adding prompt…', fg='green')
     text = text.strip()
     if not text:
-        typer.secho("⚠️  Empty prompt provided.", fg='yellow', err=True)
+        typer.secho("⚠️  Empty prompt provided.", fg="yellow", err=True)
         raise typer.Exit(1)
     append_prompt(text)
-    typer.secho('✅ Prompt added.', fg='green')
 
 
 @app.command(name="clear")
 def clear_all():
-    typer.secho('⚠️  Clearing all prompts and files…', fg='yellow')
     clear_prompts()
     clear_shared_files()
     clear_processing_files()
-    typer.secho('✅ All prompts and files cleared.', fg='green')

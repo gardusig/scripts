@@ -14,18 +14,22 @@ from kirby.ai.ai_client import AIClient
 
 import typer
 
+
 class BedrockClient(AIClient, ABC):
     MAX_TOKENS = 4096
 
     def __init__(self, config: AIConfig, region: str = "us-east-1") -> None:
         super().__init__(config)
         try:
-            typer.secho(f'ℹ️ Initializing Bedrock client in region: {region}', fg='green')
             self.client = boto3.client("bedrock-runtime", region_name=region)
-            typer.secho('✅ Bedrock client initialized successfully', fg='green')
+            typer.secho(
+                f"☑️ Bedrock client initialized in region: {region}", fg="green"
+            )
         except (BotoCoreError, ClientError) as exc:
-            typer.secho(f'❌ Unable to create Bedrock client: {exc}', fg='red', err=True)
-            raise RuntimeError(f"❌ Unable to create Bedrock client: {exc}") from exc
+            typer.secho(
+                f"❌ Unable to create Bedrock client: {exc}", fg="red", err=True
+            )
+            raise RuntimeError(f"Unable to create Bedrock client: {exc}") from exc
 
     @abstractmethod
     def _format_request_body(
@@ -45,18 +49,17 @@ class BedrockClient(AIClient, ABC):
             messages=messages,
         )
         try:
-            typer.secho(f'📨 Sending message to Bedrock [{config.model}] …', fg='blue')
             resp = self.client.invoke_model(
                 modelId=config.model,
                 body=json.dumps(body),
                 contentType="application/json",
                 accept="application/json",
             )
-            typer.secho('✅ Received response from Bedrock', fg='green')
+            typer.secho("☑️ Received response from Bedrock", fg="green")
             payload = json.loads(resp["body"].read())
             result = self._parse_response(payload).strip()
-            typer.secho('✅ Parsed Bedrock response successfully', fg='green')
+            typer.secho("☑️ Bedrock response returned to caller", fg="green")
             return result
         except (BotoCoreError, ClientError) as exc:
-            typer.secho(f'❌ Bedrock request failed: {exc}', fg='red', err=True)
-            raise RuntimeError(f"❌ Bedrock request failed: {exc}") from exc
+            typer.secho(f"❌ Bedrock request failed: {exc}", fg="red", err=True)
+            raise RuntimeError(f"Bedrock request failed: {exc}") from exc

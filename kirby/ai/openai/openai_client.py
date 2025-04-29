@@ -18,7 +18,7 @@ class OpenAIClient(AIClient):
         super().__init__(config)
         api_key = os.getenv("OPENAI_API_KEY")
         if not api_key:
-            typer.secho('❌ OPENAI_API_KEY is not set.', fg='red', err=True)
+            typer.secho("❌ OPENAI_API_KEY is not set.", fg="red", err=True)
             raise RuntimeError("❌ OPENAI_API_KEY is not set.")
         self.client = OpenAI(api_key=api_key)
 
@@ -26,14 +26,17 @@ class OpenAIClient(AIClient):
         self,
         messages: Iterable[ChatCompletionMessageParam],
     ) -> str:
-        typer.secho(f'📨 Sending request to {self.config.model}...', fg='blue')
-        response = self.client.chat.completions.create(
-            model=self.config.model,
-            temperature=self.config.temperature,
-            max_tokens=self.config.max_tokens,
-            top_p=self.config.top_p,
-            messages=messages,
-        )
-        result = response.choices[0].message.content or ""
-        typer.secho(f'✅ Response received from {self.config.model}', fg='green')
-        return result.strip()
+        try:
+            response = self.client.chat.completions.create(
+                model=self.config.model,
+                temperature=self.config.temperature,
+                max_tokens=self.config.max_tokens,
+                top_p=self.config.top_p,
+                messages=messages,
+            )
+            result = response.choices[0].message.content or ""
+            typer.secho(f"✅ Response received from {self.config.model}", fg="green")
+            return result.strip()
+        except Exception as e:
+            typer.secho(f"❌ Failed to get response from {self.config.model}: {e}", fg="red", err=True)
+            raise

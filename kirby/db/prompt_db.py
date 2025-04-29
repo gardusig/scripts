@@ -25,40 +25,40 @@ class PromptHistoryStore:
 
     def clear(self) -> None:
         self._db.clear()
-        typer.secho(f'🧹 {self.name} cleared.', fg='green')
+        typer.secho(f"☑️  Prompt history cleared: {self.name}", fg="green")
 
     def append(self, prompt: str) -> None:
         p = prompt.strip()
         if not p:
-            typer.secho("⚠️  Empty prompt — nothing added.", fg='yellow')
+            typer.secho("⚠️  Empty prompt — nothing added.", fg="yellow")
             return
         items = self._snap()
         if p in items:
-            typer.secho(f"⚠️  Prompt already present: {p}", fg='yellow')
+            typer.secho(f"⚠️  Prompt already present: {p}", fg="yellow")
             return
         items.append(p)
         self._db.push(items)
-        typer.secho(f"➕ Added prompt: {p}", fg='green')
+        typer.secho(f"☑️  Added prompt: {p}", fg="green")
 
     def remove(self, prompt: str) -> None:
         p = prompt.strip()
         if not p:
-            typer.secho("⚠️  Empty prompt — nothing removed.", fg='yellow')
+            typer.secho("⚠️  Empty prompt — nothing removed.", fg="yellow")
             return
         items = self._snap()
         try:
             items.remove(p)
         except ValueError:
-            typer.secho(f"⚠️  Prompt not tracked: {p}", fg='yellow')
+            typer.secho(f"⚠️  Prompt not tracked: {p}", fg="yellow")
             return
         self._db.push(items)
-        typer.secho(f"➖ Removed prompt: {p}", fg='green')
+        typer.secho(f"☑️  Removed prompt: {p}", fg="green")
 
     def undo(self) -> None:
         if self._db.undo():
-            typer.secho("↩️  Reverted last prompt change.", fg='green')
+            typer.secho("☑️  Reverted last prompt change.", fg="green")
         else:
-            typer.secho("⚠️  Nothing to undo.", fg='yellow')
+            typer.secho("⚠️  Nothing to undo.", fg="yellow")
 
     def summary(self) -> str:
         return self._db.summary()
@@ -77,30 +77,26 @@ _prompt_store = PromptHistoryStore("prompt_history", "📜 Prompts")
 
 
 def clear_prompts() -> None:
-    typer.secho('🐛 clear_prompts() called', fg='blue')
     _prompt_store.clear()
 
 
 def append_prompt(line: str) -> None:
-    typer.secho('🐛 append_prompt() called', fg='blue')
     _prompt_store.append(line)
 
 
 def remove_prompt(line: str) -> None:
-    typer.secho('🐛 remove_prompt() called', fg='blue')
     _prompt_store.remove(line)
 
 
 def undo_prompts() -> None:
-    typer.secho('🐛 undo_prompts() called', fg='blue')
     _prompt_store.undo()
 
 
 def summary_prompts() -> str:
-    typer.secho('🐛 summary_prompts() called', fg='blue')
-    return _prompt_store.summary()
+    summary = _prompt_store.summary()
+    return summary
 
 
 def get_latest_prompts() -> list[str]:
-    typer.secho('🐛 get_latest_prompts() called', fg='blue')
-    return _prompt_store.latest()
+    latest = _prompt_store.latest()
+    return latest
