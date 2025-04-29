@@ -1,7 +1,7 @@
 import pyperclip
 from typer.testing import CliRunner
 from unittest.mock import patch
-from kirby.cli.app import app
+from prompt_craft.cli.app import app
 
 runner = CliRunner()
 
@@ -9,13 +9,14 @@ runner = CliRunner()
 def test_preview_command():
     with (
         patch(
-            "kirby.cli.app.summary_prompts", return_value="Prompt Summary"
+            "prompt_craft.cli.app.summary_prompts", return_value="Prompt Summary"
         ) as mock_summary_prompts,
         patch(
-            "kirby.cli.app.summary_shared_files", return_value="Shared Files Summary"
+            "prompt_craft.cli.app.summary_shared_files",
+            return_value="Shared Files Summary",
         ) as mock_summary_shared_files,
         patch(
-            "kirby.cli.app.summary_processing_files",
+            "prompt_craft.cli.app.summary_processing_files",
             return_value="Processing Files Summary",
         ) as mock_summary_processing_files,
     ):
@@ -33,7 +34,7 @@ def test_preview_command():
 
 
 def test_add_prompt_command():
-    with patch("kirby.cli.app.append_prompt") as mock_append_prompt:
+    with patch("prompt_craft.cli.app.append_prompt") as mock_append_prompt:
         result = runner.invoke(app, ["add", "Test prompt"])
 
         assert result.exit_code == 0
@@ -49,9 +50,11 @@ def test_add_prompt_command_empty():
 
 def test_clear_all_command():
     with (
-        patch("kirby.cli.app.clear_prompts") as mock_clear_prompts,
-        patch("kirby.cli.app.clear_shared_files") as mock_clear_shared_files,
-        patch("kirby.cli.app.clear_processing_files") as mock_clear_processing_files,
+        patch("prompt_craft.cli.app.clear_prompts") as mock_clear_prompts,
+        patch("prompt_craft.cli.app.clear_shared_files") as mock_clear_shared_files,
+        patch(
+            "prompt_craft.cli.app.clear_processing_files"
+        ) as mock_clear_processing_files,
     ):
 
         result = runner.invoke(app, ["clear"])
@@ -65,9 +68,9 @@ def test_clear_all_command():
 def test_add_prompt_from_clipboard():
     with (
         patch(
-            "kirby.cli.app._clipboard_get", return_value="Clipboard prompt"
+            "prompt_craft.cli.app._clipboard_get", return_value="Clipboard prompt"
         ) as mock_clipboard_get,
-        patch("kirby.cli.app.append_prompt") as mock_append_prompt,
+        patch("prompt_craft.cli.app.append_prompt") as mock_append_prompt,
     ):
 
         result = runner.invoke(app, ["clipboard"])

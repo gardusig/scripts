@@ -1,6 +1,6 @@
 import pytest
 
-from kirby.ai.ai_client_config import AIConfig
+from prompt_craft.ai.ai_client_config import AIConfig
 
 
 class DummyAIConfig(AIConfig):

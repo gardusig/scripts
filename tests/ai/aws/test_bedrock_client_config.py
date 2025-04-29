@@ -1,6 +1,6 @@
 import pytest
 
-from kirby.ai.aws.bedrock_client_config import BedrockClientConfig
+from prompt_craft.ai.aws.bedrock_client_config import BedrockClientConfig
 
 
 def test_bedrock_client_config_defaults():
@@ -31,8 +31,8 @@ def test_bedrock_client_config_custom_values(model, temperature, max_tokens, top
 
 def test_bedrock_client_config_inherits_ai_config():
     # Ensure BedrockClientConfig implements AIConfig at runtime
-    from kirby.ai.aws.bedrock_client_config import BedrockClientConfig
-    from kirby.ai.ai_client_config import AIConfig
+    from prompt_craft.ai.aws.bedrock_client_config import BedrockClientConfig
+    from prompt_craft.ai.ai_client_config import AIConfig
 
     # Instead of issubclass (which fails for non-runtime-checkable Protocols), check for attribute presence
     required_attrs = ["temperature", "max_tokens", "top_p", "model"]
