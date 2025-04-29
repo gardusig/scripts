@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import typer
 from kirby.db.history_db import HistoryDB
 from kirby.util.session_util import create_session_file
 
@@ -21,40 +22,40 @@ class FileHistoryStore:
 
     def clear(self) -> None:
         self._db.clear()
-        print(f"🧹 {self.name} cleared.")
+        typer.secho(f"☑️ {self.name} cleared.", fg="green")
 
     def append(self, path: str) -> None:
         p = path.strip()
         if not p:
-            print("⚠️  Empty path — nothing added.")
+            typer.secho("⚠️  Empty path — nothing added.", fg="yellow")
             return
         files = self._snap()
         if p in files:
-            print(f"⚠️  Path already present: {p}")
+            typer.secho(f"⚠️  Path already present: {p}", fg="yellow")
             return
         files.append(p)
         self._db.push(files)
-        print(f"➕ Added {p}")
+        typer.secho(f"☑️ Added path: {p}", fg="green")
 
     def remove(self, path: str) -> None:
         p = path.strip()
         if not p:
-            print("⚠️  Empty path — nothing removed.")
+            typer.secho("⚠️  Empty path — nothing removed.", fg="yellow")
             return
         files = self._snap()
         try:
             files.remove(p)
         except ValueError:
-            print(f"⚠️  Path not tracked: {p}")
+            typer.secho(f"⚠️  Path not tracked: {p}", fg="yellow")
             return
         self._db.push(files)
-        print(f"➖ Removed {p}")
+        typer.secho(f"☑️ Removed path: {p}", fg="green")
 
     def undo(self) -> None:
         if self._db.undo():
-            print("↩️ Reverted last change.")
+            typer.secho("↩️ Reverted last change.", fg="green")
         else:
-            print("⚠️  Nothing to undo.")
+            typer.secho("⚠️  Nothing to undo.", fg="yellow")
 
     def summary(self) -> str:
         return self._db.summary()

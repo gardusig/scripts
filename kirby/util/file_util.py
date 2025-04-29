@@ -47,10 +47,11 @@ def get_all_files(
     root = Path(root).expanduser().resolve()
 
     if not root.exists():
-        typer.echo(f"⛔️  Path does not exist: {root}", err=True)
+        typer.secho(f"❌  Path does not exist: {root}", fg="red", err=True)
         return []
 
     if root.is_file():
+        typer.secho(f"☑️ Found file: {root}", fg="green")
         return [str(root)]
 
     results: list[str] = []
@@ -64,6 +65,7 @@ def get_all_files(
             full = Path(dirpath) / fname
             results.append(str(full))
 
+    typer.secho(f"☑️ Found {len(results)} file(s) under {root}", fg="green")
     return results
 
 
@@ -80,6 +82,7 @@ def stringify_file_contents(
     Read files into memory (≤ 1 MiB each). Returns {path: contents}.
     """
     if len(files) == 0:
+        typer.secho("⚠️  No files to read.", fg="yellow")
         return []
     string_list = [f"📁 {label}:"]
     for filepath in files:
@@ -88,8 +91,8 @@ def stringify_file_contents(
             if text != "":
                 string_list.append(f"File: {filepath}\n```\n{text}\n```")
         except Exception as err:
-            print("Error reading %s: %s", filepath, err)
-    print("📄 Read %d file(s)", len(string_list) - 1)
+            typer.secho(f"❌  Error reading {filepath}: {err}", fg="red", err=True)
+    typer.secho(f"☑️ Read {len(string_list) - 1} file(s)", fg="green")
     return string_list
 
 
@@ -98,13 +101,12 @@ def stringify_file_content(path: Union[str, Path]) -> str:
         if isinstance(path, str):
             path = Path(path)
         if path.stat().st_size > _MAX_MB * 1024 * 1024:
-            print("⚠️  %s bigger than %d MB; skipped.", path, _MAX_MB)
+            typer.secho(f"⚠️  {path} bigger than {_MAX_MB} MB; skipped.", fg="yellow")
             return ""
         text = path.read_text(encoding="utf-8", errors="replace").strip()
-        print("📄 Read file(s) %s", path)
         return text
     except Exception as err:
-        print("Error reading %s: %s", str(path), err)
+        typer.secho(f"❌  Error reading {str(path)}: {err}", fg="red", err=True)
         return ""
 
 
@@ -123,7 +125,8 @@ def rewrite_files(
                 typer.secho(f"✋  Skipped {path}", fg="cyan")
                 continue
         rewrite_file(path, content)
-        typer.secho(f"✅ Wrote {path}", fg="green")
+        typer.secho(f"☑️ Wrote {path}", fg="green")
+    typer.secho("☑️ All file rewrites complete.", fg="green")
 
 
 def rewrite_file(file_path: str, content: str) -> None:
@@ -135,9 +138,8 @@ def rewrite_file(file_path: str, content: str) -> None:
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content, encoding="utf-8")
-        print("✅ Rewrote %s", path)
     except Exception as err:
-        print("❌ Error writing %s: %s", path, err)
+        typer.secho(f"❌ Error writing {path}: {err}", fg="red", err=True)
 
 
 def find_repo_root() -> Path:
@@ -152,8 +154,12 @@ def find_repo_root() -> Path:
             .decode()
             .strip()
         )
+        typer.secho(f"☑️ Found git repo root: {git_root}", fg="green")
         return Path(git_root)
-    except Exception:
+    except Exception as err:
+        typer.secho(
+            f"⚠️  Could not find git repo root, using cwd: {err}", fg="yellow", err=True
+        )
         return Path.cwd()
 
 
@@ -170,8 +176,11 @@ def source_to_test_path(
 
     parts = rel.parts
     if len(parts) < 2:
+        typer.secho("❌  Path too short to determine test path.", fg="red", err=True)
         raise Exception("len(parts) < 2")
     relative_without_pkg = Path(*parts[1:])
 
     test_name = f"test_{relative_without_pkg.stem}{relative_without_pkg.suffix}"
-    return repo_root / tests_dir / relative_without_pkg.parent / test_name
+    test_path = repo_root / tests_dir / relative_without_pkg.parent / test_name
+    typer.secho(f"☑️ Source file {src} maps to test path {test_path}", fg="green")
+    return test_path

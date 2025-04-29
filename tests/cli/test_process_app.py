@@ -30,10 +30,11 @@ def test_add_file(mock_file_operations):
 
 
 def test_remove_file(mock_file_operations):
-    _, _, mock_remove, _, _, _ = mock_file_operations
-    result = runner.invoke(process_app, ["remove", "file1.txt"])
+    mock_get_all_files, _, mock_remove, _, _, _ = mock_file_operations
+    result = runner.invoke(process_app, ["remove", "path"])
     assert result.exit_code == 0
-    mock_remove.assert_called_once_with("file1.txt")
+    mock_get_all_files.assert_called_once_with("path")
+    mock_remove.assert_has_calls([call("file1.txt"), call("file2.txt")])
 
 
 def test_clear_files(mock_file_operations):

@@ -1,7 +1,7 @@
 import json
-from contextlib import suppress
 from pathlib import Path
 from typing import Callable, Generic, List, Optional, TypeVar
+import typer
 
 T = TypeVar("T")
 
@@ -28,6 +28,7 @@ class HistoryDB(Generic[T]):
         # bootstrap file with one empty snapshot
         if not self._file.exists():
             self._save([self._empty])
+            typer.secho(f"☑️ History file created: {self._file}", fg="green")
 
     # ───── public API ────────────────────────────────────────────────
 
@@ -42,6 +43,7 @@ class HistoryDB(Generic[T]):
     def undo(self) -> bool:
         history = self._load()
         if len(history) <= 1:
+            typer.secho("⚠️  No more snapshots to undo.", fg="yellow")
             return False
         history.pop()
         self._save(history)
@@ -56,15 +58,20 @@ class HistoryDB(Generic[T]):
     # ───── private helpers ───────────────────────────────────────────
 
     def _load(self) -> List[T]:
-        with suppress(Exception):
+        try:
             with open(self._file, "r", encoding="utf-8") as f:
                 return json.load(f)
-        print(f"⚠️  Failed to load {self._file.name}; resetting.")
-        return [self._empty]
+        except Exception as e:
+            typer.secho(
+                f"⚠️  Failed to load {self._file.name}; resetting. Error: {e}",
+                fg="yellow",
+                err=True,
+            )
+            return [self._empty]
 
     def _save(self, history: List[T]) -> None:
         try:
             with open(self._file, "w", encoding="utf-8") as f:
                 json.dump(history, f, indent=2)
         except Exception as e:
-            print(f"❌ Failed to save {self._file.name}: {e}")
+            typer.secho(f"❌ Failed to save {self._file.name}: {e}", fg="red", err=True)

@@ -9,11 +9,16 @@ from kirby.ai.aws.anthropic.claude_client_config import (
 )
 from kirby.ai.aws.bedrock_client import BedrockClient
 
+import typer
+
 
 class ClaudeClient(BedrockClient):
     def __init__(self, config: Optional[AIConfig] = None):
         if not config:
             config = Claude37ClientConfig()
+            typer.secho("☑️  Loaded default Claude37ClientConfig", fg="green")
+        else:
+            typer.secho("☑️  Loaded custom ClaudeClientConfig", fg="green")
         super().__init__(config)
 
     def _format_request_body(self, messages: list[dict[str, Any]]) -> dict[str, Any]:
@@ -28,4 +33,10 @@ class ClaudeClient(BedrockClient):
         }
 
     def _parse_response(self, raw: dict[str, Any]) -> str:
-        return raw["content"][0]["text"]
+        try:
+            content = raw["content"][0]["text"]
+            typer.secho("☑️  Successfully parsed Claude response", fg="green")
+            return content
+        except Exception as e:
+            typer.secho(f"❌  Failed to parse Claude response: {e}", fg="red", err=True)
+            raise

@@ -21,7 +21,8 @@ def add_file(path: str = typer.Argument(..., help="Path to append")):
 @process_app.command("remove")
 def remove_file(path: str = typer.Argument(..., help="Path to remove")):
     """Remove a file from the processing queue."""
-    remove_processing_file(path)
+    for file in get_all_files(path):
+        remove_processing_file(file)
 
 
 @process_app.command("clear")
@@ -33,7 +34,8 @@ def clear_files():
 @process_app.command("list")
 def list_files():
     """Show a summary of your processing-file history."""
-    typer.echo(summary_processing_files())
+    summary = summary_processing_files()
+    typer.echo(summary)
 
 
 @process_app.command("undo")

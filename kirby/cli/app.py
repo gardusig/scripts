@@ -25,18 +25,25 @@ app.add_typer(prompt_app)
 
 def _clipboard_get() -> str:
     try:
-        return pyperclip.paste()
+        typer.secho("ℹ️  Attempting to read from clipboard…", fg="green")
+        result = pyperclip.paste()
+        typer.secho("✅ Clipboard read successfully.", fg="green")
+        return result
     except pyperclip.PyperclipException:
-        typer.echo("⚠️  Clipboard not available on this system.", err=True)
+        typer.secho("❌  Clipboard not available on this system.", fg="red", err=True)
         raise typer.Exit(1)
 
 
 def _clipboard_set(text: str) -> None:
     try:
+        typer.secho("ℹ️  Attempting to write to clipboard…", fg="green")
         pyperclip.copy(text)
+        typer.secho("✅ Clipboard updated successfully.", fg="green")
     except PyperclipException:
-        print(text)
-        typer.echo("⚠️  Clipboard not available; printed instead.", err=True)
+        typer.echo(text)
+        typer.secho(
+            "⚠️  Clipboard not available; printed instead.", fg="yellow", err=True
+        )
 
 
 # ───────────────────────── commands ───────────────────────── #
@@ -59,7 +66,7 @@ def add_prompt(text: str = typer.Argument(..., help="Prompt line")):
     """Append an prompt string."""
     text = text.strip()
     if not text:
-        typer.echo("⚠️  Empty prompt provided.", err=True)
+        typer.secho("⚠️  Empty prompt provided.", fg="yellow", err=True)
         raise typer.Exit(1)
     append_prompt(text)
 

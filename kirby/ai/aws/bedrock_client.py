@@ -11,6 +11,8 @@ from kirby.ai.aws.bedrock_client_config import BedrockClientConfig
 
 from kirby.ai.ai_client import AIClient
 
+import typer
+
 
 class BedrockClient(AIClient, ABC):
     MAX_TOKENS = 4096
@@ -19,8 +21,15 @@ class BedrockClient(AIClient, ABC):
         super().__init__(config)
         try:
             self.client = boto3.client("bedrock-runtime", region_name=region)
+            typer.secho(
+                f"☑️ Bedrock client initialized in region: {region}",
+                fg="green",
+            )
         except (BotoCoreError, ClientError) as exc:
-            raise RuntimeError(f"❌ Unable to create Bedrock client: {exc}") from exc
+            typer.secho(
+                f"❌ Unable to create Bedrock client: {exc}", fg="red", err=True
+            )
+            raise RuntimeError(f"Unable to create Bedrock client: {exc}") from exc
 
     @abstractmethod
     def _format_request_body(
@@ -40,14 +49,17 @@ class BedrockClient(AIClient, ABC):
             messages=messages,
         )
         try:
-            print(f"📨 Sending message to Bedrock [{config.model}] …")
             resp = self.client.invoke_model(
                 modelId=config.model,
                 body=json.dumps(body),
                 contentType="application/json",
                 accept="application/json",
             )
+            typer.secho("☑️ Received response from Bedrock", fg="green")
             payload = json.loads(resp["body"].read())
-            return self._parse_response(payload).strip()
+            result = self._parse_response(payload).strip()
+            typer.secho("☑️ Bedrock response returned to caller", fg="green")
+            return result
         except (BotoCoreError, ClientError) as exc:
-            raise RuntimeError(f"❌ Bedrock request failed: {exc}") from exc
+            typer.secho(f"❌ Bedrock request failed: {exc}", fg="red", err=True)
+            raise RuntimeError(f"Bedrock request failed: {exc}") from exc

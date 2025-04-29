@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import typer
 from kirby.db.history_db import HistoryDB
 from kirby.util.session_util import create_session_file
 
@@ -23,40 +24,40 @@ class PromptHistoryStore:
 
     def clear(self) -> None:
         self._db.clear()
-        print(f"🧹 {self.name} cleared.")
+        typer.secho(f"☑️  Prompt history cleared: {self.name}", fg="green")
 
     def append(self, prompt: str) -> None:
         p = prompt.strip()
         if not p:
-            print("⚠️  Empty prompt — nothing added.")
+            typer.secho("⚠️  Empty prompt — nothing added.", fg="yellow")
             return
         items = self._snap()
         if p in items:
-            print(f"⚠️  Prompt already present: {p}")
+            typer.secho(f"⚠️  Prompt already present: {p}", fg="yellow")
             return
         items.append(p)
         self._db.push(items)
-        print(f"➕ Added prompt: {p}")
+        typer.secho(f"☑️  Added prompt: {p}", fg="green")
 
     def remove(self, prompt: str) -> None:
         p = prompt.strip()
         if not p:
-            print("⚠️  Empty prompt — nothing removed.")
+            typer.secho("⚠️  Empty prompt — nothing removed.", fg="yellow")
             return
         items = self._snap()
         try:
             items.remove(p)
         except ValueError:
-            print(f"⚠️  Prompt not tracked: {p}")
+            typer.secho(f"⚠️  Prompt not tracked: {p}", fg="yellow")
             return
         self._db.push(items)
-        print(f"➖ Removed prompt: {p}")
+        typer.secho(f"☑️  Removed prompt: {p}", fg="green")
 
     def undo(self) -> None:
         if self._db.undo():
-            print("↩️  Reverted last prompt change.")
+            typer.secho("☑️  Reverted last prompt change.", fg="green")
         else:
-            print("⚠️  Nothing to undo.")
+            typer.secho("⚠️  Nothing to undo.", fg="yellow")
 
     def summary(self) -> str:
         return self._db.summary()
@@ -91,8 +92,10 @@ def undo_prompts() -> None:
 
 
 def summary_prompts() -> str:
-    return _prompt_store.summary()
+    summary = _prompt_store.summary()
+    return summary
 
 
 def get_latest_prompts() -> list[str]:
-    return _prompt_store.latest()
+    latest = _prompt_store.latest()
+    return latest
