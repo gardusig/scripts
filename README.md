@@ -1,7 +1,7 @@
 
 # Sasori 🧰
 
-Welcome to **Sasori CLI** – command-line toolkit for managing prompts, files, and AI-powered workflows! Sasori CLI helps you organize prompt histories, file queues, and code-gen tasks, so you can focus on what matters: getting things done (with a sprinkle of fun).
+Welcome to **Sasori** – command-line toolkit for managing prompts, files, and AI-powered workflows! Sasori helps you organize prompt histories, file queues, and code-gen tasks, so you can focus on what matters: getting things done (with a sprinkle of fun).
 
 <div align="center">
   <img src="./media/kirby-eat.webp" alt="eat" height="200" />
@@ -73,8 +73,8 @@ python3 -m pip install virtualenv
 Clone and set up your environment:
 
 ```bash
-git clone https://github.com/gardusig/sasoriCLI.git
-cd sasoriCLI
+git clone https://github.com/gardusig/sasori-cli.git
+cd sasori-cli
 python3 -m venv venv
 source venv/bin/activate
 pip install -e .
@@ -88,7 +88,7 @@ pip install -e ".[dev]"
 
 ## 🔐 Environment Configuration
 
-Sasori CLI uses OpenAI (or other LLM) APIs. Set your API key in a `.env` file at the project root:
+Sasori uses OpenAI (or other LLM) APIs. Set your API key in a `.env` file at the project root:
 
 ```env
 OPENAI_API_KEY=sk-...
@@ -236,7 +236,7 @@ Let Sasori and your LLM do the heavy lifting:
 
 ## 💬 Questions? Bugs?
 
-Open an issue or start a discussion on the [GitHub repo](https://github.com/gardusig/sasoriCLI). Sasori is always hungry for feedback!
+Open an issue or start a discussion on the [GitHub repo](https://github.com/gardusig/sasori-cli). Sasori is always hungry for feedback!
 
 <div align="center">
   <img src="./media/kirby-cook.gif" alt="kirby-cook" height="100" />
