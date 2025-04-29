@@ -239,5 +239,5 @@ python -m prompt_craft code readme
 Open an issue or start a discussion on the [GitHub repo](https://github.com/gardusig/prompt_craftCLI). Prompt Craft is always hungry for feedback!
 
 <div align="center">
-  <img src="./media/prompt_craft-cook.gif" alt="prompt_craft-cook" height="100" />
+  <img src="./media/kirby-cook.gif" alt="prompt_craft-cook" height="100" />
 </div>
