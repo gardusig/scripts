@@ -51,7 +51,6 @@ def get_all_files(
         return []
 
     if root.is_file():
-        typer.secho(f"☑️ Found file: {root}", fg="green")
         return [str(root)]
 
     results: list[str] = []

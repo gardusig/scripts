@@ -100,7 +100,6 @@ class AIClient(ABC):
                         "content": final_prompt,
                     }
                 )
-            typer.secho("☑️ Message formatting complete", fg="green")
             return msgs
         except Exception as e:
             typer.secho(f"❌ Failed to format messages: {e}", fg="red", err=True)

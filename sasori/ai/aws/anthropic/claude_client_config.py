@@ -12,9 +12,9 @@ class ClaudeClientConfig(BedrockClientConfig):
 
 @dataclass
 class Claude35ClientConfig(ClaudeClientConfig):
-    model: str = "us.anthropic.claude-3-sonnet-20240229-v1:0"
+    model: str = "us.anthropic.claude-3-5-sonnet-20241022-v2:0"
 
 
 @dataclass
 class Claude37ClientConfig(ClaudeClientConfig):
-    model: str = "anthropic.claude-3-7-20230430-v1:0"
+    model: str = "us.anthropic.claude-3-7-sonnet-20250219-v1:0"
