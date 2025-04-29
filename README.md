@@ -4,7 +4,7 @@
 Welcome to **Sasori** – command-line toolkit for managing prompts, files, and AI-powered workflows! Sasori helps you organize prompt histories, file queues, and code-gen tasks, so you can focus on what matters: getting things done (with a sprinkle of fun).
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/gardusig/sasori-cli/main/media/sasori.webp" alt="eat" height="200" />
+  <img src="https://raw.githubusercontent.com/gardusig/sasori-cli/main/media/sasori.png" alt="eat" height="200" />
 </div>
 
 ## 📚 Table of Contents
