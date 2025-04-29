@@ -24,7 +24,7 @@ class PromptHistoryStore:
 
     def clear(self) -> None:
         self._db.clear()
-        typer.secho(f"☑️  Prompt history cleared: {self.name}", fg="green")
+        typer.secho("☑️  Prompt history cleared", fg="green")
 
     def append(self, prompt: str) -> None:
         p = prompt.strip()

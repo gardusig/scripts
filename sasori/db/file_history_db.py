@@ -22,7 +22,6 @@ class FileHistoryStore:
 
     def clear(self) -> None:
         self._db.clear()
-        typer.secho(f"☑️ {self.name} cleared.", fg="green")
 
     def append(self, path: str) -> None:
         p = path.strip()
@@ -35,7 +34,6 @@ class FileHistoryStore:
             return
         files.append(p)
         self._db.push(files)
-        typer.secho(f"☑️ Added path: {p}", fg="green")
 
     def remove(self, path: str) -> None:
         p = path.strip()
@@ -49,7 +47,6 @@ class FileHistoryStore:
             typer.secho(f"⚠️  Path not tracked: {p}", fg="yellow")
             return
         self._db.push(files)
-        typer.secho(f"☑️ Removed path: {p}", fg="green")
 
     def undo(self) -> None:
         if self._db.undo():
