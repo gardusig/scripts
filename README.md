@@ -13,6 +13,7 @@ Welcome to **Prompt Craft CLI** – command-line toolkit for managing prompts, f
 - [Prompt Craft CLI 🧰](#prompt-craft-cli-)
   - [📚 Table of Contents](#-table-of-contents)
   - [✨ Features](#-features)
+  - [� Example Workflow](#-example-workflow)
   - [🚀 Installation \& Setup](#-installation--setup)
     - [macOS: Python \& Homebrew](#macos-python--homebrew)
     - [Project Setup](#project-setup)
@@ -23,7 +24,6 @@ Welcome to **Prompt Craft CLI** – command-line toolkit for managing prompts, f
     - [⚙️ Processing Queue](#️-processing-queue)
     - [🤖 Code Generation](#-code-generation)
     - [🌎 Global Commands](#-global-commands)
-  - [🔄 Example Workflow](#-example-workflow)
   - [💬 Questions? Bugs?](#-questions-bugs)
 
 ## ✨ Features
@@ -34,6 +34,29 @@ Welcome to **Prompt Craft CLI** – command-line toolkit for managing prompts, f
 - **Code generation:** Auto-generate unit tests or README files using your favorite LLM.
 - **Batch operations:** Clear or show all tracked items in one go.
 - **Undo support:** Oops? Undo your last action for prompts, files, or processing queues.
+
+## 🔄 Example Workflow
+
+Let's say you want to generate tests for your codebase:
+
+```
+# Add files to process
+prompt_craft process add src/my_module.py
+
+# Add a prompt for the LLM
+prompt_craft prompt add "Write comprehensive unit tests."
+
+# Generate tests
+prompt_craft code unit-test
+
+# Review the generated tests in your project!
+```
+
+Or, to quickly create a README:
+
+```
+prompt_craft code readme
+```
 
 ## 🚀 Installation & Setup
 
@@ -210,29 +233,6 @@ Let Prompt Craft and your LLM do the heavy lifting:
   ```
   prompt_craft clear
   ```
-
-## 🔄 Example Workflow
-
-Let's say you want to generate tests for your codebase:
-
-```
-# Add files to process
-prompt_craft process add src/my_module.py
-
-# Add a prompt for the LLM
-prompt_craft prompt add "Write comprehensive unit tests."
-
-# Generate tests
-prompt_craft code unit-test
-
-# Review the generated tests in your project!
-```
-
-Or, to quickly create a README:
-
-```
-prompt_craft code readme
-```
 
 ## 💬 Questions? Bugs?
 
