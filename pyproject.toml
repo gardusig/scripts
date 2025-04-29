@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "sasori"
 version = "0.1.0"
-description = "Boost your productivity with some real-world AI functionality"
+description = "CLI toolkit for managing prompts, files, and AI-powered workflows"
 authors = [{ name = "Gustavo Gardusi", email = "gustavo.gardusi@gmail.com" }]
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
