@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 from typing import Any, cast
 
 import boto3
+from botocore.config import Config
 from botocore.exceptions import BotoCoreError, ClientError
 from sasori.ai.ai_client_config import AIConfig
 from sasori.ai.aws.bedrock_client_config import BedrockClientConfig
@@ -17,10 +18,27 @@ import typer
 class BedrockClient(AIClient, ABC):
     MAX_TOKENS = 4096
 
-    def __init__(self, config: AIConfig, region: str = "us-east-1") -> None:
+    def __init__(
+        self,
+        config: AIConfig,
+        region: str = "us-east-1",
+        read_timeout: int = 300,
+        connect_timeout: int = 30,
+        max_retries: int = 3,
+    ) -> None:
         super().__init__(config)
         try:
-            self.client = boto3.client("bedrock-runtime", region_name=region)
+            boto_config = Config(
+                region_name=region,
+                read_timeout=read_timeout,
+                connect_timeout=connect_timeout,
+                retries={"max_attempts": max_retries},
+            )
+            self.client = boto3.client(
+                "bedrock-runtime",
+                region_name=region,
+                config=boto_config
+            )
         except (BotoCoreError, ClientError) as exc:
             typer.secho(
                 f"❌ Unable to create Bedrock client: {exc}", fg="red", err=True

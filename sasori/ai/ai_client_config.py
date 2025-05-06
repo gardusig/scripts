@@ -1,8 +1,8 @@
-from typing import Protocol
+from typing import Optional, Protocol
 
 
 class AIConfig(Protocol):
-    temperature: float
-    max_tokens: int
-    top_p: float
     model: str
+    temperature: float
+    top_p: Optional[float]
+    max_tokens: int

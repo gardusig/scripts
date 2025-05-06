@@ -17,12 +17,14 @@ from sasori.cli.code_app import code_app
 from sasori.cli.process_app import process_app
 from sasori.cli.prompt_app import prompt_app
 from sasori.cli.file_app import file_app
+from sasori.cli.html_app import html_app
 
 app = typer.Typer(help="🧰 Prom CLI – manage instructions & files")
 app.add_typer(code_app)
 app.add_typer(file_app)
 app.add_typer(process_app)
 app.add_typer(prompt_app)
+app.add_typer(html_app)
 
 
 # ───────────────────────── helpers ────────────────────────── #

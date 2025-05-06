@@ -17,6 +17,8 @@ dependencies = [
   "typer[all]",
   "boto3",
   "pyperclip",
+  "requests",
+  "beautifulsoup4",
 ]
 classifiers = [
   "Programming Language :: Python :: 3",

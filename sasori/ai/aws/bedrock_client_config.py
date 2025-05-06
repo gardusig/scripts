@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 
 from sasori.ai.ai_client_config import AIConfig
 
@@ -6,6 +7,6 @@ from sasori.ai.ai_client_config import AIConfig
 @dataclass
 class BedrockClientConfig(AIConfig):
     model: str
-    temperature: float = 0.25
-    max_tokens: int = 4096
-    top_p: float = 0.96
+    temperature: float
+    top_p: Optional[float]
+    max_tokens: int
