@@ -1,6 +1,6 @@
 import pytest
 
-import sasori.ai.aws.anthropic.claude_client_config as claude_client_config
+import crowler.ai.aws.anthropic.claude_client_config as claude_client_config
 
 
 class DummyBedrockClientConfig:

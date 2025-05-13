@@ -3,13 +3,13 @@ from unittest.mock import patch, MagicMock
 
 # Patch all external dependencies at the module level
 with (
-    patch("sasori.ai.ai_client.get_shared_files", return_value=[]),
-    patch("sasori.ai.ai_client.get_latest_prompts", return_value=[]),
-    patch("sasori.ai.ai_client.stringify_file_contents", return_value=[]),
-    patch("sasori.ai.ai_client.get_instruction_strings", return_value=[]),
+    patch("crowler.ai.ai_client.get_shared_files", return_value=[]),
+    patch("crowler.ai.ai_client.get_latest_prompts", return_value=[]),
+    patch("crowler.ai.ai_client.stringify_file_contents", return_value=[]),
+    patch("crowler.ai.ai_client.get_instruction_strings", return_value=[]),
 ):
 
-    from sasori.ai.ai_client import AIClient
+    from crowler.ai.ai_client import AIClient
 
 
 # Dummy config and instruction for tests
@@ -64,15 +64,15 @@ def test_format_messages_various_inputs(
 ):
     with (
         patch(
-            "sasori.ai.ai_client.get_instruction_strings",
+            "crowler.ai.ai_client.get_instruction_strings",
             return_value=["instr1", "instr2"],
         ),
-        patch("sasori.ai.ai_client.get_shared_files", return_value=shared_files),
+        patch("crowler.ai.ai_client.get_shared_files", return_value=shared_files),
         patch(
-            "sasori.ai.ai_client.stringify_file_contents",
+            "crowler.ai.ai_client.stringify_file_contents",
             side_effect=lambda files, *args, **kwargs: [f"content:{f}" for f in files],
         ),
-        patch("sasori.ai.ai_client.get_latest_prompts", return_value=prompt_db),
+        patch("crowler.ai.ai_client.get_latest_prompts", return_value=prompt_db),
     ):
 
         msgs = ai_client._format_messages(
@@ -110,13 +110,13 @@ def test_format_messages_content(
     expected_contents,
 ):
     with (
-        patch("sasori.ai.ai_client.get_instruction_strings", return_value=["instr1"]),
-        patch("sasori.ai.ai_client.get_shared_files", return_value=shared_files),
+        patch("crowler.ai.ai_client.get_instruction_strings", return_value=["instr1"]),
+        patch("crowler.ai.ai_client.get_shared_files", return_value=shared_files),
         patch(
-            "sasori.ai.ai_client.stringify_file_contents",
+            "crowler.ai.ai_client.stringify_file_contents",
             side_effect=lambda files, *args, **kwargs: [f"content:{f}" for f in files],
         ),
-        patch("sasori.ai.ai_client.get_latest_prompts", return_value=prompt_db),
+        patch("crowler.ai.ai_client.get_latest_prompts", return_value=prompt_db),
     ):
 
         msgs = ai_client._format_messages(
@@ -143,10 +143,10 @@ def test_send_message_calls_get_response_and_prints(monkeypatch, ai_client):
 
 def test_format_messages_with_none_inputs(ai_client):
     with (
-        patch("sasori.ai.ai_client.get_instruction_strings", return_value=[]),
-        patch("sasori.ai.ai_client.get_shared_files", return_value=[]),
-        patch("sasori.ai.ai_client.stringify_file_contents", return_value=[]),
-        patch("sasori.ai.ai_client.get_latest_prompts", return_value=[]),
+        patch("crowler.ai.ai_client.get_instruction_strings", return_value=[]),
+        patch("crowler.ai.ai_client.get_shared_files", return_value=[]),
+        patch("crowler.ai.ai_client.stringify_file_contents", return_value=[]),
+        patch("crowler.ai.ai_client.get_latest_prompts", return_value=[]),
     ):
         msgs = ai_client._format_messages(
             instructions=None,
@@ -158,16 +158,16 @@ def test_format_messages_with_none_inputs(ai_client):
 
 def test_format_messages_with_multiple_shared_and_prompt_files(ai_client):
     with (
-        patch("sasori.ai.ai_client.get_instruction_strings", return_value=[]),
+        patch("crowler.ai.ai_client.get_instruction_strings", return_value=[]),
         patch(
-            "sasori.ai.ai_client.get_shared_files",
+            "crowler.ai.ai_client.get_shared_files",
             return_value=["a.txt", "b.txt"],
         ),
         patch(
-            "sasori.ai.ai_client.stringify_file_contents",
+            "crowler.ai.ai_client.stringify_file_contents",
             side_effect=lambda files, *args, **kwargs: [f"file:{f}" for f in files],
         ),
-        patch("sasori.ai.ai_client.get_latest_prompts", return_value=[]),
+        patch("crowler.ai.ai_client.get_latest_prompts", return_value=[]),
     ):
         msgs = ai_client._format_messages(
             instructions=None,
@@ -183,15 +183,15 @@ def test_format_messages_with_multiple_shared_and_prompt_files(ai_client):
 def test_format_messages_with_all_sections(ai_client):
     with (
         patch(
-            "sasori.ai.ai_client.get_instruction_strings",
+            "crowler.ai.ai_client.get_instruction_strings",
             return_value=["sys1", "sys2"],
         ),
-        patch("sasori.ai.ai_client.get_shared_files", return_value=["s.txt"]),
+        patch("crowler.ai.ai_client.get_shared_files", return_value=["s.txt"]),
         patch(
-            "sasori.ai.ai_client.stringify_file_contents",
+            "crowler.ai.ai_client.stringify_file_contents",
             side_effect=lambda files, *args, **kwargs: [f"sf:{f}" for f in files],
         ),
-        patch("sasori.ai.ai_client.get_latest_prompts", return_value=["promptA"]),
+        patch("crowler.ai.ai_client.get_latest_prompts", return_value=["promptA"]),
     ):
         msgs = ai_client._format_messages(
             instructions=[MagicMock(spec=DummyInstruction)],
