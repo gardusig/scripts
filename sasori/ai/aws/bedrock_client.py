@@ -35,9 +35,7 @@ class BedrockClient(AIClient, ABC):
                 retries={"max_attempts": max_retries},
             )
             self.client = boto3.client(
-                "bedrock-runtime",
-                region_name=region,
-                config=boto_config
+                "bedrock-runtime", region_name=region, config=boto_config
             )
         except (BotoCoreError, ClientError) as exc:
             typer.secho(

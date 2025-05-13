@@ -3,7 +3,10 @@ from typing import Any, Optional, cast
 
 from sasori.ai.ai_client_config import AIConfig
 
-from sasori.ai.aws.anthropic.claude_client_config import Claude37ClientConfig, ClaudeClientConfig
+from sasori.ai.aws.anthropic.claude_client_config import (
+    Claude37ClientConfig,
+    ClaudeClientConfig,
+)
 from sasori.ai.aws.bedrock_client import BedrockClient
 
 import typer
@@ -50,11 +53,13 @@ class ClaudeClient(BedrockClient):
                 )
                 return text_content
             else:
-                typer.secho("⚠️ No text content found in response",
-                            fg="yellow", err=True)
+                typer.secho(
+                    "⚠️ No text content found in response", fg="yellow", err=True
+                )
                 return str(raw)
         except Exception as e:
             typer.secho(f"❌ Failed to parse Claude response: {e}", fg="red", err=True)
             typer.secho(
-                f"Response structure: {str(raw)[:500]}...", fg="yellow", err=True)
+                f"Response structure: {str(raw)[:500]}...", fg="yellow", err=True
+            )
             raise

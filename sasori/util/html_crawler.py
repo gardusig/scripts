@@ -10,7 +10,8 @@ def is_valid_url(url: str) -> bool:
     try:
         result = urlparse(url)
         return all([result.scheme, result.netloc])
-    except:
+    except Exception as e:
+        print(e)
         return False
 
 
@@ -20,17 +21,16 @@ def extract_links_from_html(url: str, base_domain: Optional[str] = None) -> Set[
         response = requests.get(url, timeout=10)
         response.raise_for_status()
 
-        soup = BeautifulSoup(response.text, 'html.parser')
+        soup = BeautifulSoup(response.text, "html.parser")
         links = set()
 
         if not base_domain:
             parsed_url = urlparse(url)
             base_domain = parsed_url.netloc
 
-
-        for a_tag in soup.find_all('a'):
-            if isinstance(a_tag, Tag) and a_tag.has_attr('href'):
-                href = a_tag.get('href')
+        for a_tag in soup.find_all("a"):
+            if isinstance(a_tag, Tag) and a_tag.has_attr("href"):
+                href = a_tag.get("href")
                 if href:
                     full_url = urljoin(url, href)
                     parsed_full_url = urlparse(full_url)
@@ -44,9 +44,7 @@ def extract_links_from_html(url: str, base_domain: Optional[str] = None) -> Set[
 
 
 def crawl_and_extract_links(
-    start_urls: List[str],
-    depth: int = 1,
-    max_links: int = 10
+    start_urls: List[str], depth: int = 1, max_links: int = 10
 ) -> List[str]:
     """Crawl HTML links and extract new links from them."""
     all_links = set(start_urls)

@@ -68,6 +68,7 @@ _html_store = HtmlHistoryStore("html_history", "🌐 HTML URLs")
 
 # ───── public API for HTML URLs ───────────────────────────────
 
+
 def clear_html_urls() -> None:
     _html_store.clear()
     typer.secho("✅ HTML URLs cleared.", fg="green")
