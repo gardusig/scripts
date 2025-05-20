@@ -12,6 +12,7 @@ class ClaudeClientConfig(BedrockClientConfig):
     top_p: Optional[float] = None
     anthropic_version = ANTHROPIC_VERSION
     reasoning_max_tokens: Optional[int] = None
+    temperature: float
 
 
 @dataclass
