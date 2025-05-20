@@ -64,7 +64,7 @@ def get_all_files(
             full = Path(dirpath) / fname
             results.append(str(full))
 
-    typer.secho(f"☑️ Found {len(results)} file(s) under {root}", fg="green")
+    typer.secho(f"✅ Found {len(results)} file(s) under {root}", fg="green")
     return results
 
 
@@ -91,7 +91,6 @@ def stringify_file_contents(
                 string_list.append(f"File: {filepath}\n```\n{text}\n```")
         except Exception as err:
             typer.secho(f"❌  Error reading {filepath}: {err}", fg="red", err=True)
-    typer.secho(f"☑️ Read {len(string_list) - 1} file(s)", fg="green")
     return string_list
 
 
@@ -124,8 +123,8 @@ def rewrite_files(
                 typer.secho(f"✋  Skipped {path}", fg="cyan")
                 continue
         rewrite_file(path, content)
-        typer.secho(f"☑️ Wrote {path}", fg="green")
-    typer.secho("☑️ All file rewrites complete.", fg="green")
+        typer.secho(f"✅ Wrote {path}", fg="green")
+    typer.secho("✅ All file rewrites complete.", fg="green")
 
 
 def rewrite_file(file_path: str, content: str) -> None:
@@ -153,7 +152,7 @@ def find_repo_root() -> Path:
             .decode()
             .strip()
         )
-        typer.secho(f"☑️ Found git repo root: {git_root}", fg="green")
+        typer.secho(f"✅ Found git repo root: {git_root}", fg="green")
         return Path(git_root)
     except Exception as err:
         typer.secho(
@@ -177,5 +176,5 @@ def source_to_test_path(
 
     test_name = f"test_{relative_without_pkg.stem}{relative_without_pkg.suffix}"
     test_path = repo_root / tests_dir / relative_without_pkg.parent / test_name
-    typer.secho(f"☑️ Source file {src} maps to test path {test_path}", fg="green")
+    typer.secho(f"✅ Source file {src} maps to test path {test_path}", fg="green")
     return test_path

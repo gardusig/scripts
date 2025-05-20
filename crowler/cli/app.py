@@ -20,7 +20,7 @@ from crowler.cli.prompt_app import prompt_app
 from crowler.cli.file_app import file_app
 from crowler.cli.html_app import html_app
 
-app = typer.Typer(help="🧰 Prom CLI – manage instructions & files")
+app = typer.Typer()
 app.add_typer(code_app)
 app.add_typer(file_app)
 app.add_typer(process_app)
@@ -55,12 +55,15 @@ def _clipboard_set(text: str) -> None:
 
 
 def summary_all() -> str:
-    return '\n'.join([
-        summary_prompts(),
-        summary_shared_files(),
-        summary_processing_files(),
-        summary_html_urls(),
-    ])
+    return "\n".join(
+        [
+            summary_prompts(),
+            summary_shared_files(),
+            summary_processing_files(),
+            summary_html_urls(),
+        ]
+    )
+
 
 # ───────────────────────── commands ───────────────────────── #
 
@@ -78,16 +81,6 @@ def copy_to_clipboard():
 @app.command(name="clipboard")
 def add_prompt_from_clipboard():
     append_prompt(_clipboard_get())
-
-
-@app.command(name="add")
-def add_prompt(text: str = typer.Argument(..., help="Prompt line")):
-    """Append an prompt string."""
-    text = text.strip()
-    if not text:
-        typer.secho("⚠️  Empty prompt provided.", fg="yellow", err=True)
-        raise typer.Exit(1)
-    append_prompt(text)
 
 
 @app.command(name="clear")

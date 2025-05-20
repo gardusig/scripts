@@ -7,11 +7,11 @@ TYPER_LOG_INSTRUCTION = Instruction(
         "`typer.echo()` or `typer.secho()` calls so that logging"
         "honors Typer/Click flags.",
         "🔹 Use `typer.secho(..., fg=...)` to add color:"
-        "green for success/info (☑️), yellow for warnings (⚠️),"
+        "green for success/info (✅), yellow for warnings (⚠️),"
         "red for errors (❌)",
         "🔹 Prefix messages with a single emoji to indicate level,"
         "then a short descriptive text, e.g.:\n"
-        "    • `typer.secho(f'☑️ Loading config: {config_path}', fg='green')`\n"
+        "    • `typer.secho(f'✅ Loading config: {config_path}', fg='green')`\n"
         "    • `typer.secho('⚠️  Missing optional field, "
         "using default', fg='yellow')`\n"
         "    • `typer.secho('❌  Failed to connect to DB',"

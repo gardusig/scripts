@@ -24,7 +24,7 @@ class PromptHistoryStore:
 
     def clear(self) -> None:
         self._db.clear()
-        typer.secho("☑️  Prompt history cleared", fg="green")
+        typer.secho("✅ Prompt history cleared", fg="green")
 
     def append(self, prompt: str) -> None:
         p = prompt.strip()
@@ -37,7 +37,7 @@ class PromptHistoryStore:
             return
         items.append(p)
         self._db.push(items)
-        typer.secho(f"☑️  Added prompt: {p}", fg="green")
+        typer.secho(f"✅ Added prompt: {p}", fg="green")
 
     def remove(self, prompt: str) -> None:
         p = prompt.strip()
@@ -51,11 +51,11 @@ class PromptHistoryStore:
             typer.secho(f"⚠️  Prompt not tracked: {p}", fg="yellow")
             return
         self._db.push(items)
-        typer.secho(f"☑️  Removed prompt: {p}", fg="green")
+        typer.secho(f"✅ Removed prompt: {p}", fg="green")
 
     def undo(self) -> None:
         if self._db.undo():
-            typer.secho("☑️  Reverted last prompt change.", fg="green")
+            typer.secho("✅ Reverted last prompt change.", fg="green")
         else:
             typer.secho("⚠️  Nothing to undo.", fg="yellow")
 

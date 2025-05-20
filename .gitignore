@@ -40,3 +40,7 @@ junit.xml
 
 .pytest_cache
 .mypy_cache
+
+lib/
+include/
+bin/

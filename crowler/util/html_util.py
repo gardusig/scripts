@@ -3,6 +3,7 @@ from typing import Any
 import requests
 from bs4 import BeautifulSoup, Tag
 
+
 @dataclass
 class HtmlData:
     url: str
@@ -10,7 +11,7 @@ class HtmlData:
     meta: dict[str, Any]
     links: list[str]
     text: str
-    
+
 
 def extract_html_data(url: str) -> HtmlData:
     """
@@ -21,8 +22,8 @@ def extract_html_data(url: str) -> HtmlData:
     resp.raise_for_status()
 
     soup = BeautifulSoup(resp.text, "html.parser")
-    
-    title = soup.title.string.strip() if soup.title and soup.title.string else ''
+
+    title = soup.title.string.strip() if soup.title and soup.title.string else ""
 
     meta: dict[str, Any] = {}
     for tag in soup.find_all("meta"):
@@ -33,21 +34,15 @@ def extract_html_data(url: str) -> HtmlData:
                 meta[tag["property"]] = tag["content"]
 
     links = []
-    for el in soup.find_all('a'):
+    for el in soup.find_all("a"):
         if isinstance(el, Tag):
-            href = el.get('href')
+            href = el.get("href")
             if href:
                 links.append(href)
 
     for script in soup(["script", "style"]):
         script.decompose()
-    
+
     text = soup.get_text(separator="\n", strip=True)
 
-    return HtmlData(
-        url= url,
-        title= title,
-        meta= meta,
-        links= links,
-        text= text
-    ) 
+    return HtmlData(url=url, title=title, meta=meta, links=links, text=text)

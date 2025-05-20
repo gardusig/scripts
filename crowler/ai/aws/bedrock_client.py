@@ -67,7 +67,7 @@ class BedrockClient(AIClient, ABC):
                 contentType="application/json",
                 accept="application/json",
             )
-            typer.secho("☑️ Received response from Bedrock", fg="green")
+            typer.secho("✅ Received response from Bedrock", fg="green")
             payload = json.loads(resp["body"].read())
             result = self._parse_response(payload).strip()
             return result

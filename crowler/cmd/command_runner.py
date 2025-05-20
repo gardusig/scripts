@@ -64,7 +64,7 @@ class CommandRunner:
         paths = [str(p) for p in paths] or ["tests"]
         result = self._run(["pytest", *paths])
         if result.code == 0:
-            typer.secho("☑️  Pytest completed successfully.", fg="green")
+            typer.secho("✅ Pytest completed successfully.", fg="green")
         else:
             typer.secho("❌  Pytest failed.", fg="red", err=True)
         return result
@@ -72,7 +72,7 @@ class CommandRunner:
     def black(self, *targets: str, use_venv: bool = True) -> CommandResult:
         result = self._run(["black", *targets])
         if result.code == 0:
-            typer.secho("☑️  Black formatting completed.", fg="green")
+            typer.secho("✅ Black formatting completed.", fg="green")
         else:
             typer.secho("❌  Black formatting failed.", fg="red", err=True)
         return result
@@ -85,7 +85,7 @@ class CommandRunner:
     ) -> CommandResult:
         result = self._run([str(c) for c in cmd], env=env)
         if result.code == 0:
-            typer.secho(f"☑️  Custom command completed: {' '.join(cmd)}", fg="green")
+            typer.secho(f"✅ Custom command completed: {' '.join(cmd)}", fg="green")
         else:
             typer.secho(
                 f"❌  Custom command failed: {' '.join(cmd)}", fg="red", err=True
