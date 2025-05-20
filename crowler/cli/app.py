@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from crowler.ai.ai_client_factory import get_ai_client
 
+from crowler.db.html_db import clear_html_urls, summary_html_urls
 from crowler.db.process_file_db import (
     clear_processing_files,
     summary_processing_files,
@@ -53,14 +54,25 @@ def _clipboard_set(text: str) -> None:
         )
 
 
+def summary_all() -> str:
+    return '\n'.join([
+        summary_prompts(),
+        summary_shared_files(),
+        summary_processing_files(),
+        summary_html_urls(),
+    ])
+
 # ───────────────────────── commands ───────────────────────── #
 
 
 @app.command(name="show")
 def preview():
-    typer.echo(summary_prompts())
-    typer.echo(summary_shared_files())
-    typer.echo(summary_processing_files())
+    typer.echo(summary_all())
+
+
+@app.command(name="copy")
+def copy_to_clipboard():
+    _clipboard_set(summary_all())
 
 
 @app.command(name="clipboard")
@@ -83,6 +95,7 @@ def clear_all():
     clear_prompts()
     clear_shared_files()
     clear_processing_files()
+    clear_html_urls()
 
 
 @app.command("ask")

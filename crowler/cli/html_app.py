@@ -2,10 +2,12 @@ import typer
 from crowler.db.html_db import (
     append_html_url,
     clear_html_urls,
+    get_html_urls,
     remove_html_url,
     summary_html_urls,
     undo_html_urls,
 )
+from crowler.util.html_util import extract_html_data
 
 html_app = typer.Typer(name="html", help="Manage your HTML URL history")
 
@@ -59,3 +61,15 @@ def undo_url():
     except Exception as e:
         typer.secho(f"❌ Failed to undo last change: {e}", fg="red", err=True)
         raise
+
+@html_app.command("parse")
+def parse_urls():
+    """Undo the last change to your HTML URL history."""
+    for url in get_html_urls():
+        try:
+            html_data = extract_html_data(url)
+            print(html_data)
+        except Exception as e:
+            typer.secho(f"❌ Failed to undo last change: {e}", fg="red", err=True)
+            raise
+    

@@ -26,7 +26,9 @@ def patch_external_deps(monkeypatch):
     # Patch crowler.ai.ai_client_config.AIConfig
     monkeypatch.setitem(sys.modules, "crowler.ai.ai_client_config", MagicMock())
     # Patch crowler.ai.aws.bedrock_client_config.BedrockClientConfig
-    monkeypatch.setitem(sys.modules, "crowler.ai.aws.bedrock_client_config", MagicMock())
+    monkeypatch.setitem(
+        sys.modules, "crowler.ai.aws.bedrock_client_config", MagicMock()
+    )
     # Patch crowler.ai.ai_client.AIClient
     monkeypatch.setitem(sys.modules, "crowler.ai.ai_client", MagicMock())
     yield

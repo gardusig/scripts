@@ -22,7 +22,9 @@ def cleanup_patches():
 def mock_historydb(monkeypatch):
     # Patch HistoryDB instance methods for each test
     mock_db = MagicMock()
-    monkeypatch.setattr("crowler.db.file_history_db.HistoryDB", lambda *a, **kw: mock_db)
+    monkeypatch.setattr(
+        "crowler.db.file_history_db.HistoryDB", lambda *a, **kw: mock_db
+    )
     return mock_db
 
 
