@@ -73,10 +73,9 @@ Clone and set up your environment:
 ```bash
 git clone https://github.com/gardusig/crowler-cli.git
 cd crowler-cli
-python3 -m venv venv
-source venv/bin/activate
+python3 -m venv crowler
+source crowler/bin/activate
 pip install -e .
-pip install -e ".[dev]"
 ```
 
 For development tools:
