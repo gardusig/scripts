@@ -28,7 +28,6 @@ class HistoryDB(Generic[T]):
         # bootstrap file with one empty snapshot
         if not self._file.exists():
             self._save([self._empty])
-            typer.secho(f"✅ History file created: {self._file}", fg="green")
 
     # ───── public API ────────────────────────────────────────────────
 
