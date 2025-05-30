@@ -44,3 +44,5 @@ junit.xml
 lib/
 include/
 bin/
+
+pyvenv.cfg
