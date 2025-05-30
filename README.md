@@ -11,7 +11,6 @@ Welcome to **crowler** – command-line toolkit for managing prompts, files, and
 
 - [crowler](#crowler)
   - [📚 Table of Contents](#-table-of-contents)
-  - [✨ Features](#-features)
   - [🔄 Example Workflow](#-example-workflow)
   - [🚀 Installation \& Setup](#-installation--setup)
     - [macOS: Python \& Homebrew](#macos-python--homebrew)
@@ -24,30 +23,14 @@ Welcome to **crowler** – command-line toolkit for managing prompts, files, and
     - [🤖 Code Generation](#-code-generation)
     - [🌎 Global Commands](#-global-commands)
 
-## ✨ Features
-
-- **Prompt history management:** Add, remove, list, undo, and clear prompts for your AI workflows.
-- **File queueing:** Track files to share or process with AI, with full undo/clear support.
-- **Clipboard integration:** Instantly add prompts from your clipboard.
-- **Code generation:** Auto-generate unit tests or README files using your favorite LLM.
-- **Batch operations:** Clear or show all tracked items in one go.
-- **Undo support:** Oops? Undo your last action for prompts, files, or processing queues.
-
 ## 🔄 Example Workflow
 
 Let's say you want to generate tests for your codebase:
 
 ```
-# Add files to process
 crowler process add src/my_module.py
-
-# Add a prompt for the LLM
 crowler prompt add "Write comprehensive unit tests."
-
-# Generate tests
 crowler code unit-test
-
-# Review the generated tests in your project!
 ```
 
 Or, to quickly create a README:
@@ -71,8 +54,6 @@ python3 -m pip install virtualenv
 Clone and set up your environment:
 
 ```bash
-git clone https://github.com/gardusig/crowler-cli.git
-cd crowler-cli
 python3 -m venv venv
 source venv/bin/activate
 pip install -e .
